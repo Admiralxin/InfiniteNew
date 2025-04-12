@@ -2759,8 +2759,8 @@ local function cv()
     return ca[aZ] and ca[aZ].Type == 'Ranged'
 end
 
---  Handles the detection
---[[local cw = game:GetService('GuiService')
+-- Handles the detection
+local cw = game:GetService('GuiService')
 local cx;
 cx = cw.ErrorMessageChanged:Connect(function(msg)
     if cw:GetErrorCode() == Enum.ConnectionError.DisconnectLuaKick or cw:GetErrorCode() ==
@@ -2796,7 +2796,7 @@ cx = cw.ErrorMessageChanged:Connect(function(msg)
         end
         T:Teleport(a8, c)
     end
-end) ]]
+end)
 
 -- GUI
 local cz = bk:CreateWindow({
@@ -3212,682 +3212,6 @@ do
         end
     end
 end
-
---[[ Wheels Detected
-do
-    local d3 = {
-        GigaSlimeHead = 'Giga Slime Head',
-        NightTerrorHood = 'Night Terror Hood',
-        FlameDemonHood = 'Flame Demon Hood',
-        SpartanHelmet = 'Mezuvian Helmet',
-        AngelHood = 'Angel Hood',
-        AngelHalo = 'Angel Halo',
-        AngelicWings = 'Angelic Wings',
-        TaurhaStaff = "Taurha's Staff",
-        AetherCrown = 'Aether Crown',
-        W9T5Helmet = 'Aether Helmet'
-    }
-    local d4 = {}
-    for B, C in d3 do
-        table.insert(d4, C)
-    end
-    table.sort(d4)
-    cH:AddDropdown('selectedCosmetics', {
-        Text = 'Select Cosmetics',
-        Values = d4,
-        AllowNull = true,
-        Multi = true
-    })
-    local d5 = {
-        FrostyScarf = 'Frosty Scarf',
-        WolfspiritHelmet = 'Wolfspirit Helmet',
-        WolfspiritArmor = 'Wolfspirit Armor',
-        FestiveDress = 'Festive Dress',
-        RamHorns = 'Ram Horns',
-        CandycaneAntlers = 'Candycane Antlers',
-        CarrotNose = 'Carrot Nose',
-        FluffyJacket = 'Fluffy Jacket'
-    }
-    local d4 = {}
-    for B, C in d5 do
-        table.insert(d4, C)
-    end
-    table.sort(d4)
-    cH:AddDropdown('selectedWheelCosmetics', {
-        Text = 'Select Event Cosmetics',
-        Values = d4,
-        AllowNull = true,
-        Multi = true
-    })
-    local d6 = {{
-        Hex = '#FF1337',
-        Name = 'Rainbow',
-        SpecialType = true
-    }, {
-        Hex = '#DDEADD',
-        Name = 'Ghoul',
-        SpecialType = true
-    }, {
-        Hex = '#11CCEE',
-        Name = 'Ice',
-        SpecialType = true
-    }, {
-        Hex = '#FFADED',
-        Name = 'Faded',
-        SpecialType = true
-    }, {
-        Hex = '#F0F8FF',
-        Name = 'Alice Blue'
-    }, {
-        Hex = '#FAEBD7',
-        Name = 'Antique White'
-    }, {
-        Hex = '#00FFFF',
-        Name = 'Aqua'
-    }, {
-        Hex = '#7FFFD4',
-        Name = 'Aquamarine'
-    }, {
-        Hex = '#F0FFFF',
-        Name = 'Azure'
-    }, {
-        Hex = '#F5F5DC',
-        Name = 'Beige'
-    }, {
-        Hex = '#FFE4C4',
-        Name = 'Bisque'
-    }, {
-        Hex = '#000000',
-        Name = 'Black'
-    }, {
-        Hex = '#FFEBCD',
-        Name = 'Blanched Almond'
-    }, {
-        Hex = '#0000FF',
-        Name = 'Blue'
-    }, {
-        Hex = '#8A2BE2',
-        Name = 'Blue Violet'
-    }, {
-        Hex = '#A52A2A',
-        Name = 'Brown'
-    }, {
-        Hex = '#DEB887',
-        Name = 'Burly Wood'
-    }, {
-        Hex = '#5F9EA0',
-        Name = 'Cadet Blue'
-    }, {
-        Hex = '#7FFF00',
-        Name = 'Chartreuse'
-    }, {
-        Hex = '#D2691E',
-        Name = 'Chocolate'
-    }, {
-        Hex = '#FF7F50',
-        Name = 'Coral'
-    }, {
-        Hex = '#6495ED',
-        Name = 'Cornflower Blue'
-    }, {
-        Hex = '#FFF8DC',
-        Name = 'Cornsilk'
-    }, {
-        Hex = '#DC143C',
-        Name = 'Crimson'
-    }, {
-        Hex = '#00FFFF',
-        Name = 'Cyan'
-    }, {
-        Hex = '#00008B',
-        Name = 'Dark Blue'
-    }, {
-        Hex = '#008B8B',
-        Name = 'Dark Cyan'
-    }, {
-        Hex = '#B8860B',
-        Name = 'Dark Goldenrod'
-    }, {
-        Hex = '#A9A9A9',
-        Name = 'Dark Gray'
-    }, {
-        Hex = '#006400',
-        Name = 'Dark Green'
-    }, {
-        Hex = '#BDB76B',
-        Name = 'Dark Khaki'
-    }, {
-        Hex = '#8B008B',
-        Name = 'Dark Magenta'
-    }, {
-        Hex = '#556B2F',
-        Name = 'Dark Olive Green'
-    }, {
-        Hex = '#FF8C00',
-        Name = 'Dark Orange'
-    }, {
-        Hex = '#9932CC',
-        Name = 'Dark Orchid'
-    }, {
-        Hex = '#8B0000',
-        Name = 'Dark Red'
-    }, {
-        Hex = '#E9967A',
-        Name = 'Dark Salmon'
-    }, {
-        Hex = '#8FBC8F',
-        Name = 'Dark Sea Green'
-    }, {
-        Hex = '#483D8B',
-        Name = 'Dark Slate Blue'
-    }, {
-        Hex = '#2F4F4F',
-        Name = 'Dark Slate Gray'
-    }, {
-        Hex = '#00CED1',
-        Name = 'Dark Turquoise'
-    }, {
-        Hex = '#9400D3',
-        Name = 'Dark Violet'
-    }, {
-        Hex = '#FF1493',
-        Name = 'Deep Pink'
-    }, {
-        Hex = '#00B7EB',
-        Name = 'Deep Sky Blue'
-    }, {
-        Hex = '#696969',
-        Name = 'Dim Gray'
-    }, {
-        Hex = '#1E90FF',
-        Name = 'Dodger Blue'
-    }, {
-        Hex = '#B22222',
-        Name = 'Firebrick'
-    }, {
-        Hex = '#FFFAF0',
-        Name = 'Floral White'
-    }, {
-        Hex = '#228B22',
-        Name = 'Forest Green'
-    }, {
-        Hex = '#FF00FF',
-        Name = 'Fuchsia'
-    }, {
-        Hex = '#DCDCDC',
-        Name = 'Gainsboro'
-    }, {
-        Hex = '#F8F8FF',
-        Name = 'Ghost White'
-    }, {
-        Hex = '#FFD700',
-        Name = 'Gold'
-    }, {
-        Hex = '#DAA520',
-        Name = 'Goldenrod'
-    }, {
-        Hex = '#808080',
-        Name = 'Gray'
-    }, {
-        Hex = '#008000',
-        Name = 'Green'
-    }, {
-        Hex = '#ADFF2F',
-        Name = 'Green Yellow'
-    }, {
-        Hex = '#F0FFF0',
-        Name = 'Honeydew'
-    }, {
-        Hex = '#FF69B4',
-        Name = 'Hot Pink'
-    }, {
-        Hex = '#CD5C5C',
-        Name = 'Indian Red'
-    }, {
-        Hex = '#4B0082',
-        Name = 'Indigo'
-    }, {
-        Hex = '#FFFFF0',
-        Name = 'Ivory'
-    }, {
-        Hex = '#F0E68C',
-        Name = 'Khaki'
-    }, {
-        Hex = '#E6E6FA',
-        Name = 'Lavender'
-    }, {
-        Hex = '#FFF0F5',
-        Name = 'Lavender Blush'
-    }, {
-        Hex = '#7CFC00',
-        Name = 'Lawn Green'
-    }, {
-        Hex = '#FFFACD',
-        Name = 'Lemon Chiffon'
-    }, {
-        Hex = '#ADD8E6',
-        Name = 'Light Blue'
-    }, {
-        Hex = '#F08080',
-        Name = 'Light Coral'
-    }, {
-        Hex = '#E0FFFF',
-        Name = 'Light Cyan'
-    }, {
-        Hex = '#FAFAD2',
-        Name = 'Light Goldenrod Yellow'
-    }, {
-        Hex = '#D3D3D3',
-        Name = 'Light Gray'
-    }, {
-        Hex = '#90EE90',
-        Name = 'Light Green'
-    }, {
-        Hex = '#FFB6C1',
-        Name = 'Light Pink'
-    }, {
-        Hex = '#FFA07A',
-        Name = 'Light Salmon'
-    }, {
-        Hex = '#20B2AA',
-        Name = 'Light Sea Green'
-    }, {
-        Hex = '#87CEFA',
-        Name = 'Light Sky Blue'
-    }, {
-        Hex = '#778899',
-        Name = 'Light Slate Gray'
-    }, {
-        Hex = '#B0C4DE',
-        Name = 'Light Steel Blue'
-    }, {
-        Hex = '#FFFFE0',
-        Name = 'Light Yellow'
-    }, {
-        Hex = '#00FF00',
-        Name = 'Lime'
-    }, {
-        Hex = '#32CD32',
-        Name = 'Lime Green'
-    }, {
-        Hex = '#FAF0E6',
-        Name = 'Linen'
-    }, {
-        Hex = '#FF00FF',
-        Name = 'Magenta'
-    }, {
-        Hex = '#800000',
-        Name = 'Maroon'
-    }, {
-        Hex = '#66CDAA',
-        Name = 'Medium Aquamarine'
-    }, {
-        Hex = '#0000CD',
-        Name = 'Medium Blue'
-    }, {
-        Hex = '#BA55D3',
-        Name = 'Medium Orchid'
-    }, {
-        Hex = '#9370DB',
-        Name = 'Medium Purple'
-    }, {
-        Hex = '#3CB371',
-        Name = 'Medium Sea Green'
-    }, {
-        Hex = '#7B68EE',
-        Name = 'Medium Slate Blue'
-    }, {
-        Hex = '#00FA9A',
-        Name = 'Medium Spring Green'
-    }, {
-        Hex = '#48D1CC',
-        Name = 'Medium Turquoise'
-    }, {
-        Hex = '#C71585',
-        Name = 'Medium Violet Red'
-    }, {
-        Hex = '#191970',
-        Name = 'Midnight Blue'
-    }, {
-        Hex = '#F5FFFA',
-        Name = 'Mint Cream'
-    }, {
-        Hex = '#FFE4E1',
-        Name = 'Misty Rose'
-    }, {
-        Hex = '#FFE4B5',
-        Name = 'Moccasin'
-    }, {
-        Hex = '#FFDEAD',
-        Name = 'Navajo White'
-    }, {
-        Hex = '#000080',
-        Name = 'Navy'
-    }, {
-        Hex = '#FDF5E6',
-        Name = 'Old Lace'
-    }, {
-        Hex = '#808000',
-        Name = 'Olive'
-    }, {
-        Hex = '#6B8E23',
-        Name = 'Olive Drab'
-    }, {
-        Hex = '#FFA500',
-        Name = 'Orange'
-    }, {
-        Hex = '#FF4500',
-        Name = 'Orange Red'
-    }, {
-        Hex = '#DA70D6',
-        Name = 'Orchid'
-    }, {
-        Hex = '#EEE8AA',
-        Name = 'Pale Goldenrod'
-    }, {
-        Hex = '#98FB98',
-        Name = 'Pale Green'
-    }, {
-        Hex = '#AFEEEE',
-        Name = 'Pale Turquoise'
-    }, {
-        Hex = '#DB7093',
-        Name = 'Pale Violet Red'
-    }, {
-        Hex = '#FFEFD5',
-        Name = 'Papaya Whip'
-    }, {
-        Hex = '#FFDAB9',
-        Name = 'Peach Puff'
-    }, {
-        Hex = '#CD853F',
-        Name = 'Peru'
-    }, {
-        Hex = '#FFC0CB',
-        Name = 'Pink'
-    }, {
-        Hex = '#DDA0DD',
-        Name = 'Plum'
-    }, {
-        Hex = '#B0E0E6',
-        Name = 'Powder Blue'
-    }, {
-        Hex = '#800080',
-        Name = 'Purple'
-    }, {
-        Hex = '#FF0000',
-        Name = 'Red'
-    }, {
-        Hex = '#BC8F8F',
-        Name = 'Rosy Brown'
-    }, {
-        Hex = '#4169E1',
-        Name = 'Royal Blue'
-    }, {
-        Hex = '#8B4513',
-        Name = 'Saddle Brown'
-    }, {
-        Hex = '#FA8072',
-        Name = 'Salmon'
-    }, {
-        Hex = '#F4A460',
-        Name = 'Sandy Brown'
-    }, {
-        Hex = '#2E8B57',
-        Name = 'Sea Green'
-    }, {
-        Hex = '#FFF5EE',
-        Name = 'Sea Shell'
-    }, {
-        Hex = '#A0522D',
-        Name = 'Sienna'
-    }, {
-        Hex = '#C0C0C0',
-        Name = 'Silver'
-    }, {
-        Hex = '#87CEEB',
-        Name = 'Sky Blue'
-    }, {
-        Hex = '#6A5ACD',
-        Name = 'Slate Blue'
-    }, {
-        Hex = '#708090',
-        Name = 'Slate Gray'
-    }, {
-        Hex = '#FFFAFA',
-        Name = 'Snow'
-    }, {
-        Hex = '#00FF7F',
-        Name = 'Spring Green'
-    }, {
-        Hex = '#4682B4',
-        Name = 'Steel Blue'
-    }, {
-        Hex = '#D2B48C',
-        Name = 'Tan'
-    }, {
-        Hex = '#008080',
-        Name = 'Teal'
-    }, {
-        Hex = '#D8BFD8',
-        Name = 'Thistle'
-    }, {
-        Hex = '#FF6347',
-        Name = 'Tomato'
-    }, {
-        Hex = '#40E0D0',
-        Name = 'Turquoise'
-    }, {
-        Hex = '#EE82EE',
-        Name = 'Violet'
-    }, {
-        Hex = '#F5DEB3',
-        Name = 'Wheat'
-    }, {
-        Hex = '#FFFFFF',
-        Name = 'White'
-    }, {
-        Hex = '#F5F5F5',
-        Name = 'White Smoke'
-    }, {
-        Hex = '#FFFF00',
-        Name = 'Yellow'
-    }, {
-        Hex = '#9ACD32',
-        Name = 'Yellow Green'
-    }}
-    local d4 = {}
-    for B, C in d6 do
-        table.insert(d4, C.Name)
-    end
-    table.sort(d4)
-    cH:AddDropdown('selectedDyes', {
-        Text = 'Select Desired Dyes',
-        Tooltip = "Event wheel items with these dyes or close to these dyes won't be sold/recycled",
-        Values = d4,
-        AllowNull = true,
-        Default = {'Rainbow', 'Ghoul', 'Ice', 'Faded', 'Black', 'White'},
-        Multi = true
-    })
-    cH:AddSlider('colorDistanceThreshold', {
-        Text = 'Color Distance Threshold',
-        Tooltip = 'Keep dyes that are close to your desired dyes',
-        Default = 100,
-        Min = 0,
-        Max = 200,
-        Rounding = 0,
-        HideMax = true,
-        Compact = true
-    })
-    cH:AddToggle('autoSellCosmetics', {
-        Text = 'Auto Sell Cosmetics',
-        Default = false
-    })
-    Toggles.autoSellCosmetics:OnChanged(function(cU)
-        if cU and Toggles.autoRecycleCosmetics.Value then
-            Toggles.autoRecycleCosmetics:SetValue(false)
-        end
-    end)
-    cH:AddToggle('autoRecycleCosmetics', {
-        Text = 'Auto Recycle Cosmetics',
-        Default = false
-    })
-    Toggles.autoRecycleCosmetics:OnChanged(function(cU)
-        if cU and Toggles.autoSellCosmetics.Value then
-            Toggles.autoSellCosmetics:SetValue(false)
-        end
-    end)
-    local function d7(d8)
-        local d9 = math.floor(d8.R * 255 + 0.5)
-        local da = math.floor(d8.G * 255 + 0.5)
-        local db = math.floor(d8.B * 255 + 0.5)
-        return string.format("#%02X%02X%02X", d9, da, db)
-    end
-    local function dc(dd)
-        dd = dd:gsub("#", "")
-        return tonumber("0x" .. dd:sub(1, 2)), tonumber("0x" .. dd:sub(3, 4)), tonumber("0x" .. dd:sub(5, 6))
-    end
-    local function de(df, dg)
-        local dh, di, dj = dc(df)
-        local dk, dl, dm = dc(dg)
-        return math.sqrt((dk - dh) ^ 2 + (dl - di) ^ 2 + (dm - dj) ^ 2)
-    end
-    local function dn(dp)
-        local dq;
-        local dr;
-        if dp and dp:FindFirstChild('Dye') and dp.Dye.Value then
-            dr = d7(dp.Dye.Value)
-            for ds, dt in d6 do
-                if Options.selectedDyes.Value[dt.Name] then
-                    if dr == dt.Hex then
-                        dq = true;
-                        print('Did not sell ' .. dp.Name .. ' - ' .. dt.Name)
-                        break
-                    elseif not dt.SpecialType then
-                        local _ = de(dr, dt.Hex)
-                        if _ <= Options.colorDistanceThreshold.Value then
-                            dq = true;
-                            print('Did not sell ' .. dp.Name .. ' - Similar to ' .. dt.Name .. ' - Color Distance: ' ..
-                                      math.floor(_ / 0.1) / 10 .. ' - Hex: ' .. dr)
-                            break
-                        end
-                    end
-                end
-            end
-        end
-        if dq then
-            return true
-        end
-    end
-    cH:AddButton({
-        Text = 'Sell Selected Cosmetics',
-        Func = function()
-            local cZ = {}
-            for B, C in pairs(bG:GetChildren()) do
-                local du = d3[C.Name] or d5[C.Name] or 'none'
-                if (Options.selectedCosmetics.Value[du] or Options.selectedWheelCosmetics.Value[du]) and
-                    not C:FindFirstChild('Locked') and not dn(C) then
-                    table.insert(cZ, C)
-                end
-            end
-            if #cZ > 0 then
-                cq('Sold ' .. #cZ .. ' Cosmetics')
-                sell(cZ)
-            end
-        end,
-        DoubleClick = true
-    })
-    cH:AddButton({
-        Text = 'Recycle Selected Cosmetics',
-        Func = function()
-            local cZ = {}
-            for B, C in pairs(bG:GetChildren()) do
-                local du = d3[C.Name] or d5[C.Name] or 'none'
-                if (Options.selectedCosmetics.Value[du] or Options.selectedWheelCosmetics.Value[du]) and
-                    not C:FindFirstChild('Locked') and not dn(C) then
-                    table.insert(cZ, C)
-                end
-            end
-            if #cZ > 0 then
-                cq('Recycled ' .. #cZ .. ' Cosmetics')
-                recycle(cZ)
-            end
-        end,
-        DoubleClick = true
-    })
-    if aq then
-        bG.ChildAdded:Connect(function(C)
-            if Toggles.autoSellCosmetics.Value or Toggles.autoRecycleCosmetics.Value then
-                local du = d5[C.Name]
-                if du then
-                    C:WaitForChild('Dye', 5)
-                    if Options.selectedWheelCosmetics.Value[du] and not C:FindFirstChild('Locked') and not dn(C) then
-                        if Toggles.autoSellCosmetics.Value then
-                            sell({C})
-                        end
-                        if Toggles.autoRecycleCosmetics.Value then
-                            recycle({C})
-                        end
-                    end
-                end
-            end
-        end)
-        bF.ChildAdded:Connect(function(C)
-            if Toggles.autoSellEggs.Value then
-                local dp = bL[C.Name]
-                if dp.Type == 'Egg' then
-                    sell({C})
-                end
-            end
-        end)
-    end
-end 
-]]
-
---[[
-do
-    cJ:AddInput('wheelCount', {
-        Default = 100,
-        Numeric = true,
-        Finished = true,
-        Text = 'Wheel Spin Count'
-    })
-    cJ:AddSlider('wheelDelay', {
-        Text = 'Wheel Spin Delay',
-        Tooltip = 'Keep dyes that are close to your desired dyes',
-        Default = 0,
-        Min = 0,
-        Max = 5,
-        Rounding = 1,
-        HideMax = true,
-        Compact = true
-    })
-    local dv = cJ:AddLabel(Options.wheelCount.Value .. ' spins in ' ..
-                               timeElapsed(
-            math.round((Options.wheelCount.Value - 1) * Options.wheelDelay.Value * 10) / 10))
-    Options.wheelCount:OnChanged(function(cU)
-        dv:SetText(cU .. ' spins in ' .. timeElapsed(math.round((cU - 1) * Options.wheelDelay.Value * 10) / 10))
-    end)
-    Options.wheelDelay:OnChanged(function(cU)
-        dv:SetText(Options.wheelCount.Value .. ' spins in ' ..
-                       timeElapsed(math.round((Options.wheelCount.Value - 1) * cU * 10) / 10))
-    end)
-    cJ:AddButton({
-        Text = 'Spin wheel with the settings above!',
-        Func = function()
-            local dw, dx = tonumber(Options.wheelCount.Value), Options.wheelDelay.Value;
-            if dw > 0 then
-                cq('Spinning the wheel ' .. dw .. ' times in ' .. timeElapsed(math.round((dw - 1) * dx * 10) / 10) ..
-                       ' seconds!', 7)
-                for B = 1, dw do
-                    S.EventSpinner.JoinQueue:FireServer(c)
-                    task.wait(dx)
-                end
-            end
-        end,
-        DoubleClick = true
-    })
-end]]
 
 do
     -- Teleport for Specific Location
@@ -5773,28 +5097,33 @@ Toggles.Killaura:OnChanged(function(cU)
         end
     end)
     -- Kill Aura Pure
-
+    local rand = Random.new()
     local function randomDelay(base)
-        return base + rand:NextNumber(0.05, 0.15)
+        return base + rand:NextNumber(0.02, 0.06)
     end
     task.spawn(function()
         while Toggles.Killaura.Value and ao do
             X, Y, Z, _, a0, a1, a2 = getClosestMob(bV)
-        
+
             if alive() and not mounted() and X and not table.find(bl, aZ) then
                 for ds, gx in pairs(ca[aZ].Skills) do
                     local gy, gz = gx.MeleeOnBoss and a1 and 'Melee' or gx.Type or ca[aZ].Type, gx.Skill
                     local gA = gx.MeleeOnBoss and a1 and gx.BossRange or gx.Range or ca[aZ].Range
-                    local gB, gC = gx.Cooldown + randomDelay(Options.KillauraDelay.Value), gy == 'Ranged' and a1
-                    local gD, ge = gC and Z or _ > 0 and Y or Z, gC and a0 or _
-        
+                    local gC = gy == 'Ranged' and a1
+
+                    local gD = gC and Z or (_ > 0 and Y or Z)
+                    local ge = gC and a0 or _
                     if b7 then
                         local gE = (CFrame.new(Z + Vector3.new(0, 5, 0)) + X.CFrame.lookVector * 45).Position
                         gD, ge = gE, (gE - aG.Position).Magnitude
                     end
-        
-                    local timeSinceLast = tick() - (gx.LastUsed or 0)
-                    if timeSinceLast >= gB then
+
+                    -- Only set cooldown ONCE, not every loop
+                    if not gx.RealCooldown then
+                        gx.RealCooldown = gx.Cooldown + Options.KillauraDelay.Value
+                    end
+
+                    if tick() - (gx.LastUsed or 0) >= gx.RealCooldown then
                         if gy ~= 'Heal' and ge <= gA and a2.Value > 0 then
                             if gy == 'Melee' then
                                 b8:FireServer(gz, aG.Position, (gD - aG.Position).Unit)
@@ -5806,16 +5135,14 @@ Toggles.Killaura:OnChanged(function(cU)
                                 if gx.Args == 'MobPosition' then
                                     gz:FireServer(Z)
                                 elseif gx.Args == 'mobTbl' then
-                                    gz:FireServer({ X.Parent })
+                                    gz:FireServer({X.Parent})
                                 else
                                     gz:FireServer()
                                 end
                             end
                             gx.LastUsed = tick()
                             a5 = tick()
-                        end
-        
-                        if gy == 'Heal' and aH.Health.Value / aH.MaxHealth.Value < 0.6 then
+                        elseif gy == 'Heal' and aH.Health.Value / aH.MaxHealth.Value < 0.6 then
                             if gx.Args then
                                 gz:FireServer(gx.Args)
                             else
@@ -5826,10 +5153,11 @@ Toggles.Killaura:OnChanged(function(cU)
                     end
                 end
             end
-            task.wait(randomDelay(0.1)) -- slight variation each loop
+
+            task.wait(randomDelay(0.08)) -- tiny variation, enough to bypass pattern detection
         end
     end)
-    
+
     -- Checking Health of Mobs
     if ao and not aj:FindFirstChild(36) and ao then
         task.spawn(function()
