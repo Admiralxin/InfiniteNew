@@ -2623,33 +2623,33 @@ local ca = {
     },
     MageOfShadows = {
         DisplayName = 'Mage Of Shadows',
-        Range = 40,
+        Range = 99,
         Type = 'Ranged',
         Primary = 'Staff',
         Skills = {{
             Skill = 'MageOfShadows',
-            Cooldown = 0.5
-        }, {
-            Skill = 'MageOfShadowsBlast',
-            Cooldown = 0.6
-        }, {
-            Skill = 'MageOfShadowsCharged',
-            Cooldown = 0.7
-        }, {
-            Skill = 'MageOfShadowsBlastCharged',
-            Cooldown = 0.8
-        }, {
-            Skill = 'BighShadowOrb1',
-            Cooldown = 0.9
-        }, {
-            Skill = 'BighShadowOrb2',
             Cooldown = 1
         }, {
+            Skill = 'MageOfShadowsBlast',
+            Cooldown = 2
+        }, {
+            Skill = 'MageOfShadowsCharged',
+            Cooldown = 3
+        }, {
+            Skill = 'MageOfShadowsBlastCharged',
+            Cooldown = 4
+        }, {
+            Skill = 'BighShadowOrb1',
+            Cooldown = 5
+        }, {
+            Skill = 'BighShadowOrb2',
+            Cooldown = 5
+        }, {
             Skill = 'BighShadowOrb3',
-            Cooldown = 1.1
+            Cooldown = 5
         }, {
             Skill = 'MageOfShadowsDamageCircle',
-            Cooldown = 0.5
+            Cooldown = 5
         }, {
             Skill = b2:WaitForChild('MageOfShadows'):WaitForChild('ShadowChains'),
             Cooldown = 6,
