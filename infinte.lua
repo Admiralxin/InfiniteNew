@@ -5178,7 +5178,7 @@ Toggles.Killaura:OnChanged(function(cU)
                     if now - gx.LastUsed >= cooldown and now - lastGlobalAttack >= globalCooldown + attackLag + randomAttackInterval then
                         if gy ~= 'Heal' and ge <= gA and a2 and a2.Value > 0 then
                             simulateLookAt(Z)
-                            task.wait(randomDelay(0.03, 0.07))
+                            task.wait(randomDelay(1, 4))
     
                             -- Occasionally simulate a click to mimic human-like behavior
                             if rand:NextNumber() < 0.1 then fakeClick() end
