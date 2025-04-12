@@ -2628,11 +2628,11 @@ local ca = {
         Primary = 'Staff',
         Skills = {{
             Skill = 'MageOfShadows',
-            Cooldown = 1
+            Cooldown = 3
         },
         {
             Skill = 'MageOfShadows1',
-            Cooldown = 2
+            Cooldown = 4
         },{
             Skill = b2:WaitForChild('MageOfShadows'):WaitForChild('Ultimate'),
             Cooldown = 2,
