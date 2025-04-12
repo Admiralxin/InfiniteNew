@@ -2628,31 +2628,31 @@ local ca = {
         Primary = 'Staff',
         Skills = {{
             Skill = 'MageOfShadows',
-            Cooldown = 8
+            Cooldown = 0.5
         }, {
             Skill = 'MageOfShadowsBlast',
-            Cooldown = 9
+            Cooldown = 0.6
         }, {
             Skill = 'MageOfShadowsCharged',
-            Cooldown = 12
+            Cooldown = 0.7
         }, {
             Skill = 'MageOfShadowsBlastCharged',
-            Cooldown = 13
+            Cooldown = 1
         }, {
             Skill = 'BighShadowOrb1',
-            Cooldown = 14
+            Cooldown = 2
         }, {
             Skill = 'BighShadowOrb2',
-            Cooldown = 15
+            Cooldown = 2
         }, {
             Skill = 'BighShadowOrb3',
-            Cooldown = 16
+            Cooldown = 1
         }, {
             Skill = 'MageOfShadowsDamageCircle',
-            Cooldown = 18
+            Cooldown = 4
         }, {
             Skill = b2:WaitForChild('MageOfShadows'):WaitForChild('ShadowChains'),
-            Cooldown = 18,
+            Cooldown = 2,
             Type = 'Remote',
             Args = 'mobTbl'
         }, {
@@ -5100,28 +5100,22 @@ Toggles.Killaura:OnChanged(function(cU)
     local rand = Random.new()
 
     local function randomDelay(min, max)
-    return rand:NextNumber(min or 0.02, max or 0.06)
+        return rand:NextNumber(min or 0.03, max or 0.08)
     end
-
-    local rand = Random.new()
-
-local function randomDelay(min, max)
-    return rand:NextNumber(min or 0.03, max or 0.08)
-end
-
-local function faceTargetSmoothly(targetPos)
-    local root = aG
-    if root and root:FindFirstChild("CFrame") then
-        local current = root.CFrame.Position
-        local dir = (targetPos - current).Unit
-        local lookAt = CFrame.lookAt(current, current + dir)
-        root.CFrame = root.CFrame:Lerp(lookAt, rand:NextNumber(0.08, 0.15))
+    
+    local function faceTargetSmoothly(targetPos)
+        local root = aG
+        if root and root:FindFirstChild("CFrame") then
+            local current = root.CFrame.Position
+            local dir = (targetPos - current).Unit
+            local lookAt = CFrame.lookAt(current, current + dir)
+            root.CFrame = root.CFrame:Lerp(lookAt, rand:NextNumber(0.08, 0.15))
+        end
     end
-end
-
-local lastGlobalAttack = 0
-local globalCooldown = 0.14
-local Debug = true
+    
+    local lastGlobalAttack = 0
+    local globalCooldown = 0.14
+    local Debug = true
     task.spawn(function()
         while Toggles.Killaura.Value and ao do
             X, Y, Z, _, a0, a1, a2 = getClosestMob(bV)
@@ -5146,6 +5140,7 @@ local Debug = true
         
                     local gD = gC and Z or (_ > 0 and Y or Z)
                     local ge = gC and a0 or _
+        
                     if b7 then
                         local gE = (CFrame.new(Z + Vector3.new(0, 5, 0)) + X.CFrame.lookVector * 45).Position
                         gD, ge = gE, (gE - aG.Position).Magnitude
@@ -5157,16 +5152,23 @@ local Debug = true
                     local cooldown = gx.BaseCooldown + drift
         
                     local now = tick()
-                    if now - gx.LastUsed >= cooldown and now - lastGlobalAttack >= globalCooldown then
+        
+                    -- Add more randomness to the attack pattern
+                    local attackInterval = rand:NextNumber(0.12, 0.2)  -- Adjust this range for more unpredictability
+        
+                    if now - gx.LastUsed >= cooldown and now - lastGlobalAttack >= globalCooldown + attackInterval then
                         if gy ~= 'Heal' and ge <= gA and a2.Value > 0 then
                             faceTargetSmoothly(Z)
         
+                            -- Slightly adjust the time between each attack
                             task.wait(randomDelay(0.01, 0.035))
         
+                            -- Randomize the firing sequence slightly
+                            local attackRand = rand:NextNumber(0.9, 1.1)
                             if gy == 'Melee' then
-                                b8:FireServer(gz, aG.Position, (gD - aG.Position).Unit)
+                                b8:FireServer(gz, aG.Position, (gD - aG.Position).Unit * attackRand)
                             elseif gy == 'Ranged' then
-                                b8:FireServer(gz, gD)
+                                b8:FireServer(gz, gD * attackRand)
                             elseif gy == 'Self' then
                                 b8:FireServer(gz, aG.Position)
                             elseif gy == 'Remote' then
@@ -5183,7 +5185,9 @@ local Debug = true
                             lastGlobalAttack = now
                             a5 = now
                         elseif gy == 'Heal' and aH.Health.Value / aH.MaxHealth.Value < 0.6 then
-                            gz:FireServer(gx.Args or nil)
+                            -- Simulate heal with variability
+                            local healRand = rand:NextNumber(0.9, 1.1)
+                            gz:FireServer(gx.Args or nil, healRand)
                             gx.LastUsed = now
                             lastGlobalAttack = now
                         elseif Debug then
@@ -5193,7 +5197,7 @@ local Debug = true
                 end
             end
         
-            task.wait(randomDelay(0.07, 0.12))
+            task.wait(randomDelay(0.1, 0.15))  -- Increased randomness between each full loop
         end
     end)
 
