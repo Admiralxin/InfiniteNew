@@ -5104,16 +5104,18 @@ Toggles.Killaura:OnChanged(function(cU)
         return rand:NextNumber(min or 0.05, max or 0.15)
     end
     
+    -- Simulate mouse movement (to look like camera movement)
     local function simulateLookAt(pos)
         if not aG or not aG:IsDescendantOf(workspace) then return end
         local cam = workspace.CurrentCamera
         if not cam then return end
         local screenPos, onScreen = cam:WorldToViewportPoint(pos)
         if onScreen then
-            VirtualInput:SendMouseMoveEvent(screenPos.X + rand:NextInteger(-4,4), screenPos.Y + rand:NextInteger(-4,4), game)
+            VirtualInput:SendMouseMoveEvent(screenPos.X + rand:NextInteger(-4, 4), screenPos.Y + rand:NextInteger(-4, 4), game)
         end
     end
     
+    -- Occasionally click to mimic user input
     local function fakeClick()
         local x, y = rand:NextInteger(100, 300), rand:NextInteger(100, 300)
         VirtualInput:SendMouseButtonEvent(x, y, 0, true, game, 0)
@@ -5134,12 +5136,19 @@ Toggles.Killaura:OnChanged(function(cU)
                     table.insert(skillList, gx)
                 end
     
+                -- Randomize skill order
                 for i = #skillList, 2, -1 do
                     local j = math.random(i)
                     skillList[i], skillList[j] = skillList[j], skillList[i]
                 end
     
                 for _, gx in ipairs(skillList) do
+                    -- Skip if no skill is valid
+                    if not gx or not gx.Skill then
+                        -- This replaces the "continue" statement
+                        return
+                    end
+    
                     local gy, gz = gx.MeleeOnBoss and a1 and 'Melee' or gx.Type or ca[aZ].Type, gx.Skill
                     local gA = gx.MeleeOnBoss and a1 and gx.BossRange or gx.Range or ca[aZ].Range
                     local gC = gy == 'Ranged' and a1
@@ -5163,12 +5172,16 @@ Toggles.Killaura:OnChanged(function(cU)
                         break
                     end
     
+                    -- Avoid sending too many FireServer calls, reducing detection risk
                     if now - gx.LastUsed >= cooldown and now - lastGlobalAttack >= globalCooldown + attackLag then
                         if gy ~= 'Heal' and ge <= gA and a2 and a2.Value > 0 then
                             simulateLookAt(Z)
                             task.wait(randomDelay(0.03, 0.07))
+    
+                            -- Optionally simulate a click to mimic human-like behavior
                             if rand:NextNumber() < 0.1 then fakeClick() end
     
+                            -- Conditionally call FireServer
                             if gy == 'Melee' then
                                 b8:FireServer(gz, aG.Position, (gD - aG.Position).Unit)
                             elseif gy == 'Ranged' then
@@ -5203,6 +5216,7 @@ Toggles.Killaura:OnChanged(function(cU)
         end
     end)
 
+    
     -- Checking Health of Mobs
     if ao and not aj:FindFirstChild(36) and ao then
         task.spawn(function()
