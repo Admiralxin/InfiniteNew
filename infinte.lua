@@ -5098,32 +5098,38 @@ Toggles.Killaura:OnChanged(function(cU)
     end)
     -- Kill Aura Pure
     local rand = Random.new()
-    local function randomDelay(base)
-        return base + rand:NextNumber(0.02, 0.06)
+
+    local function randomDelay(min, max)
+    return rand:NextNumber(min or 0.02, max or 0.06)
     end
+
+    local lastGlobalAttack = 0
+    local globalAttackCooldown = 0.12  -- minimum time between any FireServer call
     task.spawn(function()
         while Toggles.Killaura.Value and ao do
             X, Y, Z, _, a0, a1, a2 = getClosestMob(bV)
-
+        
             if alive() and not mounted() and X and not table.find(bl, aZ) then
                 for ds, gx in pairs(ca[aZ].Skills) do
                     local gy, gz = gx.MeleeOnBoss and a1 and 'Melee' or gx.Type or ca[aZ].Type, gx.Skill
                     local gA = gx.MeleeOnBoss and a1 and gx.BossRange or gx.Range or ca[aZ].Range
                     local gC = gy == 'Ranged' and a1
-
+        
                     local gD = gC and Z or (_ > 0 and Y or Z)
                     local ge = gC and a0 or _
                     if b7 then
                         local gE = (CFrame.new(Z + Vector3.new(0, 5, 0)) + X.CFrame.lookVector * 45).Position
                         gD, ge = gE, (gE - aG.Position).Magnitude
                     end
-
-                    -- Only set cooldown ONCE, not every loop
-                    if not gx.RealCooldown then
-                        gx.RealCooldown = gx.Cooldown + Options.KillauraDelay.Value
-                    end
-
-                    if tick() - (gx.LastUsed or 0) >= gx.RealCooldown then
+        
+                    -- Ensure we only calculate this once
+                    gx.RealCooldown = gx.RealCooldown or gx.Cooldown + Options.KillauraDelay.Value
+        
+                    if tick() - (gx.LastUsed or 0) >= gx.RealCooldown and tick() - lastGlobalAttack >= globalAttackCooldown then
+                        -- Add human delay randomness
+                        task.wait(randomDelay(0.01, 0.035))
+        
+                        -- Check if in range & target is valid
                         if gy ~= 'Heal' and ge <= gA and a2.Value > 0 then
                             if gy == 'Melee' then
                                 b8:FireServer(gz, aG.Position, (gD - aG.Position).Unit)
@@ -5135,12 +5141,13 @@ Toggles.Killaura:OnChanged(function(cU)
                                 if gx.Args == 'MobPosition' then
                                     gz:FireServer(Z)
                                 elseif gx.Args == 'mobTbl' then
-                                    gz:FireServer({X.Parent})
+                                    gz:FireServer({ X.Parent })
                                 else
                                     gz:FireServer()
                                 end
                             end
                             gx.LastUsed = tick()
+                            lastGlobalAttack = tick()
                             a5 = tick()
                         elseif gy == 'Heal' and aH.Health.Value / aH.MaxHealth.Value < 0.6 then
                             if gx.Args then
@@ -5149,12 +5156,13 @@ Toggles.Killaura:OnChanged(function(cU)
                                 gz:FireServer()
                             end
                             gx.LastUsed = tick()
+                            lastGlobalAttack = tick()
                         end
                     end
                 end
             end
-
-            task.wait(randomDelay(0.08)) -- tiny variation, enough to bypass pattern detection
+        
+            task.wait(randomDelay(0.07, 0.12))
         end
     end)
 
