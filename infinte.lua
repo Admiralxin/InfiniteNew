@@ -5104,17 +5104,16 @@ Toggles.Killaura:OnChanged(function(cU)
         return rand:NextNumber(min or 0.05, max or 0.15)
     end
     
-    -- Simulate mouse movement (to look like camera movement)
     local function simulateLookAt(pos)
-        -- Don't actually change CFrame; simulate input instead
-        if not aG then return end
-        local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(pos)
+        if not aG or not aG:IsDescendantOf(workspace) then return end
+        local cam = workspace.CurrentCamera
+        if not cam then return end
+        local screenPos, onScreen = cam:WorldToViewportPoint(pos)
         if onScreen then
-            VirtualInput:SendMouseMoveEvent(screenPos.X + rand:NextInteger(-5,5), screenPos.Y + rand:NextInteger(-5,5), game)
+            VirtualInput:SendMouseMoveEvent(screenPos.X + rand:NextInteger(-4,4), screenPos.Y + rand:NextInteger(-4,4), game)
         end
     end
     
-    -- Occasionally click to mimic user input
     local function fakeClick()
         local x, y = rand:NextInteger(100, 300), rand:NextInteger(100, 300)
         VirtualInput:SendMouseButtonEvent(x, y, 0, true, game, 0)
@@ -5128,53 +5127,48 @@ Toggles.Killaura:OnChanged(function(cU)
     task.spawn(function()
         while Toggles.Killaura.Value and ao do
             X, Y, Z, _, a0, a1, a2 = getClosestMob(bV)
-        
+    
             if alive() and not mounted() and X and not table.find(bl, aZ) then
                 local skillList = {}
-        
                 for _, gx in pairs(ca[aZ].Skills) do
                     table.insert(skillList, gx)
                 end
-        
+    
                 for i = #skillList, 2, -1 do
                     local j = math.random(i)
                     skillList[i], skillList[j] = skillList[j], skillList[i]
                 end
-        
+    
                 for _, gx in ipairs(skillList) do
                     local gy, gz = gx.MeleeOnBoss and a1 and 'Melee' or gx.Type or ca[aZ].Type, gx.Skill
                     local gA = gx.MeleeOnBoss and a1 and gx.BossRange or gx.Range or ca[aZ].Range
                     local gC = gy == 'Ranged' and a1
-        
                     local gD = gC and Z or (_ > 0 and Y or Z)
                     local ge = gC and a0 or _
-        
+    
                     if b7 then
-                        local gE = (CFrame.new(Z + Vector3.new(0, rand:NextNumber(4, 6), 0)) + X.CFrame.lookVector * 45).Position
+                        local gE = (CFrame.new(Z + Vector3.new(0, rand:NextNumber(4, 6), 0)) + X.CFrame.LookVector * 45).Position
                         gD, ge = gE, (gE - aG.Position).Magnitude
                     end
-        
+    
                     gx.LastUsed = gx.LastUsed or 0
                     gx.BaseCooldown = gx.BaseCooldown or gx.Cooldown + Options.KillauraDelay.Value
                     local drift = rand:NextNumber(-0.1, 0.15)
                     local cooldown = gx.BaseCooldown + drift
-        
                     local now = tick()
                     local attackLag = rand:NextNumber(0.12, 0.27)
-        
-                    -- Skip randomly to mimic mistake
+    
                     if rand:NextNumber() < 0.15 then
                         if Debug then print("[Skipping attack] Mimicking mistake...") end
                         break
                     end
-        
+    
                     if now - gx.LastUsed >= cooldown and now - lastGlobalAttack >= globalCooldown + attackLag then
-                        if gy ~= 'Heal' and ge <= gA and a2.Value > 0 then
+                        if gy ~= 'Heal' and ge <= gA and a2 and a2.Value > 0 then
                             simulateLookAt(Z)
                             task.wait(randomDelay(0.03, 0.07))
-        
                             if rand:NextNumber() < 0.1 then fakeClick() end
-        
+    
                             if gy == 'Melee' then
                                 b8:FireServer(gz, aG.Position, (gD - aG.Position).Unit)
                             elseif gy == 'Ranged' then
@@ -5190,11 +5184,11 @@ Toggles.Killaura:OnChanged(function(cU)
                                     gz:FireServer()
                                 end
                             end
-        
+    
                             gx.LastUsed = now
                             lastGlobalAttack = now
                             a5 = now
-                        elseif gy == 'Heal' and aH.Health.Value / aH.MaxHealth.Value < 0.6 then
+                        elseif gy == 'Heal' and aH and aH:FindFirstChild("Health") and (aH.Health.Value / aH.MaxHealth.Value) < 0.6 then
                             gz:FireServer(gx.Args or nil)
                             gx.LastUsed = now
                             lastGlobalAttack = now
@@ -5204,13 +5198,8 @@ Toggles.Killaura:OnChanged(function(cU)
                     end
                 end
             end
-        
-            -- Random idle behavior
-            if rand:NextNumber() < 0.1 then
-                task.wait(randomDelay(0.15, 0.25))
-            else
-                task.wait(randomDelay(0.08, 0.12))
-            end
+    
+            task.wait(rand:NextNumber(0.08, 0.14))
         end
     end)
 
