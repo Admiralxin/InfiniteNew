@@ -5101,7 +5101,7 @@ Toggles.Killaura:OnChanged(function(cU)
     local VirtualInput = game:GetService("VirtualInputManager")
     
     local function randomDelay(min, max)
-        return rand:NextNumber(min or 0.05, max or 0.15)
+        return rand:NextNumber(min or 1, max or 2)
     end
     
     -- Simulate mouse movement (to look like camera movement)
@@ -5164,7 +5164,7 @@ Toggles.Killaura:OnChanged(function(cU)
                     local drift = rand:NextNumber(-0.1, 0.15)
                     local cooldown = gx.BaseCooldown + drift
                     local now = tick()
-                    local attackLag = rand:NextNumber(0.12, 0.27)
+                    local attackLag = rand:NextNumber(1, 3)
     
                     -- Randomly skip attack to mimic human-like mistakes
                     if rand:NextNumber() < 0.15 then
@@ -5173,7 +5173,7 @@ Toggles.Killaura:OnChanged(function(cU)
                     end
     
                     -- Apply a randomized interval between actions to make them less predictable
-                    local randomAttackInterval = rand:NextNumber(0.1, 0.3)
+                    local randomAttackInterval = rand:NextNumber(1, 4)
     
                     if now - gx.LastUsed >= cooldown and now - lastGlobalAttack >= globalCooldown + attackLag + randomAttackInterval then
                         if gy ~= 'Heal' and ge <= gA and a2 and a2.Value > 0 then
@@ -5184,7 +5184,7 @@ Toggles.Killaura:OnChanged(function(cU)
                             if rand:NextNumber() < 0.1 then fakeClick() end
     
                             -- Introduce randomness in FireServer calls to reduce predictability
-                            local fireInterval = rand:NextNumber(0.1, 0.25)
+                            local fireInterval = rand:NextNumber(1, 3)
                             task.wait(fireInterval)
     
                             -- Conditionally call FireServer based on skills
@@ -5218,7 +5218,7 @@ Toggles.Killaura:OnChanged(function(cU)
                 end
             end
     
-            task.wait(rand:NextNumber(0.08, 0.14))
+            task.wait(rand:NextNumber(1, 4))
         end
     end)
     
