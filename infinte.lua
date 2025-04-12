@@ -2623,7 +2623,7 @@ local ca = {
     },
     MageOfShadows = {
         DisplayName = 'Mage Of Shadows',
-        Range = 99,
+        Range = 35,
         Type = 'Ranged',
         Primary = 'Staff',
         Skills = {{
