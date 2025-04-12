@@ -5103,15 +5103,43 @@ Toggles.Killaura:OnChanged(function(cU)
     return rand:NextNumber(min or 0.02, max or 0.06)
     end
 
-    local lastGlobalAttack = 0
-    local globalAttackCooldown = 0.12  -- minimum time between any FireServer call
-    local DebugDetection = true
+    local rand = Random.new()
+
+local function randomDelay(min, max)
+    return rand:NextNumber(min or 0.03, max or 0.08)
+end
+
+local function faceTargetSmoothly(targetPos)
+    local root = aG
+    if root and root:FindFirstChild("CFrame") then
+        local current = root.CFrame.Position
+        local dir = (targetPos - current).Unit
+        local lookAt = CFrame.lookAt(current, current + dir)
+        root.CFrame = root.CFrame:Lerp(lookAt, rand:NextNumber(0.08, 0.15))
+    end
+end
+
+local lastGlobalAttack = 0
+local globalCooldown = 0.14
+local Debug = true
     task.spawn(function()
         while Toggles.Killaura.Value and ao do
             X, Y, Z, _, a0, a1, a2 = getClosestMob(bV)
         
             if alive() and not mounted() and X and not table.find(bl, aZ) then
-                for ds, gx in pairs(ca[aZ].Skills) do
+                local skillList = {}  -- collect and shuffle skills
+        
+                for _, gx in pairs(ca[aZ].Skills) do
+                    table.insert(skillList, gx)
+                end
+        
+                -- Shuffle skill order randomly each loop
+                for i = #skillList, 2, -1 do
+                    local j = math.random(i)
+                    skillList[i], skillList[j] = skillList[j], skillList[i]
+                end
+        
+                for _, gx in ipairs(skillList) do
                     local gy, gz = gx.MeleeOnBoss and a1 and 'Melee' or gx.Type or ca[aZ].Type, gx.Skill
                     local gA = gx.MeleeOnBoss and a1 and gx.BossRange or gx.Range or ca[aZ].Range
                     local gC = gy == 'Ranged' and a1
@@ -5123,60 +5151,44 @@ Toggles.Killaura:OnChanged(function(cU)
                         gD, ge = gE, (gE - aG.Position).Magnitude
                     end
         
-                    gx.RealCooldown = gx.RealCooldown or gx.Cooldown + Options.KillauraDelay.Value
+                    gx.LastUsed = gx.LastUsed or 0
+                    gx.BaseCooldown = gx.BaseCooldown or gx.Cooldown + Options.KillauraDelay.Value
+                    local drift = rand:NextNumber(-0.1, 0.1)
+                    local cooldown = gx.BaseCooldown + drift
         
-                    local timeSinceLast = tick() - (gx.LastUsed or 0)
-                    local timeSinceGlobal = tick() - lastGlobalAttack
-        
-                    local shouldFire = false
-                    local reasonBlocked = nil
-        
-                    if timeSinceLast >= gx.RealCooldown and timeSinceGlobal >= globalAttackCooldown then
-                        -- Within allowed timing
+                    local now = tick()
+                    if now - gx.LastUsed >= cooldown and now - lastGlobalAttack >= globalCooldown then
                         if gy ~= 'Heal' and ge <= gA and a2.Value > 0 then
-                            shouldFire = true
-                        elseif gy == 'Heal' and aH.Health.Value / aH.MaxHealth.Value < 0.6 then
-                            shouldFire = true
-                        else
-                            reasonBlocked = "Out of Range or No Target HP"
-                        end
-                    else
-                        if timeSinceLast < gx.RealCooldown then
-                            reasonBlocked = "Skill Cooldown Not Ready"
-                        elseif timeSinceGlobal < globalAttackCooldown then
-                            reasonBlocked = "Global Attack Delay Triggered"
-                        end
-                    end
+                            faceTargetSmoothly(Z)
         
-                    if shouldFire then
-                        task.wait(randomDelay(0.01, 0.03)) -- add human-like input lag
+                            task.wait(randomDelay(0.01, 0.035))
         
-                        if gy == 'Melee' then
-                            b8:FireServer(gz, aG.Position, (gD - aG.Position).Unit)
-                        elseif gy == 'Ranged' then
-                            b8:FireServer(gz, gD)
-                        elseif gy == 'Self' then
-                            b8:FireServer(gz, aG.Position)
-                        elseif gy == 'Remote' then
-                            if gx.Args == 'MobPosition' then
-                                gz:FireServer(Z)
-                            elseif gx.Args == 'mobTbl' then
-                                gz:FireServer({ X.Parent })
-                            else
-                                gz:FireServer()
+                            if gy == 'Melee' then
+                                b8:FireServer(gz, aG.Position, (gD - aG.Position).Unit)
+                            elseif gy == 'Ranged' then
+                                b8:FireServer(gz, gD)
+                            elseif gy == 'Self' then
+                                b8:FireServer(gz, aG.Position)
+                            elseif gy == 'Remote' then
+                                if gx.Args == 'MobPosition' then
+                                    gz:FireServer(Z)
+                                elseif gx.Args == 'mobTbl' then
+                                    gz:FireServer({X.Parent})
+                                else
+                                    gz:FireServer()
+                                end
                             end
+        
+                            gx.LastUsed = now
+                            lastGlobalAttack = now
+                            a5 = now
+                        elseif gy == 'Heal' and aH.Health.Value / aH.MaxHealth.Value < 0.6 then
+                            gz:FireServer(gx.Args or nil)
+                            gx.LastUsed = now
+                            lastGlobalAttack = now
+                        elseif Debug then
+                            print("[⚠️ Blocked]:", gz.Name, "| Reason: out of range or health too high.")
                         end
-        
-                        gx.LastUsed = tick()
-                        lastGlobalAttack = tick()
-                        a5 = tick()
-        
-                    elseif DebugDetection and reasonBlocked then
-                        print("[⚠️ Detection Warning] Blocked Skill:", gz.Name or "Unknown")
-                        print("    Reason:", reasonBlocked)
-                        print("    Target Distance:", math.floor(ge), " | Required:", math.floor(gA))
-                        print("    Time Since Skill:", math.floor(timeSinceLast * 1000) .. "ms")
-                        print("    Time Since Last Global Attack:", math.floor(timeSinceGlobal * 1000) .. "ms")
                     end
                 end
             end
