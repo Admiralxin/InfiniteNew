@@ -5099,29 +5099,32 @@ Toggles.Killaura:OnChanged(function(cU)
     -- Kill Aura Pure
     local rand = Random.new()
 
+    -- Function to generate random delay intervals
     local function randomDelay(min, max)
-        return rand:NextNumber(min or 0.03, max or 0.08)
+        return rand:NextNumber(min or 0.05, max or 0.15)  -- Increase delay range for more randomness
     end
     
+    -- Smoothly face the target, but with some randomness
     local function faceTargetSmoothly(targetPos)
         local root = aG
         if root and root:FindFirstChild("CFrame") then
             local current = root.CFrame.Position
             local dir = (targetPos - current).Unit
             local lookAt = CFrame.lookAt(current, current + dir)
-            root.CFrame = root.CFrame:Lerp(lookAt, rand:NextNumber(0.08, 0.15))
+            -- Use a random lerp factor to simulate imperfect turns
+            root.CFrame = root.CFrame:Lerp(lookAt, rand:NextNumber(0.1, 0.2))
         end
     end
     
     local lastGlobalAttack = 0
-    local globalCooldown = 0.14
+    local globalCooldown = 0.2
     local Debug = true
     task.spawn(function()
         while Toggles.Killaura.Value and ao do
             X, Y, Z, _, a0, a1, a2 = getClosestMob(bV)
         
             if alive() and not mounted() and X and not table.find(bl, aZ) then
-                local skillList = {}  -- collect and shuffle skills
+                local skillList = {}  -- Collect and shuffle skills
         
                 for _, gx in pairs(ca[aZ].Skills) do
                     table.insert(skillList, gx)
@@ -5141,8 +5144,9 @@ Toggles.Killaura:OnChanged(function(cU)
                     local gD = gC and Z or (_ > 0 and Y or Z)
                     local ge = gC and a0 or _
         
+                    -- Randomize position adjustments further
                     if b7 then
-                        local gE = (CFrame.new(Z + Vector3.new(0, 5, 0)) + X.CFrame.lookVector * 45).Position
+                        local gE = (CFrame.new(Z + Vector3.new(0, rand:NextNumber(4, 6), 0)) + X.CFrame.lookVector * 45).Position
                         gD, ge = gE, (gE - aG.Position).Magnitude
                     end
         
@@ -5153,18 +5157,17 @@ Toggles.Killaura:OnChanged(function(cU)
         
                     local now = tick()
         
-                    -- Add more randomness to the attack pattern
-                    local attackInterval = rand:NextNumber(0.12, 0.2)  -- Adjust this range for more unpredictability
-        
-                    if now - gx.LastUsed >= cooldown and now - lastGlobalAttack >= globalCooldown + attackInterval then
+                    -- Introduce a random "lag" time to attack intervals
+                    local attackLag = rand:NextNumber(0.15, 0.25)
+                    if now - gx.LastUsed >= cooldown and now - lastGlobalAttack >= globalCooldown + attackLag then
                         if gy ~= 'Heal' and ge <= gA and a2.Value > 0 then
                             faceTargetSmoothly(Z)
         
-                            -- Slightly adjust the time between each attack
-                            task.wait(randomDelay(0.01, 0.035))
+                            -- Introduce delay between attacks to simulate laggy human behavior
+                            task.wait(randomDelay(0.05, 0.1))
         
-                            -- Randomize the firing sequence slightly
-                            local attackRand = rand:NextNumber(0.9, 1.1)
+                            -- Randomized attack targeting and variability in direction
+                            local attackRand = rand:NextNumber(0.9, 1.2)
                             if gy == 'Melee' then
                                 b8:FireServer(gz, aG.Position, (gD - aG.Position).Unit * attackRand)
                             elseif gy == 'Ranged' then
@@ -5197,7 +5200,8 @@ Toggles.Killaura:OnChanged(function(cU)
                 end
             end
         
-            task.wait(randomDelay(0.1, 0.15))  -- Increased randomness between each full loop
+            -- Introduce more random "inactivity" to reduce the bot-like feel
+            task.wait(randomDelay(0.1, 0.2))  -- Increased randomness between each full loop
         end
     end)
 
