@@ -5104,15 +5104,15 @@ Toggles.Killaura:OnChanged(function(cU)
                 for ds, gx in pairs(ca[aZ].Skills) do
                     local gy, gz = gx.MeleeOnBoss and a1 and 'Melee' or gx.Type or ca[aZ].Type, gx.Skill
                     local gA = gx.MeleeOnBoss and a1 and gx.BossRange or gx.Range or ca[aZ].Range
-                    local gB, gC = gx.Cooldown, gy == 'Ranged' and a1 -- removed Options.KillauraDelay.Value
+                    local gB, gC = gx.Cooldown, gy == 'Ranged' and a1
                     local gD, ge = gC and Z or _ > 0 and Y or Z, gC and a0 or _
                     if b7 then
                         local gE = (CFrame.new(Z + Vector3.new(0, 5, 0)) + X.CFrame.lookVector * 45).Position
                         gD, ge = gE, (gE - aG.Position).magnitude
                     end
+                    -- no delay here; fire all ready skills
                     if tick() - (gx.LastUsed or 0) >= gB then
                         if gy ~= 'Heal' and ge <= gA and a2.Value > 0 then
-                            -- optional: task.wait() or remove for max speed
                             if gy == 'Melee' then
                                 b8:FireServer(gz, aG.Position, (gD - aG.Position).Unit)
                             elseif gy == 'Ranged' then
@@ -5130,9 +5130,7 @@ Toggles.Killaura:OnChanged(function(cU)
                             end
                             gx.LastUsed = tick()
                             a5 = tick()
-                        end
-                        if gy == 'Heal' and aH.Health.Value / aH.MaxHealth.Value < math.random(0.5, 0.65) then
-                            -- optional: keep or reduce this delay slightly
+                        elseif gy == 'Heal' and aH.Health.Value / aH.MaxHealth.Value < math.random(0.5, 0.65) then
                             if gx.Args then
                                 gz:FireServer(gx.Args)
                             else
@@ -5143,7 +5141,7 @@ Toggles.Killaura:OnChanged(function(cU)
                     end
                 end
             end
-            task.wait() -- minimal delay to yield; prevents thread lock without slowing performance
+            task.wait() -- keep this small to prevent Roblox from stalling the thread
         end
     end)
     
