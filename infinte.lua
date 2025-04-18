@@ -5097,23 +5097,22 @@ Toggles.Killaura:OnChanged(function(cU)
         end
     end)
     -- Kill Aura Pure
-    -- Kill Aura Pure
     task.spawn(function()
         while Toggles.Killaura.Value and ao do
             X, Y, Z, _, a0, a1, a2 = getClosestMob(bV)
             if alive() and not mounted() and X and not table.find(bl, aZ) then
                 for ds, gx in pairs(ca[aZ].Skills) do
-                    local gy, gz = gx.MeleeOnBoss and a1 and 'Melee' or gx.Type or ca[aZ].Type, gx.Skill;
-                    local gA = gx.MeleeOnBoss and a1 and gx.BossRange or gx.Range or ca[aZ].Range;
-                    local gB, gC = gx.Cooldown + Options.KillauraDelay.Value, gy == 'Ranged' and a1;
-                    local gD, ge = gC and Z or _ > 0 and Y or Z, gC and a0 or _;
+                    local gy, gz = gx.MeleeOnBoss and a1 and 'Melee' or gx.Type or ca[aZ].Type, gx.Skill
+                    local gA = gx.MeleeOnBoss and a1 and gx.BossRange or gx.Range or ca[aZ].Range
+                    local gB, gC = gx.Cooldown, gy == 'Ranged' and a1 -- removed Options.KillauraDelay.Value
+                    local gD, ge = gC and Z or _ > 0 and Y or Z, gC and a0 or _
                     if b7 then
-                        local gE = (CFrame.new(Z + Vector3.new(0, 5, 0)) + X.CFrame.lookVector * 45).Position;
+                        local gE = (CFrame.new(Z + Vector3.new(0, 5, 0)) + X.CFrame.lookVector * 45).Position
                         gD, ge = gE, (gE - aG.Position).magnitude
                     end
                     if tick() - (gx.LastUsed or 0) >= gB then
                         if gy ~= 'Heal' and ge <= gA and a2.Value > 0 then
-                            task.wait(math.random(0.1, 0.3))
+                            -- optional: task.wait() or remove for max speed
                             if gy == 'Melee' then
                                 b8:FireServer(gz, aG.Position, (gD - aG.Position).Unit)
                             elseif gy == 'Ranged' then
@@ -5132,8 +5131,8 @@ Toggles.Killaura:OnChanged(function(cU)
                             gx.LastUsed = tick()
                             a5 = tick()
                         end
-                        if gy == 'Heal' and aH.Health.Value / aH.MaxHealth.Value < math.random(0.5,0.65) then
-                            task.wait(math.random(0.5, 1.5))
+                        if gy == 'Heal' and aH.Health.Value / aH.MaxHealth.Value < math.random(0.5, 0.65) then
+                            -- optional: keep or reduce this delay slightly
                             if gx.Args then
                                 gz:FireServer(gx.Args)
                             else
@@ -5144,10 +5143,10 @@ Toggles.Killaura:OnChanged(function(cU)
                     end
                 end
             end
-            task.wait(math.random(0.2, 0.4))
+            task.wait() -- minimal delay to yield; prevents thread lock without slowing performance
         end
     end)
-
+    
     
 
     
