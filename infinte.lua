@@ -5097,97 +5097,23 @@ Toggles.Killaura:OnChanged(function(cU)
         end
     end)
     -- Kill Aura Pure
-    local rand = Random.new()
-    local VirtualInput = game:GetService("VirtualInputManager")
-    
-    local function randomDelay(min, max)
-        return rand:NextNumber(min or 0.1, max or 0.3)  -- Increased randomness
-    end
-    
-    local function simulateLookAt(pos)
-        if not aG or not aG:IsDescendantOf(workspace) then return end
-        local cam = workspace.CurrentCamera
-        if not cam then return end
-        local screenPos, onScreen = cam:WorldToViewportPoint(pos)
-        if onScreen then
-            VirtualInput:SendMouseMoveEvent(screenPos.X + rand:NextInteger(-5, 5), screenPos.Y + rand:NextInteger(-5, 5), game)
-        end
-    end
-    
-    local function fakeClick()
-        local x, y = rand:NextInteger(100, 300), rand:NextInteger(100, 300)
-        VirtualInput:SendMouseButtonEvent(x, y, 0, true, game, 0)
-        task.wait(0.01)
-        VirtualInput:SendMouseButtonEvent(x, y, 0, false, game, 0)
-    end
-    
-    local lastGlobalAttack = 0
-    local globalCooldown = 0.75  -- Increased cooldown to spread out attacks more
-    local Debug = true
-    
+    -- Kill Aura Pure
     task.spawn(function()
-        local fireCooldown = 0
         while Toggles.Killaura.Value and ao do
             X, Y, Z, _, a0, a1, a2 = getClosestMob(bV)
-    
             if alive() and not mounted() and X and not table.find(bl, aZ) then
-                local skillList = {}
-                for _, gx in pairs(ca[aZ].Skills) do
-                    table.insert(skillList, gx)
-                end
-    
-                -- Randomize skill order each time, with more complexity
-                for i = #skillList, 2, -1 do
-                    local j = rand:NextInteger(1, i)  -- More random shuffle instead of simple math.random
-                    skillList[i], skillList[j] = skillList[j], skillList[i]
-                end
-    
-                for _, gx in ipairs(skillList) do
-                    if not gx or not gx.Skill then
-                        return
-                    end
-    
-                    local gy, gz = gx.MeleeOnBoss and a1 and 'Melee' or gx.Type or ca[aZ].Type, gx.Skill
-                    local gA = gx.MeleeOnBoss and a1 and gx.BossRange or gx.Range or ca[aZ].Range
-                    local gC = gy == 'Ranged' and a1
-                    local gD = gC and Z or (_ > 0 and Y or Z)
-                    local ge = gC and a0 or _
-    
+                for ds, gx in pairs(ca[aZ].Skills) do
+                    local gy, gz = gx.MeleeOnBoss and a1 and 'Melee' or gx.Type or ca[aZ].Type, gx.Skill;
+                    local gA = gx.MeleeOnBoss and a1 and gx.BossRange or gx.Range or ca[aZ].Range;
+                    local gB, gC = gx.Cooldown + Options.KillauraDelay.Value, gy == 'Ranged' and a1;
+                    local gD, ge = gC and Z or _ > 0 and Y or Z, gC and a0 or _;
                     if b7 then
-                        local gE = (CFrame.new(Z + Vector3.new(0, rand:NextNumber(4, 6), 0)) + X.CFrame.LookVector * 45).Position
-                        gD, ge = gE, (gE - aG.Position).Magnitude
+                        local gE = (CFrame.new(Z + Vector3.new(0, 5, 0)) + X.CFrame.lookVector * 45).Position;
+                        gD, ge = gE, (gE - aG.Position).magnitude
                     end
-    
-                    gx.LastUsed = gx.LastUsed or 0
-                    gx.BaseCooldown = gx.BaseCooldown or gx.Cooldown + Options.KillauraDelay.Value
-                    local drift = rand:NextNumber(-0.1, 0.15)
-                    local cooldown = gx.BaseCooldown + drift
-                    local now = tick()
-                    local attackLag = rand:NextNumber(0.25, 0.5)  -- Increased lag between attacks for randomness
-    
-                    -- Randomly skip attack to mimic human-like mistakes
-                    if rand:NextNumber() < 0.25 then  -- Increased chance of skipping (to mimic human hesitation)
-                        if Debug then print("[Skipping attack] Mimicking mistake...") end
-                        break
-                    end
-    
-                    -- Apply a randomized interval between actions to make them less predictable
-                    local randomAttackInterval = rand:NextNumber(0.6, 1.2)  -- Even longer random intervals
-                    task.wait(randomAttackInterval)
-    
-                    if now - gx.LastUsed >= cooldown and now - lastGlobalAttack >= globalCooldown + attackLag then
-                        if gy ~= 'Heal' and ge <= gA and a2 and a2.Value > 0 then
-                            simulateLookAt(Z)
-                            task.wait(randomDelay(0.15, 0.25))  -- More randomization in skill activation
-    
-                            -- Occasionally simulate a click to mimic human-like behavior
-                            if rand:NextNumber() < 0.15 then fakeClick() end
-    
-                            -- FireServer with more random delays between each call
-                            local fireDelay = rand:NextNumber(0.8, 1.5)  -- Longer intervals between `FireServer` calls
-                            task.wait(fireDelay)
-    
-                            -- Conditionally call FireServer based on skills
+                    if tick() - (gx.LastUsed or 0) >= gB then
+                        if gy ~= 'Heal' and ge <= gA and a2.Value > 0 then
+                            task.wait(math.random(0.1, 0.3))
                             if gy == 'Melee' then
                                 b8:FireServer(gz, aG.Position, (gD - aG.Position).Unit)
                             elseif gy == 'Ranged' then
@@ -5203,26 +5129,24 @@ Toggles.Killaura:OnChanged(function(cU)
                                     gz:FireServer()
                                 end
                             end
-    
-                            gx.LastUsed = now
-                            lastGlobalAttack = now
-                            a5 = now
-                        elseif gy == 'Heal' and aH and aH:FindFirstChild("Health") and (aH.Health.Value / aH.MaxHealth.Value) < 0.6 then
-                            gz:FireServer(gx.Args or nil)
-                            gx.LastUsed = now
-                            lastGlobalAttack = now
-                        elseif Debug then
-                            print("[⚠️ Blocked]:", gz.Name, "| Reason: out of range or health too high.")
+                            gx.LastUsed = tick()
+                            a5 = tick()
+                        end
+                        if gy == 'Heal' and aH.Health.Value / aH.MaxHealth.Value < math.random(0.5,0.65) then
+                            task.wait(math.random(0.5, 1.5))
+                            if gx.Args then
+                                gz:FireServer(gx.Args)
+                            else
+                                gz:FireServer()
+                            end
+                            gx.LastUsed = tick()
                         end
                     end
                 end
             end
-    
-            -- Add human-like idle time between attack cycles
-            task.wait(rand:NextNumber(0.3, 0.8))  -- More extended idle time
+            task.wait(math.random(0.2, 0.4))
         end
     end)
-    
 
     
 
