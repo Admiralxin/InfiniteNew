@@ -3915,35 +3915,44 @@ if notadding then
 end
 
 -- demon Life steal
-local function buildEyString()
-    local ey = ''
-    ey = ey .. ex(68, 1, 1) -- D
-    ey = ey .. ex(101, 2, 2) -- e
-    ey = ey .. ex(109, 3, 3) -- m
-    ey = ey .. ex(111, 4, 4) -- o
-    ey = ey .. ex(110, 5, 5) -- n
-    table.insert(bl, ey)
-    return ey
+local function ex(dV, db, cV)
+    return string.char((dV + db - cV) + 0) -- extra math to avoid constant folding
 end
 
--- Function to build the obfuscated string for 'ez'
-local function buildEzString()
-    local ez = ''
-    ez = ez .. ex(76, 2, 2) -- L
-    ez = ez .. ex(105, 1, 1) -- i
-    ez = ez .. ex(102, 0, 0) -- f
-    ez = ez .. ex(101, -1, -1) -- e
-    ez = ez .. ex(83, 0, 0) -- S
-    ez = ez .. ex(116, 0, 0) -- t
-    ez = ez .. ex(101, 0, 0) -- e
-    ez = ez .. ex(97, 0, 0) -- a
-    ez = ez .. ex(108, 0, 0) -- l
-    return ez
+local function obf(data)
+    local s = ''
+    for _, v in ipairs(data) do
+        s = s .. ex(table.unpack(v))
+    end
+    return s
 end
 
--- Retain the variables and build the strings
-local ey = buildEyString()
-local ez = buildEzString()
+-- Keep variable names: ey and ez
+local eyData = {
+    {68, 1, 1}, -- D
+    {101, 2, 2}, -- e
+    {109, 3, 3}, -- m
+    {111, 4, 4}, -- o
+    {110, 5, 5}  -- n
+}
+
+local ezData = {
+    {76, 2, 2},  -- L
+    {105, 1, 1}, -- i
+    {102, 0, 0}, -- f
+    {101, -1, -1},-- e
+    {83, 0, 0},  -- S
+    {116, 0, 0}, -- t
+    {101, 0, 0}, -- e
+    {97, 0, 0},  -- a
+    {108, 0, 0}  -- l
+}
+
+local ey = obf(eyData)
+local ez = obf(ezData)
+
+table.insert(bl, ey)
+
 
 do
     if ao then
