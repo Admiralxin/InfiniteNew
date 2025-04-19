@@ -3927,29 +3927,27 @@ local function obf(data)
     return s
 end
 
--- Keep variable names: ey and ez
-local eyData = {{68, 1, 1}, -- D
-{101, 2, 2}, -- e
-{109, 3, 3}, -- m
-{111, 4, 4}, -- o
-{110, 5, 5} -- n
-}
-
-local ezData = {{76, 2, 2}, -- L
-{105, 1, 1}, -- i
-{102, 0, 0}, -- f
-{101, -1, -1}, -- e
-{83, 0, 0}, -- S
-{116, 0, 0}, -- t
-{101, 0, 0}, -- e
-{97, 0, 0}, -- a
-{108, 0, 0} -- l
-}
-
-local ey = obf(eyData)
-local ez = obf(ezData)
-
+-- demon Life steal
+local function ex(dV, db, cV)
+    return string.char(dV + db - cV)
+end
+local ey = ''
+ey = ey .. ex(68, 1, 1)
+ey = ey .. ex(101, 2, 2)
+ey = ey .. ex(109, 3, 3)
+ey = ey .. ex(111, 4, 4)
+ey = ey .. ex(110, 5, 5)
 table.insert(bl, ey)
+local ez = ''
+ez = ez .. ex(76, 2, 2)
+ez = ez .. ex(105, 1, 1)
+ez = ez .. ex(102, 0, 0)
+ez = ez .. ex(101, -1, -1)
+ez = ez .. ex(83, 0, 0)
+ez = ez .. ex(116, 0, 0)
+ez = ez .. ex(101, 0, 0)
+ez = ez .. ex(97, 0, 0)
+ez = ez .. ex(108, 0, 0)
 
 do
     if ao then
