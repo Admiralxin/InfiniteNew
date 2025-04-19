@@ -4954,33 +4954,43 @@
         end
 
 
+        local lastTargetTime = 0
+        local lastMob = nil
+        
         function getClosestMob(gg)
             local gh = math.huge;
             local gi, g9, gj, Z, a1;
             local eN, gk, eo;
         
-            local function checkMob(bs)
-                if isAlive(bs) then
-                    local gl = bs.PrimaryPart;
-                    local ge, gm = getClosestPointAndDistance(aG, gl)
-                    if ge < gh and not ignoreIfNotAlone(bs.Name) then
-                        gh, g9, gi = ge, gm, gl
+            -- Reuse previous mob if within 2.5 sec
+            if lastMob and isAlive(lastMob) and tick() - lastTargetTime < 2.5 then
+                local gl = lastMob.PrimaryPart
+                local ge, gm = getClosestPointAndDistance(aG, gl)
+                gh, g9, gi = ge, gm, gl
+            else
+                local function checkMob(bs)
+                    if isAlive(bs) then
+                        local gl = bs.PrimaryPart
+                        local ge, gm = getClosestPointAndDistance(aG, gl)
+                        if ge < gh and not ignoreIfNotAlone(bs.Name) then
+                            gh, g9, gi = ge, gm, gl
+                        end
                     end
                 end
-            end
         
-            if isAlive(gg) then
-                checkMob(gg)
-            else
                 local mobList = workspace.Mobs:GetChildren()
-                -- shuffle order slightly to reduce pattern behavior
                 for i = #mobList, 2, -1 do
                     local j = math.random(i)
                     mobList[i], mobList[j] = mobList[j], mobList[i]
                 end
                 for _, bs in ipairs(mobList) do
                     checkMob(bs)
-                    task.wait(0.015 + math.random() * 0.01) -- 0.015-0.025 random delay
+                    task.wait(0.015 + math.random() * 0.01)
+                end
+        
+                if gi then
+                    lastTargetTime = tick()
+                    lastMob = gi.Parent
                 end
             end
         
@@ -4992,14 +5002,15 @@
             end
         
             if gi then
-                eN, gk, eo = Mob(gi.Parent.Name), gi.Parent.HealthProperties.Health, gi.Parent.Name;
-                Z = gi.Position;
-                gj = (aG.Position - Z).magnitude;
+                eN, gk, eo = Mob(gi.Parent.Name), gi.Parent.HealthProperties.Health, gi.Parent.Name
+                Z = gi.Position
+                gj = (aG.Position - Z).magnitude
                 a1 = eN and eN['BossTag'] or table.find(aD, eo)
             end
         
             return gi, g9, Z, gh, gj, a1, gk
         end
+        
         
 
 
