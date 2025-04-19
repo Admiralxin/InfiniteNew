@@ -4956,18 +4956,26 @@
 
         local lastTargetTime = 0
         local lastMob = nil
+        local lastMobPosition = nil
         
         function getClosestMob(gg)
             local gh = math.huge;
             local gi, g9, gj, Z, a1;
             local eN, gk, eo;
         
-            -- Reuse previous mob if within 2.5 sec
+            -- Reuse previous mob if it's still valid
             if lastMob and isAlive(lastMob) and tick() - lastTargetTime < 2.5 then
                 local gl = lastMob.PrimaryPart
                 local ge, gm = getClosestPointAndDistance(aG, gl)
-                gh, g9, gi = ge, gm, gl
-            else
+                if lastMobPosition and (lastMobPosition - gl.Position).magnitude > 5 then
+                    -- Mob moved a lot, force retarget
+                    lastMob = nil
+                else
+                    gh, g9, gi = ge, gm, gl
+                end
+            end
+        
+            if not gi then
                 local function checkMob(bs)
                     if isAlive(bs) then
                         local gl = bs.PrimaryPart
@@ -4985,12 +4993,13 @@
                 end
                 for _, bs in ipairs(mobList) do
                     checkMob(bs)
-                    task.wait(0.015 + math.random() * 0.01)
+                    task.wait(0.018 + math.random() * 0.015)
                 end
         
                 if gi then
-                    lastTargetTime = tick()
+                    lastTargetTime = tick() + math.random() * 0.75
                     lastMob = gi.Parent
+                    lastMobPosition = gi.Position
                 end
             end
         
@@ -5013,6 +5022,8 @@
         
         
 
+
+        
 
         function equipWepWithId(gn, go)
             for B, C in pairs(bF:GetChildren()) do
