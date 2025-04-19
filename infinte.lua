@@ -2628,25 +2628,25 @@ local ca = {
         Primary = 'Staff',
         Skills = {{
             Skill = 'MageOfShadows',
-            Cooldown = 1
-        }, {
-            Skill = 'MageOfShadowsBlast',
             Cooldown = 1.5
         }, {
+            Skill = 'MageOfShadowsBlast',
+            Cooldown = 15
+        }, {
             Skill = 'MageOfShadowsCharged',
-            Cooldown = 2
+            Cooldown = 20
         }, {
             Skill = 'MageOfShadowsBlastCharged',
-            Cooldown = 3
+            Cooldown = 21
         }, {
             Skill = 'BighShadowOrb1',
-            Cooldown = 3.5
+            Cooldown = 25
         }, {
             Skill = 'BighShadowOrb2',
-            Cooldown = 4
+            Cooldown = 25
         }, {
             Skill = 'BighShadowOrb3',
-            Cooldown = 4.5
+            Cooldown = 25
         }, {
             Skill = 'MageOfShadowsDamageCircle',
             Cooldown = 5
