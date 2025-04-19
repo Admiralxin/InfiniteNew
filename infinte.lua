@@ -2842,8 +2842,8 @@ do
         Text = 'Delay',
         Default = 0,
         Min = 0,
-        Max = 5,
-        Rounding = 2.5,
+        Max = 10,
+        Rounding = 2,
         HideMax = true,
         Compact = true
     })
@@ -5098,7 +5098,7 @@ Toggles.Killaura:OnChanged(function(cU)
     end)
 
     -- Kill Aura Pure
-    
+
     task.spawn(function()
         while Toggles.Killaura.Value and ao do
             X, Y, Z, _, a0, a1, a2 = getClosestMob(bV)
