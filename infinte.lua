@@ -4952,6 +4952,8 @@
                 return true
             end
         end
+
+        
         function getClosestMob(gg)
             local gh = math.huge;
             local gi, g9, gj, Z, a1;
