@@ -2628,7 +2628,7 @@ local ca = {
         Primary = 'Staff',
         Skills = {{
             Skill = 'MageOfShadows',
-            Cooldown = 1.5
+            Cooldown = 2
         }, {
             Skill = 'MageOfShadowsBlast',
             Cooldown = 15
@@ -2640,16 +2640,16 @@ local ca = {
             Cooldown = 21
         }, {
             Skill = 'BighShadowOrb1',
-            Cooldown = 2
-        }, {
-            Skill = 'BighShadowOrb2',
-            Cooldown = 2.5
-        }, {
-            Skill = 'BighShadowOrb3',
             Cooldown = 3
         }, {
+            Skill = 'BighShadowOrb2',
+            Cooldown = 4
+        }, {
+            Skill = 'BighShadowOrb3',
+            Cooldown = 6
+        }, {
             Skill = 'MageOfShadowsDamageCircle',
-            Cooldown = 5
+            Cooldown = 7
         }, {
             Skill = b2:WaitForChild('MageOfShadows'):WaitForChild('ShadowChains'),
             Cooldown = 15,
