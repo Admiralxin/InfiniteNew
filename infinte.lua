@@ -4955,37 +4955,46 @@
 
 
         function getClosestMob(gg)
-            local gh = math.huge
-            local gi, g9, gj, Z, a1
-            local eN, gk, eo
+            local gh = math.huge;
+            local gi, g9, gj, Z, a1;
+            local eN, gk, eo;
         
-            if isAlive(gg) then
-                local gl = gg.PrimaryPart
-                local ge, gm = getClosestPointAndDistance(aG, gl)
-                gh, g9, gi = ge, gm, gl
-            else
-                for ds, bs in pairs(workspace.Mobs:GetChildren()) do
-                    if isAlive(bs) then
-                        local gl = bs.PrimaryPart
-                        local ge, gm = getClosestPointAndDistance(aG, gl)
-                        if ge < gh and not ignoreIfNotAlone(bs.Name) then
-                            gh, g9, gi = ge, gm, gl
-                        end
-                        -- Add a small delay to slow down mob targeting slightly
-                        task.wait(math.random(1, 3) / 100) -- 0.01s to 0.03s
+            local function checkMob(bs)
+                if isAlive(bs) then
+                    local gl = bs.PrimaryPart;
+                    local ge, gm = getClosestPointAndDistance(aG, gl)
+                    if ge < gh and not ignoreIfNotAlone(bs.Name) then
+                        gh, g9, gi = ge, gm, gl
                     end
                 end
             end
         
-            if b7 and gi and gi:FindFirstChild('MobProperties') and gi.MobProperties:FindFirstChild('CurrentAttack') and
-                gi.MobProperties.CurrentAttack.Value ~= 'Piledriver' and gi.MobProperties.CurrentAttack.Value ~= 'Slap' then
-                return nil
+            if isAlive(gg) then
+                checkMob(gg)
+            else
+                local mobList = workspace.Mobs:GetChildren()
+                -- shuffle order slightly to reduce pattern behavior
+                for i = #mobList, 2, -1 do
+                    local j = math.random(i)
+                    mobList[i], mobList[j] = mobList[j], mobList[i]
+                end
+                for _, bs in ipairs(mobList) do
+                    checkMob(bs)
+                    task.wait(0.015 + math.random() * 0.01) -- 0.015-0.025 random delay
+                end
+            end
+        
+            if b7 and gi and gi:FindFirstChild('MobProperties') and gi.MobProperties:FindFirstChild('CurrentAttack') then
+                local atk = gi.MobProperties.CurrentAttack.Value
+                if atk == 'Piledriver' or atk == 'Slap' then
+                    return nil
+                end
             end
         
             if gi then
-                eN, gk, eo = Mob(gi.Parent.Name), gi.Parent.HealthProperties.Health, gi.Parent.Name
-                Z = gi.Position
-                gj = (aG.Position - Z).magnitude
+                eN, gk, eo = Mob(gi.Parent.Name), gi.Parent.HealthProperties.Health, gi.Parent.Name;
+                Z = gi.Position;
+                gj = (aG.Position - Z).magnitude;
                 a1 = eN and eN['BossTag'] or table.find(aD, eo)
             end
         
