@@ -4953,38 +4953,47 @@
             end
         end
 
-        
+
         function getClosestMob(gg)
-            local gh = math.huge;
-            local gi, g9, gj, Z, a1;
-            local eN, gk, eo;
+            local gh = math.huge
+            local gi, g9, gj, Z, a1
+            local eN, gk, eo
+        
             if isAlive(gg) then
-                local gl = gg.PrimaryPart;
+                local gl = gg.PrimaryPart
                 local ge, gm = getClosestPointAndDistance(aG, gl)
                 gh, g9, gi = ge, gm, gl
             else
                 for ds, bs in pairs(workspace.Mobs:GetChildren()) do
                     if isAlive(bs) then
-                        local gl = bs.PrimaryPart;
+                        local gl = bs.PrimaryPart
                         local ge, gm = getClosestPointAndDistance(aG, gl)
                         if ge < gh and not ignoreIfNotAlone(bs.Name) then
                             gh, g9, gi = ge, gm, gl
                         end
+                        -- Add a small delay to slow down mob targeting slightly
+                        task.wait(math.random(1, 3) / 100) -- 0.01s to 0.03s
                     end
                 end
             end
+        
             if b7 and gi and gi:FindFirstChild('MobProperties') and gi.MobProperties:FindFirstChild('CurrentAttack') and
                 gi.MobProperties.CurrentAttack.Value ~= 'Piledriver' and gi.MobProperties.CurrentAttack.Value ~= 'Slap' then
                 return nil
             end
+        
             if gi then
-                eN, gk, eo = Mob(gi.Parent.Name), gi.Parent.HealthProperties.Health, gi.Parent.Name;
-                Z = gi.Position;
-                gj = (aG.Position - Z).magnitude;
+                eN, gk, eo = Mob(gi.Parent.Name), gi.Parent.HealthProperties.Health, gi.Parent.Name
+                Z = gi.Position
+                gj = (aG.Position - Z).magnitude
                 a1 = eN and eN['BossTag'] or table.find(aD, eo)
             end
+        
             return gi, g9, Z, gh, gj, a1, gk
         end
+        
+
+
         function equipWepWithId(gn, go)
             for B, C in pairs(bF:GetChildren()) do
                 if C:FindFirstChild('ID') and C.ID.Value and C.ID.Value == gn then
