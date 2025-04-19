@@ -2640,19 +2640,19 @@ local ca = {
             Cooldown = 21
         }, {
             Skill = 'BighShadowOrb1',
-            Cooldown = 25
+            Cooldown = 2
         }, {
             Skill = 'BighShadowOrb2',
-            Cooldown = 25
+            Cooldown = 2.5
         }, {
             Skill = 'BighShadowOrb3',
-            Cooldown = 25
+            Cooldown = 3
         }, {
             Skill = 'MageOfShadowsDamageCircle',
             Cooldown = 5
         }, {
             Skill = b2:WaitForChild('MageOfShadows'):WaitForChild('ShadowChains'),
-            Cooldown = 6,
+            Cooldown = 15,
             Type = 'Remote',
             Args = 'mobTbl'
         }, {
