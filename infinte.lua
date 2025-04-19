@@ -4958,73 +4958,73 @@
 
         
         local lastTargetTime = 0
-        local lastMob = nil
-        local lastMobPosition = nil
-        local stayNearTime = 6  -- Time in seconds to stay near a mob before considering switching targets.
-        
-        function getClosestMob(gg)
-            local gh = math.huge;
-            local gi, g9, gj, Z, a1;
-            local eN, gk, eo;
-        
-            -- Reuse the previous mob if we’re still within the "stay near" time limit
-            if lastMob and isAlive(lastMob) and tick() - lastTargetTime < stayNearTime then
-                local gl = lastMob.PrimaryPart
+local lastMob = nil
+local stayNearTime = 6  -- Time in seconds to stay near a mob before considering switching targets.
+local targetSwitchDelay = 1.5  -- Delay before switching targets
+
+function getClosestMob(gg)
+    local gh = math.huge;
+    local gi, g9, gj, Z, a1;
+    local eN, gk, eo;
+
+    -- Check if we should keep the last target or switch
+    if lastMob and isAlive(lastMob) and tick() - lastTargetTime < stayNearTime then
+        local gl = lastMob.PrimaryPart
+        local ge, gm = getClosestPointAndDistance(aG, gl)
+        if lastMobPosition and (lastMobPosition - gl.Position).magnitude > 5 then
+            -- Mob has moved too far, retarget
+            lastMob = nil
+        else
+            gh, g9, gi = ge, gm, gl
+        end
+    end
+
+    if not gi then
+        -- Re-target if we’ve exceeded stayNearTime or no previous target exists
+        local function checkMob(bs)
+            if isAlive(bs) then
+                local gl = bs.PrimaryPart
                 local ge, gm = getClosestPointAndDistance(aG, gl)
-                if lastMobPosition and (lastMobPosition - gl.Position).magnitude > 5 then
-                    -- If the mob has moved a lot, we can re-target
-                    lastMob = nil
-                else
+                if ge < gh and not ignoreIfNotAlone(bs.Name) then
                     gh, g9, gi = ge, gm, gl
                 end
             end
-        
-            if not gi then
-                -- Re-target if we’ve exceeded stayNearTime or no previous target exists
-                local function checkMob(bs)
-                    if isAlive(bs) then
-                        local gl = bs.PrimaryPart
-                        local ge, gm = getClosestPointAndDistance(aG, gl)
-                        if ge < gh and not ignoreIfNotAlone(bs.Name) then
-                            gh, g9, gi = ge, gm, gl
-                        end
-                    end
-                end
-        
-                local mobList = workspace.Mobs:GetChildren()
-                for i = #mobList, 2, -1 do
-                    local j = math.random(i)
-                    mobList[i], mobList[j] = mobList[j], mobList[i]
-                end
-                for _, bs in ipairs(mobList) do
-                    checkMob(bs)
-                    task.wait(0.02 + math.random() * 0.02)
-                end
-        
-                if gi then
-                    lastTargetTime = tick()
-                    lastMob = gi.Parent
-                    lastMobPosition = gi.Position
-                end
-            end
-        
-            if b7 and gi and gi:FindFirstChild('MobProperties') and gi.MobProperties:FindFirstChild('CurrentAttack') then
-                local atk = gi.MobProperties.CurrentAttack.Value
-                if atk == 'Piledriver' or atk == 'Slap' then
-                    return nil
-                end
-            end
-        
-            if gi then
-                eN, gk, eo = Mob(gi.Parent.Name), gi.Parent.HealthProperties.Health, gi.Parent.Name
-                Z = gi.Position
-                gj = (aG.Position - Z).magnitude
-                a1 = eN and eN['BossTag'] or table.find(aD, eo)
-            end
-        
-            return gi, g9, Z, gh, gj, a1, gk
         end
-        
+
+        local mobList = workspace.Mobs:GetChildren()
+        for i = #mobList, 2, -1 do
+            local j = math.random(i)
+            mobList[i], mobList[j] = mobList[j], mobList[i]
+        end
+        for _, bs in ipairs(mobList) do
+            checkMob(bs)
+            task.wait(0.05 + math.random() * 0.1)  -- Increased randomness in delay to make the bot's behavior less predictable
+        end
+
+        if gi then
+            lastTargetTime = tick()
+            lastMob = gi.Parent
+            lastMobPosition = gi.Position
+        end
+    end
+
+    if b7 and gi and gi:FindFirstChild('MobProperties') and gi.MobProperties:FindFirstChild('CurrentAttack') then
+        local atk = gi.MobProperties.CurrentAttack.Value
+        if atk == 'Piledriver' or atk == 'Slap' then
+            return nil
+        end
+    end
+
+    if gi then
+        eN, gk, eo = Mob(gi.Parent.Name), gi.Parent.HealthProperties.Health, gi.Parent.Name
+        Z = gi.Position
+        gj = (aG.Position - Z).magnitude
+        a1 = eN and eN['BossTag'] or table.find(aD, eo)
+    end
+
+    return gi, g9, Z, gh, gj, a1, gk
+end
+
         
         
 
