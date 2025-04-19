@@ -5176,18 +5176,17 @@ Toggles.Killaura:OnChanged(function(cU)
     if a_(ey) and Toggles.Killaura.Value and bloodBindingEnabled and ao then
         task.spawn(function()
             while Toggles.Killaura.Value do
-                if a_(ey) then
-                    if alive() and not mounted() and not aF:FindFirstChild('AttackBuffDemonBloodBinding', true) and X and
-                        _ and _ <= 95 then
-                        b2.Demon.BloodBinding:FireServer()
+                if alive() and not mounted() and X and _ and _ <= 95 then
+                    if not aF:FindFirstChild('AttackBuffDemonBloodBinding', true) then
+                        b2[ey][ez]:FireServer()
                         a5 = tick()
-                        task.wait(2)
                     end
                 end
-                task.wait()
+                task.wait(0.2) -- aggressive polling
             end
         end)
     end
+    
 
     -- Summoner Kill Aura
     if a_('Summoner') and Toggles.Killaura.Value and ao then
