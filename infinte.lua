@@ -2759,8 +2759,7 @@ local function cv()
     return ca[aZ] and ca[aZ].Type == 'Ranged'
 end
 
---  Handles the detection
---[[local cw = game:GetService('GuiService')
+local cw = game:GetService('GuiService')
     local cx;
     cx = cw.ErrorMessageChanged:Connect(function(msg)
         if cw:GetErrorCode() == Enum.ConnectionError.DisconnectLuaKick or cw:GetErrorCode() ==
@@ -2796,7 +2795,7 @@ end
             end
             T:Teleport(a8, c)
         end
-    end) ]]
+    end)
 
 -- GUI
 local cz = bk:CreateWindow({
