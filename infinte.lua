@@ -2628,22 +2628,22 @@
             Primary = 'Staff',
             Skills = {{
                 Skill = 'MageOfShadows',
-                Cooldown = 0.3
+                Cooldown = 1
             },{
                 Skill = 'MageOfShadows',
-                Cooldown = 0.4
+                Cooldown = 2
             },{
                 Skill = 'MageOfShadows',
-                Cooldown = 0.5
+                Cooldown = 3
             },{
                 Skill = 'MageOfShadows',
-                Cooldown = 0.6
+                Cooldown = 4
             },{
                 Skill = 'MageOfShadows',
-                Cooldown = 0.7
+                Cooldown = 5
             },{
                 Skill = b2:WaitForChild('MageOfShadows'):WaitForChild('ShadowChains'),
-                Cooldown = 6,
+                Cooldown = 15,
                 Type = 'Remote',
                 Args = 'mobTbl'
             }, {
