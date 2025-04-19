@@ -2628,29 +2628,20 @@
             Primary = 'Staff',
             Skills = {{
                 Skill = 'MageOfShadows',
-                Cooldown = 0.275
-            }, {
-                Skill = 'MageOfShadowsBlast',
                 Cooldown = 0.3
-            }, {
-                Skill = 'MageOfShadowsCharged',
-                Cooldown = 0.31
-            }, {
-                Skill = 'MageOfShadowsBlastCharged',
-                Cooldown = 0.31
-            }, {
-                Skill = 'BighShadowOrb1',
-                Cooldown = 0.33
-            }, {
-                Skill = 'BighShadowOrb2',
-                Cooldown = 0.33
-            }, {
-                Skill = 'BighShadowOrb3',
-                Cooldown = 0.33
-            }, {
-                Skill = 'MageOfShadowsDamageCircle',
-                Cooldown = 0.33
-            }, {
+            },{
+                Skill = 'MageOfShadows',
+                Cooldown = 0.4
+            },{
+                Skill = 'MageOfShadows',
+                Cooldown = 0.5
+            },{
+                Skill = 'MageOfShadows',
+                Cooldown = 0.6
+            },{
+                Skill = 'MageOfShadows',
+                Cooldown = 0.7
+            },{
                 Skill = b2:WaitForChild('MageOfShadows'):WaitForChild('ShadowChains'),
                 Cooldown = 6,
                 Type = 'Remote',
@@ -3919,7 +3910,7 @@
         return string.char(dV + db - cV)
     end
     local ey = ''
-    ey = ey .. ex(68, 1, 1)
+    ey = ey .. ex(68, 1, 1) 
     ey = ey .. ex(101, 2, 2)
     ey = ey .. ex(109, 3, 3)
     ey = ey .. ex(111, 4, 4)
@@ -5144,6 +5135,7 @@ end
                 task.wait()
             end
         end)
+
         -- Kill Aura Pure
         task.spawn(function()
             while Toggles.Killaura.Value and ao do
@@ -5166,7 +5158,7 @@ end
                                 elseif gy == 'Ranged' then
                                     b8:FireServer(gz, gD)
                                 elseif gy == 'Self' then
-                                    b8:FireServer(gz, aG.Position)
+                                    b8:FireServer(gz, aG.Position) 
                                 elseif gy == 'Remote' then
                                     if gx.Args == 'MobPosition' then
                                         gz:FireServer(Z)
@@ -5195,6 +5187,7 @@ end
             end
         end)
     
+
         -- Checking Health of Mobs
         if ao and not aj:FindFirstChild(36) and ao then
             task.spawn(function()
