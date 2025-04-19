@@ -5099,71 +5099,56 @@ Toggles.Killaura:OnChanged(function(cU)
     end)
 
     -- Kill Aura Pure
-
-    -- Jitter function to introduce slight randomness in skill usage timing
-    local function skillJitter()
-        return math.random(100, 300) / 1000 -- Adds 0.1 to 0.3 second random jitter
-    end
-
-    -- Modify skill execution to include jitter
     task.spawn(function()
         while Toggles.Killaura.Value and ao do
             X, Y, Z, _, a0, a1, a2 = getClosestMob(bV)
             if alive() and not mounted() and X and not table.find(bl, aZ) then
                 for ds, gx in pairs(ca[aZ].Skills) do
-                    local gy = gx.MeleeOnBoss and a1 and 'Melee' or gx.Type or ca[aZ].Type
-                    local gA = gx.MeleeOnBoss and a1 and gx.BossRange or gx.Range or ca[aZ].Range
-                    local gB, gC = gx.Cooldown + Options.KillauraDelay.Value + math.random(0.1, 0.3),
-                        gy == 'Ranged' and a1
-                    local gD, ge = gC and Z or _ > 0 and Y or Z, gC and a0 or _
-
-                    -- Add jitter to the skill cooldown to create randomness
-                    gB = gB + skillJitter() -- Adds jitter to the cooldown
-
-                    -- Only execute the skill if it's off cooldown
+                    local gy, gz = gx.MeleeOnBoss and a1 and 'Melee' or gx.Type or ca[aZ].Type, gx.Skill;
+                    local gA = gx.MeleeOnBoss and a1 and gx.BossRange or gx.Range or ca[aZ].Range;
+                    local gB, gC = gx.Cooldown + Options.KillauraDelay.Value, gy == 'Ranged' and a1;
+                    local gD, ge = gC and Z or _ > 0 and Y or Z, gC and a0 or _;
+                    if b7 then
+                        local gE = (CFrame.new(Z + Vector3.new(0, 5, 0)) + X.CFrame.lookVector * 45).Position;
+                        gD, ge = gE, (gE - aG.Position).magnitude
+                    end
                     if tick() - (gx.LastUsed or 0) >= gB then
                         if gy ~= 'Heal' and ge <= gA and a2.Value > 0 then
-                            -- Add delay to the skill firing
-                            task.wait(math.random(0.5, 1.0)) -- Slightly more delay to simulate human-like behavior
-
-                            -- Fire skill based on type
+                            task.wait(math.random(0.1, 0.3))
                             if gy == 'Melee' then
-                                b8:FireServer(gx.Skill, aG.Position, (gD - aG.Position).Unit)
+                                b8:FireServer(gz, aG.Position, (gD - aG.Position).Unit)
                             elseif gy == 'Ranged' then
-                                b8:FireServer(gx.Skill, gD)
+                                b8:FireServer(gz, gD)
                             elseif gy == 'Self' then
-                                b8:FireServer(gx.Skill, aG.Position)
+                                b8:FireServer(gz, aG.Position)
                             elseif gy == 'Remote' then
-                                -- Handle remote skill types
                                 if gx.Args == 'MobPosition' then
-                                    gx.Skill:FireServer(Z)
+                                    gz:FireServer(Z)
                                 elseif gx.Args == 'mobTbl' then
-                                    gx.Skill:FireServer({X.Parent})
+                                    gz:FireServer({X.Parent})
                                 else
-                                    gx.Skill:FireServer()
+                                    gz:FireServer()
                                 end
                             end
-                            gx.LastUsed = tick() -- Mark the skill as used
-                            a5 = tick() -- Update timestamp
+                            gx.LastUsed = tick()
+                            a5 = tick()
                         end
-
-                        -- Healing logic
-                        if gy == 'Heal' and aH.Health.Value / aH.MaxHealth.Value < math.random(0.5, 0.65) then
-                            -- Add randomized healing delay
-                            task.wait(math.random(1.5, 2.5))
+                        if gy == 'Heal' and aH.Health.Value / aH.MaxHealth.Value < math.random(0.5,0.65) then
+                            task.wait(math.random(0.5, 1.5))
                             if gx.Args then
-                                gx.Skill:FireServer(gx.Args)
+                                gz:FireServer(gx.Args)
                             else
-                                gx.Skill:FireServer()
+                                gz:FireServer()
                             end
-                            gx.LastUsed = tick() -- Update timestamp
+                            gx.LastUsed = tick()
                         end
                     end
                 end
             end
-            task.wait(math.random(0.7, 1.2)) -- Randomized overall wait
+            task.wait(math.random(0.2, 0.4))
         end
     end)
+
 
     -- Force Restart Dungeon
     if ao then
