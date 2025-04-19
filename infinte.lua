@@ -5096,61 +5096,57 @@ Toggles.Killaura:OnChanged(function(cU)
             task.wait()
         end
     end)
-
-
+    -- Kill Aura Pure
     task.spawn(function()
-    while Toggles.Killaura.Value and ao do
-        X, Y, Z, _, a0, a1, a2 = getClosestMob(bV)
-        if alive() and not mounted() and X and not table.find(bl, aZ) then
-            for ds, gx in pairs(ca[aZ].Skills) do
-                local gy, gz = gx.MeleeOnBoss and a1 and 'Melee' or gx.Type or ca[aZ].Type, gx.Skill
-                local gA = gx.MeleeOnBoss and a1 and gx.BossRange or gx.Range or ca[aZ].Range
-                local gB, gC = gx.Cooldown, gy == 'Ranged' and a1
-                local gD, ge = gC and Z or _ > 0 and Y or Z, gC and a0 or _
-                if b7 then
-                    local gE = (CFrame.new(Z + Vector3.new(0, 5, 0)) + X.CFrame.lookVector * 45).Position
-                    gD, ge = gE, (gE - aG.Position).magnitude
-                end
-                -- no delay here; fire all ready skills
-                if tick() - (gx.LastUsed or 0) >= gB then
-                    if gy ~= 'Heal' and ge <= gA and a2.Value > 0 then
-                        if gy == 'Melee' then
-                            b8:FireServer(gz, aG.Position, (gD - aG.Position).Unit)
-                        elseif gy == 'Ranged' then
-                            b8:FireServer(gz, gD)
-                        elseif gy == 'Self' then
-                            b8:FireServer(gz, aG.Position)
-                        elseif gy == 'Remote' then
-                            if gx.Args == 'MobPosition' then
-                                gz:FireServer(Z)
-                            elseif gx.Args == 'mobTbl' then
-                                gz:FireServer({X.Parent})
+        while Toggles.Killaura.Value and ao do
+            X, Y, Z, _, a0, a1, a2 = getClosestMob(bV)
+            if alive() and not mounted() and X and not table.find(bl, aZ) then
+                for ds, gx in pairs(ca[aZ].Skills) do
+                    local gy, gz = gx.MeleeOnBoss and a1 and 'Melee' or gx.Type or ca[aZ].Type, gx.Skill;
+                    local gA = gx.MeleeOnBoss and a1 and gx.BossRange or gx.Range or ca[aZ].Range;
+                    local gB, gC = gx.Cooldown + Options.KillauraDelay.Value, gy == 'Ranged' and a1;
+                    local gD, ge = gC and Z or _ > 0 and Y or Z, gC and a0 or _;
+                    if b7 then
+                        local gE = (CFrame.new(Z + Vector3.new(0, 5, 0)) + X.CFrame.lookVector * 45).Position;
+                        gD, ge = gE, (gE - aG.Position).magnitude
+                    end
+                    if tick() - (gx.LastUsed or 0) >= gB then
+                        if gy ~= 'Heal' and ge <= gA and a2.Value > 0 then
+                            task.wait(math.random(0.1, 0.3))
+                            if gy == 'Melee' then
+                                b8:FireServer(gz, aG.Position, (gD - aG.Position).Unit)
+                            elseif gy == 'Ranged' then
+                                b8:FireServer(gz, gD)
+                            elseif gy == 'Self' then
+                                b8:FireServer(gz, aG.Position)
+                            elseif gy == 'Remote' then
+                                if gx.Args == 'MobPosition' then
+                                    gz:FireServer(Z)
+                                elseif gx.Args == 'mobTbl' then
+                                    gz:FireServer({X.Parent})
+                                else
+                                    gz:FireServer()
+                                end
+                            end
+                            gx.LastUsed = tick()
+                            a5 = tick()
+                        end
+                        if gy == 'Heal' and aH.Health.Value / aH.MaxHealth.Value < math.random(0.5,0.65) then
+                            task.wait(math.random(0.5, 1.5))
+                            if gx.Args then
+                                gz:FireServer(gx.Args)
                             else
                                 gz:FireServer()
                             end
+                            gx.LastUsed = tick()
                         end
-                        gx.LastUsed = tick()
-                        a5 = tick()
-                    elseif gy == 'Heal' and aH.Health.Value / aH.MaxHealth.Value < math.random(0.5, 0.65) then
-                        if gx.Args then
-                            gz:FireServer(gx.Args)
-                        else
-                            gz:FireServer()
-                        end
-                        gx.LastUsed = tick()
                     end
                 end
             end
+            task.wait(math.random(0.2, 0.4))
         end
-        task.wait() -- keep this small to prevent Roblox from stalling the thread
-    end
- end)
+    end)
 
-    
-
-    
-
-    
     -- Checking Health of Mobs
     if ao and not aj:FindFirstChild(36) and ao then
         task.spawn(function()
@@ -5184,7 +5180,6 @@ Toggles.Killaura:OnChanged(function(cU)
         end)
     end
 
-    
     -- Summoner Kill Aura
     if a_('Summoner') and Toggles.Killaura.Value and ao then
         task.spawn(function()
@@ -5236,8 +5231,6 @@ Toggles.Killaura:OnChanged(function(cU)
     end
 end)
 
-
-
 -- Collect Drops
 Toggles.CollectDrops:OnChanged(function()
     task.spawn(function()
@@ -5252,7 +5245,6 @@ Toggles.CollectDrops:OnChanged(function()
         end
     end)
 end)
-
 
 
 -- Auto equip best weapon
