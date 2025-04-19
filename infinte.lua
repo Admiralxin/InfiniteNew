@@ -4954,21 +4954,25 @@
         end
 
 
+
+
+        
         local lastTargetTime = 0
         local lastMob = nil
         local lastMobPosition = nil
+        local stayNearTime = 6  -- Time in seconds to stay near a mob before considering switching targets.
         
         function getClosestMob(gg)
             local gh = math.huge;
             local gi, g9, gj, Z, a1;
             local eN, gk, eo;
         
-            -- Reuse previous mob if it's still valid
-            if lastMob and isAlive(lastMob) and tick() - lastTargetTime < 2.5 then
+            -- Reuse the previous mob if we’re still within the "stay near" time limit
+            if lastMob and isAlive(lastMob) and tick() - lastTargetTime < stayNearTime then
                 local gl = lastMob.PrimaryPart
                 local ge, gm = getClosestPointAndDistance(aG, gl)
                 if lastMobPosition and (lastMobPosition - gl.Position).magnitude > 5 then
-                    -- Mob moved a lot, force retarget
+                    -- If the mob has moved a lot, we can re-target
                     lastMob = nil
                 else
                     gh, g9, gi = ge, gm, gl
@@ -4976,6 +4980,7 @@
             end
         
             if not gi then
+                -- Re-target if we’ve exceeded stayNearTime or no previous target exists
                 local function checkMob(bs)
                     if isAlive(bs) then
                         local gl = bs.PrimaryPart
@@ -4993,11 +4998,11 @@
                 end
                 for _, bs in ipairs(mobList) do
                     checkMob(bs)
-                    task.wait(0.018 + math.random() * 0.015)
+                    task.wait(0.02 + math.random() * 0.02)
                 end
         
                 if gi then
-                    lastTargetTime = tick() + math.random() * 0.75
+                    lastTargetTime = tick()
                     lastMob = gi.Parent
                     lastMobPosition = gi.Position
                 end
@@ -5021,9 +5026,10 @@
         end
         
         
-
-
         
+
+
+
 
         function equipWepWithId(gn, go)
             for B, C in pairs(bF:GetChildren()) do
