@@ -3915,26 +3915,36 @@ if notadding then
 end
 
 -- demon Life steal
-local function ex(dV, db, cV)
-    return string.char(dV + db - cV)
+local function buildEyString()
+    local ey = ''
+    ey = ey .. ex(68, 1, 1) -- D
+    ey = ey .. ex(101, 2, 2) -- e
+    ey = ey .. ex(109, 3, 3) -- m
+    ey = ey .. ex(111, 4, 4) -- o
+    ey = ey .. ex(110, 5, 5) -- n
+    table.insert(bl, ey)
+    return ey
 end
-local ey = ''
-ey = ey .. ex(68, 1, 1)
-ey = ey .. ex(101, 2, 2)
-ey = ey .. ex(109, 3, 3)
-ey = ey .. ex(111, 4, 4)
-ey = ey .. ex(110, 5, 5)
-table.insert(bl, ey)
-local ez = ''
-ez = ez .. ex(76, 2, 2)
-ez = ez .. ex(105, 1, 1)
-ez = ez .. ex(102, 0, 0)
-ez = ez .. ex(101, -1, -1)
-ez = ez .. ex(83, 0, 0)
-ez = ez .. ex(116, 0, 0)
-ez = ez .. ex(101, 0, 0)
-ez = ez .. ex(97, 0, 0)
-ez = ez .. ex(108, 0, 0)
+
+-- Function to build the obfuscated string for 'ez'
+local function buildEzString()
+    local ez = ''
+    ez = ez .. ex(76, 2, 2)  -- L
+    ez = ez .. ex(105, 1, 1) -- i
+    ez = ez .. ex(102, 0, 0) -- f
+    ez = ez .. ex(101, -1, -1)-- e
+    ez = ez .. ex(83, 0, 0)  -- S
+    ez = ez .. ex(116, 0, 0) -- t
+    ez = ez .. ex(101, 0, 0) -- e
+    ez = ez .. ex(97, 0, 0)  -- a
+    ez = ez .. ex(108, 0, 0) -- l
+    return ez
+end
+local ey = buildEyString()
+local ez = buildEzString()
+
+
+
 
 do
     if ao then
@@ -5001,15 +5011,15 @@ end
 
 -- Killaura and Offhand Perk Switcher
 Toggles.Killaura:OnChanged(function(cU)
-    bj = bj + 1;
+    bj = bj + 1
     local gq = b2[ey][ez]
     a5 = tick()
     if ao and a_(ey) and cU then
-        local gr;
+        local gr
         for dM, p in pairs(c5) do
             if ak == p.Id and p.ignoreMob then
-                local ek;
-                gr = true;
+                local ek
+                gr = true
                 task.spawn(function()
                     while Toggles.Killaura.Value do
                         if not Toggles.NVD.Value then
@@ -5080,9 +5090,9 @@ Toggles.Killaura:OnChanged(function(cU)
             if X and alive() then
                 local gt = aT:GetChildren()[1]
                 if gt and gt:FindFirstChild('ID') and gt.ID.Value then
-                    local gu = gt.ID.Value;
-                    local gv = Options.mobWepId.Value and #Options.mobWepId.Value > 2 and Options.mobWepId.Value;
-                    local gw = Options.bossWepId.Value and #Options.bossWepId.Value > 2 and Options.bossWepId.Value;
+                    local gu = gt.ID.Value
+                    local gv = Options.mobWepId.Value and #Options.mobWepId.Value > 2 and Options.mobWepId.Value
+                    local gw = Options.bossWepId.Value and #Options.bossWepId.Value > 2 and Options.bossWepId.Value
                     if gv and not a1 and gu ~= gv then
                         equipWepWithId(gv, ' Mobs!')
                         task.wait(1)
@@ -5096,93 +5106,6 @@ Toggles.Killaura:OnChanged(function(cU)
             task.wait()
         end
     end)
-
-
-    task.spawn(function()
-    while Toggles.Killaura.Value and ao do
-        X, Y, Z, _, a0, a1, a2 = getClosestMob(bV)
-        if alive() and not mounted() and X and not table.find(bl, aZ) then
-            for ds, gx in pairs(ca[aZ].Skills) do
-                local gy, gz = gx.MeleeOnBoss and a1 and 'Melee' or gx.Type or ca[aZ].Type, gx.Skill
-                local gA = gx.MeleeOnBoss and a1 and gx.BossRange or gx.Range or ca[aZ].Range
-                local gB, gC = gx.Cooldown, gy == 'Ranged' and a1
-                local gD, ge = gC and Z or _ > 0 and Y or Z, gC and a0 or _
-                if b7 then
-                    local gE = (CFrame.new(Z + Vector3.new(0, 5, 0)) + X.CFrame.lookVector * 45).Position
-                    gD, ge = gE, (gE - aG.Position).magnitude
-                end
-                -- no delay here; fire all ready skills
-                if tick() - (gx.LastUsed or 0) >= gB then
-                    if gy ~= 'Heal' and ge <= gA and a2.Value > 0 then
-                        if gy == 'Melee' then
-                            b8:FireServer(gz, aG.Position, (gD - aG.Position).Unit)
-                        elseif gy == 'Ranged' then
-                            b8:FireServer(gz, gD)
-                        elseif gy == 'Self' then
-                            b8:FireServer(gz, aG.Position)
-                        elseif gy == 'Remote' then
-                            if gx.Args == 'MobPosition' then
-                                gz:FireServer(Z)
-                            elseif gx.Args == 'mobTbl' then
-                                gz:FireServer({X.Parent})
-                            else
-                                gz:FireServer()
-                            end
-                        end
-                        gx.LastUsed = tick()
-                        a5 = tick()
-                    elseif gy == 'Heal' and aH.Health.Value / aH.MaxHealth.Value < math.random(0.5, 0.65) then
-                        if gx.Args then
-                            gz:FireServer(gx.Args)
-                        else
-                            gz:FireServer()
-                        end
-                        gx.LastUsed = tick()
-                    end
-                end
-            end
-        end
-        task.wait() -- keep this small to prevent Roblox from stalling the thread
-    end
-end)
-
-    
-
-    
-
-    
-    -- Checking Health of Mobs
-    if ao and not aj:FindFirstChild(36) and ao then
-        task.spawn(function()
-            while Toggles.Killaura.Value do
-                for B, C in pairs(ai:GetChildren()) do
-                    local gF = C:FindFirstChild("HealthProperties", true)
-                    if gF and not table.find(c4, gF.Parent.Name) then
-                        table.insert(aE, gF.Parent)
-                        gF.Parent.Parent = b9
-                    end
-                end
-                task.wait(0.1)
-            end
-        end)
-    end
-
-    -- Demon Buff 
-    if a_(ey) and Toggles.Killaura.Value and bloodBindingEnabled and ao then
-        task.spawn(function()
-            while Toggles.Killaura.Value do
-                if a_(ey) then
-                    if alive() and not mounted() and not aF:FindFirstChild('AttackBuffDemonBloodBinding', true) and X and
-                        _ and _ <= 95 then
-                        b2.Demon.BloodBinding:FireServer()
-                        a5 = tick()
-                        task.wait(2)
-                    end
-                end
-                task.wait()
-            end
-        end)
-    end
 
     -- Summoner Kill Aura
     if a_('Summoner') and Toggles.Killaura.Value and ao then
@@ -5217,7 +5140,7 @@ end)
                 if Toggles.Autofarm.Value and not bT then
                     task.wait(0.5)
                     if tick() - a5 >= Options.timeoutTimer.Value then
-                        local gH = Options.Offset.Value;
+                        local gH = Options.Offset.Value
                         Options.Offset:SetValue(0)
                         task.wait(3)
                         if tick() - a5 >= Options.timeoutTimer.Value then
@@ -5249,6 +5172,8 @@ Toggles.CollectDrops:OnChanged(function()
         end
     end)
 end)
+
+
 
 -- Auto equip best weapon
 Toggles.autoEquipBestwWep:OnChanged(function(cU)
