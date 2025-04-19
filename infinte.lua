@@ -2760,42 +2760,42 @@ local function cv()
 end
 
 local cw = game:GetService('GuiService')
-    local cx;
-    cx = cw.ErrorMessageChanged:Connect(function(msg)
-        if cw:GetErrorCode() == Enum.ConnectionError.DisconnectLuaKick or cw:GetErrorCode() ==
-            Enum.ConnectionError.DisconnectConnectionLost or msg:lower():find("exploit") then
-            cx:Disconnect()
-            aa.Kicked = true;
-            save()
-            if msg:lower():find("exploit") then
-                local cy = 'Killaura Delay: ``' .. Options.KillauraDelay.Value .. '``\nClass: ``' .. ca[aZ].DisplayName ..
-                               '``\nPing: ``' .. ping2() .. '``'
-                if ao then
-                    cy = cy .. '\nCode: ``' .. codeStr .. '``\nMission: ``' .. missionName .. '``'
-                end
-                cy = cy .. '\n' .. plrLink;
-                request({
-                    Url = boink2,
-                    Method = "POST",
-                    Headers = {
-                        ["Content-Type"] = "application/json"
-                    },
-                    Body = e:JSONEncode({
-                        ["embeds"] = {{
-                            ["title"] = 'Exploit Kick',
-                            ["description"] = cy,
-                            ["type"] = 'rich',
-                            ["color"] = tonumber(m.LightPink),
-                            ["footer"] = {
-                                ["text"] = f() .. ' UTC'
-                            }
-                        }}
-                    })
-                })
+local cx;
+cx = cw.ErrorMessageChanged:Connect(function(msg)
+    if cw:GetErrorCode() == Enum.ConnectionError.DisconnectLuaKick or cw:GetErrorCode() ==
+        Enum.ConnectionError.DisconnectConnectionLost or msg:lower():find("exploit") then
+        cx:Disconnect()
+        aa.Kicked = true;
+        save()
+        if msg:lower():find("exploit") then
+            local cy = 'Killaura Delay: ``' .. Options.KillauraDelay.Value .. '``\nClass: ``' .. ca[aZ].DisplayName ..
+                           '``\nPing: ``' .. ping2() .. '``'
+            if ao then
+                cy = cy .. '\nCode: ``' .. codeStr .. '``\nMission: ``' .. missionName .. '``'
             end
-            T:Teleport(a8, c)
+            cy = cy .. '\n' .. plrLink;
+            request({
+                Url = boink2,
+                Method = "POST",
+                Headers = {
+                    ["Content-Type"] = "application/json"
+                },
+                Body = e:JSONEncode({
+                    ["embeds"] = {{
+                        ["title"] = 'Exploit Kick',
+                        ["description"] = cy,
+                        ["type"] = 'rich',
+                        ["color"] = tonumber(m.LightPink),
+                        ["footer"] = {
+                            ["text"] = f() .. ' UTC'
+                        }
+                    }}
+                })
+            })
         end
-    end)
+        T:Teleport(a8, c)
+    end
+end)
 
 -- GUI
 local cz = bk:CreateWindow({
@@ -5098,27 +5098,33 @@ Toggles.Killaura:OnChanged(function(cU)
 
     -- Kill Aura Pure
 
+    -- Jitter function to introduce slight randomness in skill usage timing
+    local function skillJitter()
+        return math.random(100, 300) / 1000 -- Adds 0.1 to 0.3 second random jitter
+    end
+
+    -- Modify skill execution to include jitter
     task.spawn(function()
         while Toggles.Killaura.Value and ao do
             X, Y, Z, _, a0, a1, a2 = getClosestMob(bV)
             if alive() and not mounted() and X and not table.find(bl, aZ) then
                 for ds, gx in pairs(ca[aZ].Skills) do
-                    -- Fetch skill type and cooldown
                     local gy = gx.MeleeOnBoss and a1 and 'Melee' or gx.Type or ca[aZ].Type
                     local gA = gx.MeleeOnBoss and a1 and gx.BossRange or gx.Range or ca[aZ].Range
-                    local gB, gC = gx.Cooldown + Options.KillauraDelay.Value, gy == 'Ranged' and a1
+                    local gB, gC = gx.Cooldown + Options.KillauraDelay.Value + math.random(0.1, 0.3),
+                        gy == 'Ranged' and a1
                     local gD, ge = gC and Z or _ > 0 and Y or Z, gC and a0 or _
 
-                    -- Adjust the cooldown with randomness for more natural behavior
-                    gB = gB + math.random() * 0.1 -- Slightly increased randomness
+                    -- Add jitter to the skill cooldown to create randomness
+                    gB = gB + skillJitter() -- Adds jitter to the cooldown
 
-                    -- If the skill hasn't been used recently and is off cooldown
+                    -- Only execute the skill if it's off cooldown
                     if tick() - (gx.LastUsed or 0) >= gB then
                         if gy ~= 'Heal' and ge <= gA and a2.Value > 0 then
-                            -- Random delay for a more natural action
-                            task.wait(math.random(0.4, 0.6)) -- Adjusted delay for natural execution
+                            -- Add delay to the skill firing
+                            task.wait(math.random(0.5, 1.0)) -- Slightly more delay to simulate human-like behavior
 
-                            -- Execute the skill based on its type
+                            -- Fire skill based on type
                             if gy == 'Melee' then
                                 b8:FireServer(gx.Skill, aG.Position, (gD - aG.Position).Unit)
                             elseif gy == 'Ranged' then
@@ -5126,7 +5132,7 @@ Toggles.Killaura:OnChanged(function(cU)
                             elseif gy == 'Self' then
                                 b8:FireServer(gx.Skill, aG.Position)
                             elseif gy == 'Remote' then
-                                -- Handle Remote skills (like ShadowChains or Ultimate)
+                                -- Handle remote skill types
                                 if gx.Args == 'MobPosition' then
                                     gx.Skill:FireServer(Z)
                                 elseif gx.Args == 'mobTbl' then
@@ -5135,26 +5141,25 @@ Toggles.Killaura:OnChanged(function(cU)
                                     gx.Skill:FireServer()
                                 end
                             end
-                            gx.LastUsed = tick() -- Update the timestamp of last skill usage
-                            a5 = tick()
+                            gx.LastUsed = tick() -- Mark the skill as used
+                            a5 = tick() -- Update timestamp
                         end
 
                         -- Healing logic
                         if gy == 'Heal' and aH.Health.Value / aH.MaxHealth.Value < math.random(0.5, 0.65) then
-                            -- Randomized delay for healing to avoid fast healing spamming
-                            task.wait(math.random(1.0, 2.0))
+                            -- Add randomized healing delay
+                            task.wait(math.random(1.5, 2.5))
                             if gx.Args then
                                 gx.Skill:FireServer(gx.Args)
                             else
                                 gx.Skill:FireServer()
                             end
-                            gx.LastUsed = tick()
+                            gx.LastUsed = tick() -- Update timestamp
                         end
                     end
                 end
             end
-            -- Randomize overall checking interval to make it less predictable
-            task.wait(math.random(0.5, 0.7)) -- Randomized wait before checking for the next target
+            task.wait(math.random(0.7, 1.2)) -- Randomized overall wait
         end
     end)
 
