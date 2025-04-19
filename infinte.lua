@@ -2628,31 +2628,31 @@ local ca = {
         Primary = 'Staff',
         Skills = {{
             Skill = 'MageOfShadows',
-            Cooldown = 2
+            Cooldown = 0.275
         }, {
             Skill = 'MageOfShadowsBlast',
-            Cooldown = 15
+            Cooldown = 0.3
         }, {
             Skill = 'MageOfShadowsCharged',
-            Cooldown = 20
+            Cooldown = 0.31
         }, {
             Skill = 'MageOfShadowsBlastCharged',
-            Cooldown = 21
+            Cooldown = 0.31
         }, {
             Skill = 'BighShadowOrb1',
-            Cooldown = 3
+            Cooldown = 0.33
         }, {
             Skill = 'BighShadowOrb2',
-            Cooldown = 4
+            Cooldown = 0.33
         }, {
             Skill = 'BighShadowOrb3',
-            Cooldown = 6
+            Cooldown = 0.33
         }, {
             Skill = 'MageOfShadowsDamageCircle',
-            Cooldown = 7
+            Cooldown = 0.33
         }, {
             Skill = b2:WaitForChild('MageOfShadows'):WaitForChild('ShadowChains'),
-            Cooldown = 15,
+            Cooldown = 6,
             Type = 'Remote',
             Args = 'mobTbl'
         }, {
@@ -4982,6 +4982,8 @@ do
         end
         return gi, g9, Z, gh, gj, a1, gk
     end
+
+
     function equipWepWithId(gn, go)
         for B, C in pairs(bF:GetChildren()) do
             if C:FindFirstChild('ID') and C.ID.Value and C.ID.Value == gn then
