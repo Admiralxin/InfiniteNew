@@ -1,6 +1,7 @@
 if game.gameId ~= 985731078 then
     return
 end
+    wait(10)
 if not game:IsLoaded() then
     game.Loaded:Wait()
 end
