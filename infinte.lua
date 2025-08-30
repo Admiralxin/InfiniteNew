@@ -13,6 +13,12 @@ local d = c.UserId;
 local e = game:GetService('HttpService')
 getgenv().plrLink = 'User: [' .. c.DisplayName .. ' (@' .. c.Name .. ')](https://www.roblox.com/users/' .. c.UserId ..
                         '/profile)'
+local g;
+local h;
+local i;
+local j;
+local k, l, m, n, o = '', '', '', '', ''
+
 local function f()
     local g = os.date("!*t", os.time())
     local h, i, j, k, l = g.hour, g.min, g.sec, g.day, g.month;
@@ -2865,6 +2871,41 @@ local function cv()
 end
 local cw = game:GetService('GuiService')
 local cx;
+cx = cw.ErrorMessageChanged:Connect(function(msg)
+    if cw.GetErrorCode() == Enum.ConnectionError.DisconnectLuaKick or co:GetErrorCode() ==
+        Enum.ConnectionError.DisconnectConnectionLost or msg:lower():find("exploit") then   
+          cx.Disconnect()
+          aa.Kicked =true;
+          save()
+          if msg:lower():find("exploit") then
+            local cq = 'Killaura Delay: ``' .. Options.KillauraDelay.Value .. '``\nClass: ``' .. ca[aZ].DisplayName ..
+                           '``\nPing: ``' .. ping2() .. '``'
+            if aw then
+                cq = cq .. '\nCode: ``' .. i .. '``\nMission: ``' .. h .. '``'
+            end
+            cq = cq .. '\n' .. f;
+              request({
+                Url = boink2,
+                Method = "POST",
+                Headers = {
+                    ["Content-Type"] = "application/json"
+                },
+                Body = e:JSONEncode({
+                    ["embeds"] = {{
+                        ["title"] = 'Exploit Kick',
+                        ["description"] = cq,
+                        ["type"] = 'rich',
+                        ["color"] = tonumber(v.LightPink),
+                        ["footer"] = {
+                            ["text"] = utcDateAndTime() .. ' UTC'
+                        }
+                    }}
+                })
+            })
+        end
+        T:Teleport(a8, c)
+    end
+end)
 
 local cz = bk:CreateWindow({
     Title = bausha,
