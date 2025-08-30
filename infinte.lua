@@ -5848,7 +5848,7 @@ Toggles.Killaura:OnChanged(function(cU)
 local defaultArgs = {
     [1] = nil, -- Sẽ được gán là tên kỹ năng
     [2] = nil, -- Vị trí hoặc dữ liệu khác
-    [4] = 66    -- Giá trị cố định
+    [4] = 67    -- Giá trị cố định
 }
 
 task.spawn(function()
